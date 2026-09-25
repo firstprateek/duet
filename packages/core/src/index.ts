@@ -1,5 +1,6 @@
 export * from "./bankCategories.ts";
 export * from "./categories.ts";
+export * from "./crypto.ts";
 export * from "./dates.ts";
 export * from "./db/driver.ts";
 export { MIGRATIONS, migrate, SCHEMA_VERSION } from "./db/schema.ts";
@@ -14,9 +15,11 @@ export * from "./insights.ts";
 export * from "./merchants.ts";
 export * from "./model.ts";
 export * from "./money.ts";
+export * from "./protocol.ts";
 export * from "./queries.ts";
 export * from "./quickadd.ts";
 export * from "./rules.ts";
 export * from "./store.ts";
 export * from "./suggest.ts";
+export * from "./sync.ts";
 export * from "./words.ts";
