@@ -5,15 +5,17 @@
 //!   (`db_open`, `db_all`, `db_run`, `db_batch`).
 //! - Reading a statement file again later, by its path (`read_statement_file`).
 //! - The macOS keychain for secrets (`secret_get`, `secret_set`, `secret_delete`).
+//! - Updates from our Mac mini (`update_check`), whose address the app only learns at runtime.
 
 use std::path::Path;
 use std::sync::Mutex;
 
 use rusqlite::types::{Value, ValueRef};
 use rusqlite::{params_from_iter, Connection};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value as Json};
 use tauri::{Manager, State};
+use tauri_plugin_updater::UpdaterExt;
 
 /// The database connection, opened by `db_open` once the app knows where its data lives.
 pub struct Db(Mutex<Option<Connection>>);
@@ -26,8 +28,16 @@ pub struct Statement {
     params: Vec<Json>,
 }
 
+// `pnpm dev` keeps its own database and keychain items, so trying something out never touches
+// the household we actually use, or syncs anything to the other Mac.
+#[cfg(not(debug_assertions))]
 const DATABASE_FILE: &str = "duet.db";
+#[cfg(debug_assertions)]
+const DATABASE_FILE: &str = "duet-dev.db";
+#[cfg(not(debug_assertions))]
 const KEYCHAIN_SERVICE: &str = "app.duet.desktop";
+#[cfg(debug_assertions)]
+const KEYCHAIN_SERVICE: &str = "app.duet.desktop.dev";
 const STATEMENT_EXTENSIONS: [&str; 6] = ["csv", "xlsx", "xls", "ofx", "qfx", "qbo"];
 const MAX_STATEMENT_BYTES: u64 = 50 * 1024 * 1024;
 
@@ -90,7 +100,9 @@ fn with_conn<T>(
 fn query(conn: &Connection, sql: &str, params: &[Json]) -> Result<Vec<Map<String, Json>>, String> {
     let mut stmt = conn.prepare_cached(sql).map_err(err)?;
     let names: Vec<String> = stmt.column_names().iter().map(|s| s.to_string()).collect();
-    let mut rows = stmt.query(params_from_iter(to_sql_all(params)?)).map_err(err)?;
+    let mut rows = stmt
+        .query(params_from_iter(to_sql_all(params)?))
+        .map_err(err)?;
     let mut out = Vec::new();
     while let Some(row) = rows.next().map_err(err)? {
         let mut object = Map::new();
@@ -104,7 +116,8 @@ fn query(conn: &Connection, sql: &str, params: &[Json]) -> Result<Vec<Map<String
 
 fn execute(conn: &Connection, sql: &str, params: &[Json]) -> Result<(), String> {
     let mut stmt = conn.prepare_cached(sql).map_err(err)?;
-    stmt.execute(params_from_iter(to_sql_all(params)?)).map_err(err)?;
+    stmt.execute(params_from_iter(to_sql_all(params)?))
+        .map_err(err)?;
     Ok(())
 }
 
@@ -199,6 +212,45 @@ async fn secret_delete(key: String) -> Result<(), String> {
     }
 }
 
+/// What the updater plugin's own `check` returns, so the app can hand it to the plugin's
+/// `Update` class and install it the usual way.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct UpdateMetadata {
+    rid: tauri::ResourceId,
+    current_version: String,
+    version: String,
+    body: Option<String>,
+    raw_json: Json,
+}
+
+/// Looks for a newer Duet where our Mac mini hands it out: the relay's address plus
+/// `/app/latest.json`. The repository is private, so updates can't come from GitHub, and
+/// whatever the Mac mini offers still has to be signed with Duet's release key to install.
+#[tauri::command]
+async fn update_check(
+    webview: tauri::Webview,
+    endpoint: String,
+) -> Result<Option<UpdateMetadata>, String> {
+    let url = tauri::Url::parse(&endpoint).map_err(err)?;
+    let updater = webview
+        .updater_builder()
+        .endpoints(vec![url])
+        .map_err(err)?
+        .build()
+        .map_err(err)?;
+    let Some(update) = updater.check().await.map_err(err)? else {
+        return Ok(None);
+    };
+    Ok(Some(UpdateMetadata {
+        current_version: update.current_version.clone(),
+        version: update.version.clone(),
+        body: update.body.clone(),
+        raw_json: update.raw_json.clone(),
+        rid: webview.resources_table().add(update),
+    }))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -214,7 +266,8 @@ pub fn run() {
             read_statement_file,
             secret_get,
             secret_set,
-            secret_delete
+            secret_delete,
+            update_check
         ])
         .run(tauri::generate_context!())
         .expect("Duet couldn't start");
@@ -232,12 +285,23 @@ mod tests {
     #[test]
     fn values_round_trip() {
         let mut conn = memory();
-        execute(&conn, "CREATE TABLE t (id TEXT, n INTEGER, r REAL, b INTEGER, z TEXT)", &[]).unwrap();
+        execute(
+            &conn,
+            "CREATE TABLE t (id TEXT, n INTEGER, r REAL, b INTEGER, z TEXT)",
+            &[],
+        )
+        .unwrap();
         execute_batch(
             &mut conn,
             &[Statement {
                 sql: "INSERT INTO t VALUES (?, ?, ?, ?, ?)".into(),
-                params: vec![json!("a"), json!(784200), json!(0.93), json!(true), Json::Null],
+                params: vec![
+                    json!("a"),
+                    json!(784200),
+                    json!(0.93),
+                    json!(true),
+                    Json::Null,
+                ],
             }],
         )
         .unwrap();
@@ -257,8 +321,14 @@ mod tests {
         let result = execute_batch(
             &mut conn,
             &[
-                Statement { sql: "INSERT INTO t VALUES ('x')".into(), params: vec![] },
-                Statement { sql: "INSERT INTO t VALUES ('x')".into(), params: vec![] },
+                Statement {
+                    sql: "INSERT INTO t VALUES ('x')".into(),
+                    params: vec![],
+                },
+                Statement {
+                    sql: "INSERT INTO t VALUES ('x')".into(),
+                    params: vec![],
+                },
             ],
         );
         assert!(result.is_err());

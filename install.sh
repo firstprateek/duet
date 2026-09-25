@@ -1,14 +1,17 @@
 #!/bin/sh
-# Installs (or updates) Duet from the latest GitHub release:
+# Installs (or updates) Duet from our Mac mini. The repository is private, so the Mac mini keeps
+# a copy of the latest release (duet-server update) and hands it to our Macs over Tailscale. It
+# serves this script with its own address filled in, so on each Mac:
 #
-#   curl -fsSL https://raw.githubusercontent.com/firstprateek/duet/main/install.sh | sh
+#   curl -fsSL https://<mac-mini>.<tailnet>.ts.net/app/install.sh | sh
 #
 # Files downloaded with curl aren't quarantined, so macOS opens Duet without the "unidentified
-# developer" dance. Duet is signed with its own self-signed certificate, and after this first
-# install it keeps itself up to date (each update's signature is checked before it installs).
+# developer" dance. Duet is signed with its own self-signed certificate. After this, Settings >
+# Updates finds new versions on the same Mac mini, and each one's signature is checked before
+# it installs.
 set -eu
 
-REPO="${DUET_REPO:-firstprateek/duet}"
+FROM="${DUET_FROM:-__DUET_FROM__}"
 DEST="${DUET_DEST:-/Applications}"
 
 say() { printf '%s\n' "$*"; }
@@ -16,24 +19,23 @@ fail() { say "Duet couldn't be installed: $*" >&2; exit 1; }
 
 [ "$(uname -s)" = "Darwin" ] || fail "Duet runs on macOS."
 command -v curl >/dev/null || fail "curl is missing."
+case "$FROM" in
+  https://*) ;;
+  *) fail "use the copy of this script the Mac mini hands out, at https://<mac-mini>.<tailnet>.ts.net/app/install.sh." ;;
+esac
 
-api="https://api.github.com/repos/$REPO/releases/latest"
-say "Looking for the latest Duet…"
-release="$(curl -fsSL -H "Accept: application/vnd.github+json" "$api")" \
-  || fail "couldn't reach GitHub (is the repository public?)."
-
-# The app bundle the updater uses: Duet_universal.app.tar.gz or similar.
-url="$(printf '%s' "$release" \
-  | grep -o '"browser_download_url": *"[^"]*\.app\.tar\.gz"' \
-  | head -n 1 \
-  | sed 's/.*"\(https[^"]*\)"$/\1/')"
-[ -n "$url" ] || fail "the latest release has no macOS app."
-version="$(printf '%s' "$release" | grep -o '"tag_name": *"[^"]*"' | head -n 1 | sed 's/.*"\([^"]*\)"$/\1/')"
+say "Looking for the latest Duet on the Mac mini…"
+manifest="$(curl -fsSL "$FROM/latest.json")" || fail "couldn't reach the Mac mini (is Tailscale on?)."
+version="$(printf '%s' "$manifest" | grep -o '"version": *"[^"]*"' | head -n 1 | sed 's/.*"\([^"]*\)"$/\1/')"
+[ -n "$version" ] || fail "the Mac mini doesn't have a release yet (run duet-server update there)."
 
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 say "Downloading Duet $version…"
-curl -fsSL "$url" -o "$tmp/duet.tar.gz" || fail "the download didn't finish."
+curl -fsSL "$FROM/Duet.app.tar.gz" -o "$tmp/duet.tar.gz" || fail "the download didn't finish."
+expected="$(curl -fsSL "$FROM/Duet.app.tar.gz.sha256" | cut -d' ' -f1)" || fail "couldn't get the checksum."
+actual="$(shasum -a 256 "$tmp/duet.tar.gz" | cut -d' ' -f1)"
+[ "$expected" = "$actual" ] || fail "the download doesn't match its checksum."
 tar -xzf "$tmp/duet.tar.gz" -C "$tmp" || fail "the download looks damaged."
 app="$(find "$tmp" -maxdepth 2 -name '*.app' -type d | head -n 1)"
 [ -n "$app" ] || fail "the download has no app in it."

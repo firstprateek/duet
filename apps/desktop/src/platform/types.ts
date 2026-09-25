@@ -27,5 +27,6 @@ export interface Platform {
     delete(key: string): Promise<void>;
   };
   appVersion(): Promise<string>;
-  checkForUpdate(): Promise<UpdateInfo | null>;
+  /** Looks for a newer Duet on the Mac mini at this address (the relay's). */
+  checkForUpdate(from: string): Promise<UpdateInfo | null>;
 }

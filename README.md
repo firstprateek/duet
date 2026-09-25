@@ -38,7 +38,15 @@ The browser preview keeps everything in memory, so a reload starts over. With `?
 opens on Jack and Jill's year, whose numbers are the ones in the designs. To try sync in the
 preview, run `pnpm relay:dev` and use `http://127.0.0.1:8787` as the Mac mini's address.
 
-Setting up the Mac mini (the relay, Tailscale, backups, `duet export`) is in
+`pnpm dev` never touches the household we actually use: it keeps its own database and keychain
+items, so trying something out can't sync to the other Mac.
+
+## Installing
+
+The repository is private, so Duet comes from our Mac mini rather than GitHub: `duet-server
+update` copies each release there, and each Mac installs it over Tailscale with
+`curl -fsSL https://<mac-mini>.<tailnet>.ts.net/app/install.sh | sh`. Setting up the Mac mini
+(Tailscale, the relay, backups, the app, `duet export`) is in
 [docs/self-hosting.md](docs/self-hosting.md).
 
 ## License

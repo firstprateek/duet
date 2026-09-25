@@ -23,7 +23,8 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 - `pnpm lint` / `pnpm format` — Biome
 - `pnpm typecheck` — `tsc` per package (TypeScript 7)
 - `pnpm dev:web` — the app in a browser with sample data (sql.js), no Tauri needed
-- `pnpm dev` — the real desktop app (needs Rust)
+- `pnpm dev` — the real desktop app (needs Rust). Debug builds use `duet-dev.db` and the keychain
+  service `app.duet.desktop.dev`, so they never touch the household we use
 
 ## Conventions that matter
 
@@ -54,6 +55,12 @@ Read the spec before changing behavior; it is the source of truth for words, mat
   through `read_statement_file`, which only opens statement extensions under 50 MB.
 - **Relay updates** (`duet-server update`) check the release's SHA-256; the spec also asks for a
   signature, which needs the release key set up first (a later step).
+- **Installs and updates come from the Mac mini, not GitHub.** The repository stays private, so
+  `duet-server update` (signed in with `gh`) copies each release to `/usr/local/var/duet/app`
+  and `tailscale serve` publishes it at `/app`, with `latest.json` rewritten to point there.
+  The app asks the relay's address plus `/app/latest.json` through the `update_check` Rust
+  command, since the updater's endpoint is only known at runtime; the release key's signature
+  is still checked before anything installs.
 - **The personal vault** (Mine details backed up under the owner's own key) is still an open
   question in the spec, so it isn't built; the envelope's `stream` field leaves room for it.
 

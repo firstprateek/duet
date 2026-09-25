@@ -394,12 +394,14 @@ export class SettingsScreen extends Screen {
             <h2>Updates</h2>
             <div style="font-size:13.5px;font-weight:700;color:var(--du-ink-2)">Duet ${v.version}</div>
             ${
-              this.available
-                ? html`<div class="line">
+              !this.app.sync.relayUrl.get()
+                ? html`<div style="font-size:13.5px;font-weight:700;color:var(--du-ink-2)">New versions come through the Mac mini, once sync is set up.</div>`
+                : this.available
+                  ? html`<div class="line">
                   <div class="grow">Version ${this.available.version} is ready</div>
                   <button class="btn small" @click=${() => this.available?.install()}>Update and restart</button>
                 </div>`
-                : html`<button class="btn soft small" style="align-self:flex-start" ?disabled=${this.checking} @click=${this.checkUpdate}>
+                  : html`<button class="btn soft small" style="align-self:flex-start" ?disabled=${this.checking} @click=${this.checkUpdate}>
                   ${this.checking ? "Checking…" : this.available === null ? "You're up to date" : "Check for updates"}
                 </button>`
             }
@@ -658,9 +660,11 @@ export class SettingsScreen extends Screen {
   };
 
   private checkUpdate = async () => {
+    const from = this.app.sync.relayUrl.get();
+    if (!from) return;
     this.checking = true;
     try {
-      this.available = await this.app.platform.checkForUpdate();
+      this.available = await this.app.platform.checkForUpdate(from);
     } catch {
       this.app.toast("Couldn't check for updates right now.");
     } finally {

@@ -4,7 +4,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { check } from "@tauri-apps/plugin-updater";
+import { Update } from "@tauri-apps/plugin-updater";
 import type { PickedFile, Platform } from "./types.ts";
 
 /**
@@ -89,9 +89,16 @@ export async function createTauriPlatform(): Promise<Platform> {
       },
     },
     appVersion: () => getVersion(),
-    async checkForUpdate() {
-      const update = await check();
-      if (!update) return null;
+    async checkForUpdate(from) {
+      // The Mac mini hands out each release next to the relay (duet-server update puts it
+      // there), since the repository is private. Rust checks the signature before installing.
+      const endpoint = `${from.replace(/\/+$/, "")}/app/latest.json`;
+      const metadata = await invoke<ConstructorParameters<typeof Update>[0] | null>(
+        "update_check",
+        { endpoint },
+      );
+      if (!metadata) return null;
+      const update = new Update(metadata);
       return {
         version: update.version,
         notes: update.body ?? null,
