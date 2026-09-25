@@ -21,7 +21,7 @@ ever stores ciphertext.
 | M2 Month view and Ebb & flow | Month, Trends, Transactions, Our rhythm, Clean slate, insights | In progress |
 | M3 Sync and encryption | Keys, recovery phrases, pairing, relay, merging, export CLI | In progress |
 | M4 Smart sorting | Embeddings, local LLM, Laya, evaluation | In progress |
-| M5 v1.0 | Accessibility, first run, README and self-hosting guide | Not started |
+| M5 v1.0 | Accessibility, first run, README and self-hosting guide | In progress |
 
 ## Development
 

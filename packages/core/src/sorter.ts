@@ -1,3 +1,4 @@
+import type { ColumnMapping } from "@duet/importers";
 import { type Category, categoryPath } from "./categories.ts";
 import { chunk, placeholders } from "./db/driver.ts";
 import { getCategories } from "./household.ts";
@@ -436,4 +437,86 @@ export async function smartSort(
   }
   if (improved) store.notify(["drafts"]);
   return { improved, waiting };
+}
+
+// ————— Unfamiliar layouts —————
+
+type ProposedMapping = Omit<ColumnMapping, "headerRow">;
+
+/**
+ * For a file whose layout we don't know: the small LLM proposes which column is which, from
+ * the header and a few rows. It's only a proposal; the column-match sheet shows how the rows
+ * would read, and we confirm it.
+ */
+export async function proposeMapping(
+  client: SorterClient,
+  headers: readonly string[],
+  rows: ReadonlyArray<readonly string[]>,
+): Promise<ProposedMapping | null> {
+  if (headers.length < 2) return null;
+  const last = headers.length - 1;
+  const index = { type: "integer", minimum: 0, maximum: last };
+  const prompt = [
+    "A bank or card statement file has these columns (number: header):",
+    ...headers.map((h, i) => `${i}: ${h || "(no header)"}`),
+    "",
+    "Its first rows:",
+    ...rows.slice(0, 5).map((r) => r.map((c) => c ?? "").join(" | ")),
+    "",
+    "Which column is the date, and which describes the transaction? Where is the amount: one column",
+    "(and does spending show as positive or negative numbers there?), or separate money-out (debit)",
+    "and money-in (credit) columns? Is there a column with the bank's own category? And what kind of",
+    "account is this: a credit card, checking or savings?",
+  ].join("\n");
+  const answer = await client.generate<{
+    date: number;
+    description: number;
+    amountStyle: "one" | "split";
+    amount?: number;
+    spendingIs?: "positive" | "negative";
+    debit?: number;
+    credit?: number;
+    bankCategory?: number | null;
+    accountKind: "credit" | "checking" | "savings";
+  }>(
+    prompt,
+    {
+      type: "object",
+      properties: {
+        date: index,
+        description: index,
+        amountStyle: { type: "string", enum: ["one", "split"] },
+        amount: index,
+        spendingIs: { type: "string", enum: ["positive", "negative"] },
+        debit: index,
+        credit: index,
+        bankCategory: { anyOf: [index, { type: "null" }] },
+        accountKind: { type: "string", enum: ["credit", "checking", "savings"] },
+      },
+      required: ["date", "description", "amountStyle", "accountKind"],
+    },
+    "You read the layout of bank statement exports. Answer only in the JSON asked for, using column numbers.",
+  );
+  const ok = (n: unknown): n is number =>
+    Number.isInteger(n) && (n as number) >= 0 && (n as number) <= last;
+  if (!ok(answer.date) || !ok(answer.description)) return null;
+  let amount: ProposedMapping["amount"];
+  if (answer.amountStyle === "split") {
+    if (!ok(answer.debit) || !ok(answer.credit) || answer.debit === answer.credit) return null;
+    amount = { debit: answer.debit, credit: answer.credit };
+  } else {
+    if (!ok(answer.amount)) return null;
+    amount = {
+      column: answer.amount,
+      spendingIs: answer.spendingIs === "negative" ? "negative" : "positive",
+    };
+  }
+  const kinds = ["credit", "checking", "savings"] as const;
+  return {
+    date: answer.date,
+    description: answer.description,
+    amount,
+    ...(ok(answer.bankCategory) ? { bankCategory: answer.bankCategory } : {}),
+    accountKind: kinds.includes(answer.accountKind) ? answer.accountKind : "credit",
+  };
 }

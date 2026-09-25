@@ -36,6 +36,7 @@ export class SettingsScreen extends Screen {
     editing: { state: true },
     available: { state: true },
     confirmPhrase: { state: true },
+    sorterDraft: { state: true },
     checking: { state: true },
     newCategory: { state: true },
   };
@@ -261,6 +262,8 @@ export class SettingsScreen extends Screen {
   declare editing: string | null;
   declare available: UpdateInfo | null | undefined;
   declare confirmPhrase: boolean;
+  /** The sorting service address while it's being changed. */
+  declare sorterDraft: string | null;
   declare checking: boolean;
   declare newCategory: { name: string; parentId: string };
 
@@ -282,6 +285,7 @@ export class SettingsScreen extends Screen {
     this.editing = null;
     this.available = undefined;
     this.confirmPhrase = false;
+    this.sorterDraft = null;
     this.checking = false;
     this.newCategory = { name: "", parentId: "food" };
   }
@@ -384,6 +388,7 @@ export class SettingsScreen extends Screen {
               <span class="pill good">Rules and history</span>
               ${this.renderModels()}
             </div>
+            ${this.renderSorterAddress()}
           </section>
           <section class="card">
             <h2>Updates</h2>
@@ -578,6 +583,38 @@ export class SettingsScreen extends Screen {
     </section>`;
   }
 
+  /** Where the sorting service is: next to the relay unless we say otherwise. */
+  private renderSorterAddress() {
+    if (this.sorterDraft !== null) {
+      return html`<form
+        class="line"
+        @submit=${async (e: Event) => {
+          e.preventDefault();
+          const url = this.sorterDraft?.trim() || null;
+          await setLocalSettings(this.app.store, { sorterUrl: url });
+          this.sorterDraft = null;
+          await this.app.sorting.check();
+        }}
+      >
+        <input
+          class="input grow"
+          aria-label="Sorting service address"
+          placeholder="Next to the relay, at /sort"
+          .value=${this.sorterDraft}
+          @input=${(e: Event) => (this.sorterDraft = (e.target as HTMLInputElement).value)}
+        />
+        <button class="btn small">Save</button>
+      </form>`;
+    }
+    const own = this.basics.settings.sorterUrl;
+    const relay = this.app.sync.relayUrl.get();
+    const shown = own ?? (relay ? `${relay}/sort` : null);
+    return html`<div class="line">
+      <span class="grow mono" style="font-size:12.5px">${shown ? shown.replace(/^https?:\/\//, "") : "No sorting service yet"}</span>
+      <button class="linkish" @click=${() => (this.sorterDraft = own ?? "")}>Change</button>
+    </div>`;
+  }
+
   private renderModels() {
     const sorter = this.app.sorting.sorter.get();
     if (sorter.state === "off") return html`<span class="pill">Mac mini models not set up</span>`;
@@ -585,6 +622,7 @@ export class SettingsScreen extends Screen {
     if (sorter.state === "away")
       return html`<span class="pill warn" title=${sorter.message}>Mac mini models away</span>`;
     const h = sorter.health;
+    if (!h.ollama) return html`<span class="pill warn">Ollama isn't running on the Mac mini</span>`;
     const ready = [
       h.embed.ready ? "Embeddings ready" : null,
       h.llm.ready ? "Small LLM ready" : null,

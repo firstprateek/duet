@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 import { NodeSqliteDriver } from "../src/db/node.ts";
 import { addByHand } from "../src/entries.ts";
 import { setupHousehold } from "../src/household.ts";
-import { cosine, nearestCategories, SorterClient, smartSort } from "../src/sorter.ts";
+import {
+  cosine,
+  nearestCategories,
+  proposeMapping,
+  SorterClient,
+  smartSort,
+} from "../src/sorter.ts";
 import { Store } from "../src/store.ts";
 
 /** Letter counts: texts that share a merchant name land close together. */
@@ -182,5 +188,55 @@ describe("nearest categories", () => {
     expect(candidates[0]!.categoryId).toBe("coffee");
     expect(candidates[0]!.score).toBeGreaterThan(0.99);
     expect(cosine([1, 0], [0, 1])).toBe(0);
+  });
+});
+
+describe("proposing a column mapping", () => {
+  const headers = ["Posted", "Payee", "Memo", "Withdrawal", "Deposit"];
+  const rows = [
+    ["08/01/2026", "DIVIDEND", "Share dividend", "", "1.84"],
+    ["08/02/2026", "VENMO PAYMENT", "1022334455", "24", ""],
+  ];
+  const asking = (output: unknown) => {
+    let prompt = "";
+    const fetch = async (_input: string, init?: RequestInit): Promise<Response> => {
+      prompt = JSON.parse(String(init?.body)).prompt;
+      return new Response(JSON.stringify({ output }));
+    };
+    return {
+      client: new SorterClient("https://mini.ts.net/sort", { fetch }),
+      prompt: () => prompt,
+    };
+  };
+
+  it("reads the model's answer into a mapping to confirm", async () => {
+    const { client, prompt } = asking({
+      date: 0,
+      description: 1,
+      amountStyle: "split",
+      debit: 3,
+      credit: 4,
+      bankCategory: null,
+      accountKind: "checking",
+    });
+    expect(await proposeMapping(client, headers, rows)).toEqual({
+      date: 0,
+      description: 1,
+      amount: { debit: 3, credit: 4 },
+      accountKind: "checking",
+    });
+    expect(prompt()).toContain("3: Withdrawal");
+    expect(prompt()).toContain("08/02/2026 | VENMO PAYMENT");
+  });
+
+  it("turns down answers that point at columns that aren't there", async () => {
+    const { client } = asking({
+      date: 0,
+      description: 9,
+      amountStyle: "one",
+      amount: 3,
+      accountKind: "credit",
+    });
+    expect(await proposeMapping(client, headers, rows)).toBeNull();
   });
 });

@@ -1,4 +1,11 @@
-import { beginImport, fileSha256, formatMoney, rememberForSetup } from "@duet/core";
+import {
+  beginImport,
+  fileSha256,
+  formatMoney,
+  proposeMapping,
+  rememberForSetup,
+  SorterClient,
+} from "@duet/core";
 import type { AccountKind, ColumnMapping, ParsedStatement } from "@duet/importers";
 import { css, html, nothing } from "lit";
 import type { Sheet } from "../app/app.ts";
@@ -20,6 +27,8 @@ export class ColumnMatchSheet extends Screen {
     mapping: { state: true },
     preview: { state: true },
     busy: { state: true },
+    asking: { state: true },
+    suggested: { state: true },
   };
   static override styles = [
     Screen.styles,
@@ -97,6 +106,11 @@ export class ColumnMatchSheet extends Screen {
   declare mapping: ColumnMapping;
   declare preview: ParsedStatement | null;
   declare busy: boolean;
+  /** Waiting for the Mac mini's model to suggest columns. */
+  declare asking: boolean;
+  /** The columns shown are the model's suggestion (until we change one). */
+  declare suggested: boolean;
+  private touched = false;
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -128,7 +142,31 @@ export class ColumnMatchSheet extends Screen {
     if (category >= 0) this.mapping.bankCategory = category;
     this.preview = null;
     this.busy = false;
+    this.asking = false;
+    this.suggested = false;
     void this.refreshPreview();
+    void this.askMacMini();
+  }
+
+  /** The small LLM proposes which column is which; we still confirm it by the preview. */
+  private async askMacMini() {
+    const url = await this.app.sorting.url();
+    const sorter = this.app.sorting.sorter.get();
+    if (!url || sorter.state !== "ready" || !sorter.health.llm.ready) return;
+    this.asking = true;
+    try {
+      const p = this.sheet.file.parsed;
+      const proposal = await proposeMapping(new SorterClient(url), p.headers, p.sample);
+      if (proposal && !this.touched) {
+        this.mapping = { ...proposal, headerRow: this.mapping.headerRow };
+        this.suggested = true;
+        await this.refreshPreview();
+      }
+    } catch {
+      // our own guess stays
+    } finally {
+      this.asking = false;
+    }
   }
 
   private async refreshPreview() {
@@ -140,6 +178,8 @@ export class ColumnMatchSheet extends Screen {
   }
 
   private set(patch: Partial<ColumnMapping>) {
+    this.touched = true;
+    this.suggested = false;
     this.mapping = { ...this.mapping, ...patch };
     void this.refreshPreview();
   }
@@ -168,7 +208,16 @@ export class ColumnMatchSheet extends Screen {
           <span class="badge" style="background:var(--du-butter-bg)"><du-icon name="file" size="22"></du-icon></span>
           <div>
             <h1>New layout · one quick setup</h1>
-            <div class="meta">${file.name} · point at a few columns once, and Duet remembers</div>
+            <div class="meta">
+              ${file.name} ·
+              ${
+                this.asking
+                  ? "asking the Mac mini which columns are which…"
+                  : this.suggested
+                    ? "the Mac mini suggested these columns; check the rows read right"
+                    : "point at a few columns once, and Duet remembers"
+              }
+            </div>
           </div>
         </div>
         <table>

@@ -49,6 +49,28 @@ Read the spec before changing behavior; it is the source of truth for words, mat
   unknown layout, and Uploads guesses their account from the file name (display only; the setup
   still asks, and can add the file to an account we already have).
 
+- **Tauri plugins**: dialog, updater and process only. The spec lists sql and fs too; SQLite
+  goes through our Rust command instead (see above), and statement files are read by path
+  through `read_statement_file`, which only opens statement extensions under 50 MB.
+- **Relay updates** (`duet-server update`) check the release's SHA-256; the spec also asks for a
+  signature, which needs the release key set up first (a later step).
+- **The personal vault** (Mine details backed up under the owner's own key) is still an open
+  question in the spec, so it isn't built; the envelope's `stream` field leaves room for it.
+
+## Sync and sorting, in short
+
+- One household per relay. The first Mac creates it; the second joins with a one-time code that
+  carries the relay address, an invite, the household key and the joiner's member id. Anyone
+  holding a recovery phrase can restore a Mac, or read the log read-only (`duet export`), with
+  the key id and proof derived from the phrase; the relay stores only the proof's hash.
+- The relay is plain `Request`/`Response` code (`services/sync/src/relay.ts`): Bun serves it on
+  the Mac mini, Node serves it in tests and in `pnpm relay:dev`.
+- Core runs under Node's type stripping (for the CLI), so avoid TypeScript-only runtime syntax
+  there: no parameter properties, enums or namespaces.
+- Smart sorting lives in `core/sorter.ts`. The sorting service is found at the relay's address
+  plus `/sort` unless Settings says otherwise. An LLM answer never shows as sure (its confidence
+  is capped at 0.84); only our rules and close agreement among our own past rows do.
+
 ## Sample data and the designs
 
 `apps/desktop/src/demo/seed.ts` builds Jack and Jill's year for the browser preview. Its numbers
