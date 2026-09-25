@@ -19,6 +19,7 @@ import type { ColumnMapping, ParsedStatement, ReadOptions } from "@duet/importer
 import { signal } from "@lit-labs/signals";
 import type { PickedFile, Platform } from "../platform/index.ts";
 import { parseHash, type Route, toHash } from "./router.ts";
+import { SortingService } from "./sorting.ts";
 import { SyncService } from "./sync.ts";
 
 export interface Basics {
@@ -93,6 +94,7 @@ export class App extends EventTarget {
   >();
 
   readonly sync: SyncService;
+  readonly sorting: SortingService;
 
   constructor(
     readonly store: Store,
@@ -100,6 +102,7 @@ export class App extends EventTarget {
   ) {
     super();
     this.sync = new SyncService(store, platform);
+    this.sorting = new SortingService(store, this.sync);
     store.onChange(() => this.changed());
     window.addEventListener("hashchange", () => this.route.set(parseHash(location.hash)));
   }

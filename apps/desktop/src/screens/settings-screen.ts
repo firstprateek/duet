@@ -382,7 +382,7 @@ export class SettingsScreen extends Screen {
             }
             <div class="chips">
               <span class="pill good">Rules and history</span>
-              <span class="pill">${s.sorterUrl ? "Mac mini models" : "Mac mini models not set up"}</span>
+              ${this.renderModels()}
             </div>
           </section>
           <section class="card">
@@ -576,6 +576,23 @@ export class SettingsScreen extends Screen {
           : nothing
       }
     </section>`;
+  }
+
+  private renderModels() {
+    const sorter = this.app.sorting.sorter.get();
+    if (sorter.state === "off") return html`<span class="pill">Mac mini models not set up</span>`;
+    if (sorter.state === "checking") return html`<span class="pill">Asking the Mac mini…</span>`;
+    if (sorter.state === "away")
+      return html`<span class="pill warn" title=${sorter.message}>Mac mini models away</span>`;
+    const h = sorter.health;
+    const ready = [
+      h.embed.ready ? "Embeddings ready" : null,
+      h.llm.ready ? "Small LLM ready" : null,
+      h.laya.ready ? "Laya trained" : null,
+    ].filter((x): x is string => !!x);
+    if (ready.length === 0)
+      return html`<span class="pill warn">Mac mini models not pulled yet</span>`;
+    return ready.map((label) => html`<span class="pill good">${label}</span>`);
   }
 
   private newPhrase = async () => {

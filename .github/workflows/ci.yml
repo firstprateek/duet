@@ -34,6 +34,16 @@ jobs:
           bun build --compile src/main.ts --outfile bin/duet-sync
           ./bin/duet-sync version
 
+  sorter:
+    name: Sorting service (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Test the sorting service
+        working-directory: services/sorter
+        run: uv run pytest -q
+
   desktop:
     name: Desktop shell (macOS)
     runs-on: macos-latest

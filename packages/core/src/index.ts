@@ -19,6 +19,7 @@ export * from "./protocol.ts";
 export * from "./queries.ts";
 export * from "./quickadd.ts";
 export * from "./rules.ts";
+export * from "./sorter.ts";
 export * from "./store.ts";
 export * from "./suggest.ts";
 export * from "./sync.ts";

@@ -77,6 +77,10 @@ export class SortScreen extends Screen {
         font-weight: 600;
         color: var(--du-muted);
       }
+      .mini {
+        color: var(--du-link);
+        font-weight: 800;
+      }
       .progress {
         display: flex;
         align-items: center;
@@ -546,7 +550,15 @@ export class SortScreen extends Screen {
         <div class="head">
           <div>
             <h1>${account?.name ?? "Statement"} · ${monthName(month)}</h1>
-            <div class="sub">${owner} · ${total} transactions · ${v.file.fileName}</div>
+            <div class="sub">
+              ${owner} · ${total} transactions · ${v.file.fileName}${
+                this.app.sorting.running.get()
+                  ? html` · <span class="mini">Asking the Mac mini…</span>`
+                  : this.app.sorting.waiting.get() > 0
+                    ? html` · <span class="mini">${this.app.sorting.waiting.get()} waiting for the Mac mini</span>`
+                    : nothing
+              }
+            </div>
           </div>
           <div class="progress">
             ${words.sortedOf(sorted, total)}

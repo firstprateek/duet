@@ -123,7 +123,7 @@ export class SyncSetupSheet extends Screen {
         relayUrl: address,
         deviceName: this.deviceName.trim(),
       });
-      void this.app.sync.start();
+      void this.app.sync.start().then(() => this.app.sorting.check());
       this.app.replaceSheet({ kind: "phrase", phrase, next: { kind: "join-code" } });
     } catch (error) {
       this.error = error instanceof Error ? error.message : String(error);

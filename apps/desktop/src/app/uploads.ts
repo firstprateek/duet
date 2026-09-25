@@ -15,6 +15,8 @@ export async function uploadFiles(app: App, files: PickedFile[]): Promise<void> 
     if (fileId) {
       lastReady = fileId;
       readyCount++;
+      // The Mac mini's models look at the rows still unsure, in the background.
+      void app.sorting.run(fileId);
     }
   }
   if (readyCount === 1 && lastReady) app.navigate({ name: "sort", fileId: lastReady });

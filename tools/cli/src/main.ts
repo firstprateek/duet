@@ -1,7 +1,11 @@
 #!/usr/bin/env -S node --no-warnings
-import { homedir } from "node:os";
+import { existsSync, mkdtempSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
-import { isRecoveryPhrase, normalizePhrase } from "@duet/core";
+import { DatabaseSync } from "node:sqlite";
+import { isRecoveryPhrase, normalizePhrase, SorterClient, Store } from "@duet/core";
+import { NodeSqliteDriver } from "@duet/core/db/node";
+import { describeReport, evaluate } from "./eval.ts";
 import { exportHousehold, fileSource, inspectRelay, relaySource } from "./export.ts";
 
 const HELP = `duet: our household's data, outside the app
@@ -17,6 +21,11 @@ const HELP = `duet: our household's data, outside the app
 
   duet phrase
       Checks a recovery phrase against the word list, to be sure a paper copy is right.
+
+  duet eval [--db <duet.db>] [--sorter https://mac-mini…/sort] [--limit 500] [--model 100]
+      Replays our sorted rows through each sorting step and reports how many would need no
+      correction. --db defaults to this Mac's Duet database (a snapshot is used, never the
+      live file); --sorter adds the Mac mini's embeddings and small LLM.
 `;
 
 function options(argv: string[]): Record<string, string | true> {
@@ -119,6 +128,24 @@ async function main(): Promise<void> {
         `  Device: ${d.name}${d.removed ? " (removed)" : ""}${d.lastSeenAt ? `, last seen ${d.lastSeenAt.slice(0, 16).replace("T", " ")}` : ""}`,
       );
     }
+    return;
+  }
+  if (command === "eval") {
+    const db =
+      typeof opts.db === "string"
+        ? opts.db
+        : join(homedir(), "Library", "Application Support", "app.duet.desktop", "duet.db");
+    if (!existsSync(db)) fail(`There's no Duet database at ${db}. Pass --db.`);
+    // A snapshot, so the app's own file is never touched (vectors get cached in the copy).
+    const copy = join(mkdtempSync(join(tmpdir(), "duet-eval-")), "duet.db");
+    new DatabaseSync(db, { readOnly: true }).exec(`VACUUM INTO '${copy.replace(/'/g, "''")}'`);
+    const store = await Store.open(new NodeSqliteDriver(copy));
+    const report = await evaluate(store, {
+      sorter: typeof opts.sorter === "string" ? new SorterClient(opts.sorter) : undefined,
+      limit: typeof opts.limit === "string" ? Number(opts.limit) : undefined,
+      modelLimit: typeof opts.model === "string" ? Number(opts.model) : undefined,
+    });
+    console.log(describeReport(report));
     return;
   }
   if (command === "phrase") {

@@ -67,6 +67,34 @@ under launchd, and publishes it on the tailnet. It prints the address to use, so
 
 Either phrase alone opens all household data, so either of us can always look at it.
 
+## Smart sorting (optional)
+
+Rules, our own history, a starter pack of merchants and the bank's categories sort most rows on
+each Mac with no help. The Mac mini can lend two models for the rest: an embedding model that
+finds the past rows closest in meaning, and a small LLM for new merchants. Both run under
+[Ollama](https://ollama.com), only on the Mac mini, and the service in front of them keeps
+nothing.
+
+```bash
+brew install ollama uv
+brew services start ollama
+services/sync/deploy/duet-server install-sorter
+```
+
+It pulls the models (`nomic-embed-text` and `qwen2.5:7b-instruct` unless `DUET_EMBED_MODEL` and
+`DUET_LLM_MODEL` say otherwise), starts the service under launchd and publishes it at `/sort`
+next to the relay; Duet finds it there. Settings shows which models are ready.
+
+To see whether they earn their place on our own data, replay what we've already sorted:
+
+```bash
+pnpm duet eval --sorter https://mac-mini.tail1234.ts.net/sort
+```
+
+It reports how many rows would need no correction with this Mac's steps alone, and with each
+model added. Laya joins once it's fine-tuned on our history, and only if the evaluation says it
+beats what came before.
+
 ## Backups
 
 Every night the relay copies its database to `/usr/local/var/duet/backups`, keeping 30 daily

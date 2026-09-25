@@ -9,8 +9,11 @@
 #   duet-server backup                        a backup right now (one also runs every night)
 #   duet-server logs                          follow the relay's log
 #   duet-server keep-awake                    never sleep, and start again after a power cut
+#   duet-server install-sorter                the sorting service (needs uv and Ollama), published
+#                                             on the tailnet under /sort
 #
-# install, update and keep-awake change the system, so they ask for your password (sudo).
+# install, install-sorter, update and keep-awake change the system, so they ask for your
+# password (sudo).
 set -eu
 
 REPO="${DUET_REPO:-firstprateek/duet}"
@@ -33,7 +36,7 @@ arch_name() {
 
 install_plists() {
   user="${SUDO_USER:-$(id -un)}"
-  for name in app.duet.sync app.duet.backup; do
+  for name in "$@"; do
     sed "s/__USER__/$user/" "$HERE/$name.plist" | sudo tee "$DAEMONS/$name.plist" >/dev/null
     sudo chown root:wheel "$DAEMONS/$name.plist"
     sudo chmod 644 "$DAEMONS/$name.plist"
@@ -52,7 +55,7 @@ case "${1:-help}" in
     sudo touch "$LOGS/duet-sync.log" "$LOGS/duet-backup.log"
     sudo chown "$user" "$LOGS/duet-sync.log" "$LOGS/duet-backup.log"
     sudo install -m 755 "$source_bin" "$BIN"
-    install_plists
+    install_plists app.duet.sync app.duet.backup
     sleep 1
     curl -fsS http://127.0.0.1:8787/v1/health >/dev/null || fail "the relay didn't start; see duet-server logs"
     if command -v tailscale >/dev/null; then
@@ -96,11 +99,32 @@ case "${1:-help}" in
   logs)
     tail -n 50 -f "$LOGS/duet-sync.log"
     ;;
+  install-sorter)
+    command -v uv >/dev/null || fail "the sorting service needs uv: brew install uv"
+    command -v ollama >/dev/null || fail "the sorting service needs Ollama: brew install ollama && brew services start ollama"
+    user="${SUDO_USER:-$(id -un)}"
+    sudo mkdir -p /usr/local/lib/duet-sorter "$LOGS"
+    sudo chown -R "$user" /usr/local/lib/duet-sorter
+    sudo touch "$LOGS/duet-sorter.log"
+    sudo chown "$user" "$LOGS/duet-sorter.log"
+    rsync -a --delete --exclude .venv --exclude __pycache__ "$HERE/../../sorter/" /usr/local/lib/duet-sorter/
+    (cd /usr/local/lib/duet-sorter && uv sync --frozen --no-dev) || fail "couldn't install the sorting service"
+    say "Pulling the models (a few GB the first time)…"
+    ollama pull "${DUET_EMBED_MODEL:-nomic-embed-text}"
+    ollama pull "${DUET_LLM_MODEL:-qwen2.5:7b-instruct}"
+    install_plists app.duet.sorter
+    sleep 2
+    curl -fsS http://127.0.0.1:8788/v1/health >/dev/null || fail "the sorting service didn't start; see $LOGS/duet-sorter.log"
+    if command -v tailscale >/dev/null; then
+      tailscale serve --bg --https=443 --set-path /sort http://127.0.0.1:8788 >/dev/null
+    fi
+    say "The sorting service is running. Duet finds it next to the relay, at /sort."
+    ;;
   keep-awake)
     sudo pmset -a sleep 0 disksleep 0 autorestart 1
     say "The Mac mini won't sleep, and starts again after a power cut."
     ;;
   *)
-    sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'
     ;;
 esac
