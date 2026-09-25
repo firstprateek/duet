@@ -232,15 +232,21 @@ export async function monthView(store: Store, month: MonthKey): Promise<MonthVie
   const row: HistoryRow | undefined = view.flow.months.find((m) => m.month === month);
   const coverage = await accountCoverage(store, month);
 
+  // Transactions added after a Clean slate that covered them: one for this month, or one
+  // for everything up to a day in (or after) this month.
   let addedAfterSlate: MonthView["addedAfterSlate"] = null;
-  const slatesForMonth = view.slates.filter(
-    (s) => s.appliesTo === month || s.appliesTo === "overall",
-  );
-  const latestSlate = slatesForMonth.sort((a, b) => (a.addedAt < b.addedAt ? 1 : -1))[0];
+  const covering = view.slates
+    .filter((s) => s.appliesTo === month || (s.appliesTo === "overall" && s.date >= `${month}-01`))
+    .sort((a, b) => (a.addedAt < b.addedAt ? 1 : -1));
+  const latestSlate = covering[0];
   if (latestSlate) {
     const [row2] = await store.db.all<{ n: number }>(
-      "SELECT COUNT(*) AS n FROM transactions WHERE deleted_at IS NULL AND month = ? AND added_at > ?",
-      [month, latestSlate.addedAt],
+      "SELECT COUNT(*) AS n FROM transactions WHERE deleted_at IS NULL AND month = ? AND date <= ? AND added_at > ?",
+      [
+        month,
+        latestSlate.appliesTo === "overall" ? latestSlate.date : `${month}-31`,
+        latestSlate.addedAt,
+      ],
     );
     const count = Number(row2?.n ?? 0);
     if (count > 0) addedAfterSlate = { count, date: latestSlate.date };
@@ -306,6 +312,10 @@ export interface TrendsView {
   typicalTotal: Cents;
   typicalByTop: Array<{ category: Category; amount: Cents }>;
   latest: { month: MonthKey; total: Cents; difference: Cents } | null;
+  /** The latest month by top-level category, to compare with a typical month. */
+  latestByTop: Map<string, Cents>;
+  /** The top-level category that moved the latest month most, if one did. */
+  latestMostlyCategory: string | null;
   notes: TrendNote[];
   topCategories: Category[];
 }
@@ -324,7 +334,7 @@ export async function trendsView(
     categoryId === options.categoryId ||
     topLevelOf(categoryId, categories)?.id === options.categoryId;
 
-  const series = months.map((month) => {
+  const all = history.map((month) => {
     const ours = ledger.ours
       .filter((r) => r.month === month && inFilter(r.category_id))
       .reduce((s, r) => s + r.total, 0);
@@ -336,31 +346,42 @@ export async function trendsView(
     const second = mineOf(pair.second);
     return { month, ours, first, second, total: ours + first + second };
   });
+  const series = all.slice(-months.length);
 
+  // "A typical month" is the middle of the six months before the latest, so the latest
+  // month can be compared with it.
   const top = monthTotals(ledger, history, categories, "top");
   const detail = monthTotals(ledger, history, categories, "detail");
-  const nextMonth = addMonths(options.through, 1);
-  const typicalTop = typicalMonth(top, nextMonth);
+  const typicalTop = typicalMonth(top, options.through);
+  const typicalTotal = median(
+    all
+      .filter((s) => s.month < options.through && s.month >= addMonths(options.through, -6))
+      .filter((s) => s.total !== 0)
+      .map((s) => s.total),
+  );
   const byId = new Map(categories.map((c) => [c.id, c]));
   const typicalByTop = [...typicalTop.byCategory.entries()]
     .filter(([, amount]) => amount > 0)
     .map(([id, amount]) => ({ category: byId.get(id)!, amount }))
     .filter((x) => x.category)
     .sort((a, b) => b.amount - a.amount);
-  const typicalTotal = median(
-    series
-      .slice(-6)
-      .filter((s) => s.total !== 0)
-      .map((s) => s.total),
-  );
   const latestRow = series[series.length - 1];
-  const previousTypical = typicalMonth(top, options.through).total;
   const names = (id: string) => byId.get(id)?.name ?? "Something else";
   const notes = trendNotes(
     detail.filter((d) => d.total !== 0),
     names,
   );
+  const latestTop = top[top.length - 1];
+  const headline = latestTop ? monthHeadline(latestTop, typicalTop, names) : null;
+  const mostly =
+    headline?.sentence && latestTop
+      ? ([...latestTop.byCategory.keys()].find((id) =>
+          headline.sentence?.startsWith(`Mostly ${names(id)}.`),
+        ) ?? null)
+      : null;
   return {
+    latestByTop: latestTop?.byCategory ?? new Map(),
+    latestMostlyCategory: mostly,
     months: series,
     typicalTotal,
     typicalByTop,
@@ -368,7 +389,7 @@ export async function trendsView(
       ? {
           month: latestRow.month,
           total: latestRow.total,
-          difference: latestRow.total - previousTypical,
+          difference: latestRow.total - typicalTotal,
         }
       : null,
     notes,
@@ -444,4 +465,34 @@ export async function activeMonths(store: Store): Promise<MonthKey[]> {
      ORDER BY month`,
   );
   return rows.map((r) => r.month).filter(Boolean);
+}
+
+/**
+ * How much of a month was sorted without anyone changing the suggestion. Without a month,
+ * the latest month that has anything sorted.
+ */
+export async function sortingStats(
+  store: Store,
+  month?: MonthKey,
+): Promise<{ month: MonthKey | null; total: number; withoutHelp: number }> {
+  let m = month ?? null;
+  if (!m) {
+    const [latest] = await store.db.all<{ m: string | null }>(
+      "SELECT MAX(substr(date, 1, 7)) AS m FROM drafts WHERE decision IN ('ours', 'mine')",
+    );
+    m = latest?.m ?? null;
+  }
+  if (!m) return { month: null, total: 0, withoutHelp: 0 };
+  const rows = await store.db.all<{
+    tier: string;
+    decision: string;
+    suggested_share: string | null;
+  }>(
+    "SELECT tier, decision, suggested_share FROM drafts WHERE decision IN ('ours', 'mine') AND substr(date, 1, 7) = ?",
+    [m],
+  );
+  const withoutHelp = rows.filter(
+    (r) => r.tier !== "you" && r.tier !== "none" && r.decision === r.suggested_share,
+  ).length;
+  return { month: m, total: rows.length, withoutHelp };
 }

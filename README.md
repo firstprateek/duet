@@ -30,9 +30,12 @@ Needs Node 22.13+, pnpm, and (for the desktop app) Rust.
 ```bash
 pnpm install
 pnpm test
-pnpm dev:web   # the app in a browser with sample data
+pnpm dev:web   # the app in a browser; open http://localhost:5174/?sample for sample data
 pnpm dev       # the desktop app
 ```
+
+The browser preview keeps everything in memory, so a reload starts over. With `?sample` it
+opens on Jack and Jill's year, whose numbers are the ones in the designs.
 
 ## License
 

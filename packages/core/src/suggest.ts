@@ -11,7 +11,8 @@ import type { Share } from "./words.ts";
  * "The last 12 Blue Bottle visits were Coffee, and all of them were just for you."
  */
 
-export type Tier = "rule" | "refund" | "history" | "pack" | "bank" | "model" | "none";
+/** Where a category came from. "you" means we picked it ourselves. */
+export type Tier = "rule" | "refund" | "history" | "pack" | "bank" | "model" | "you" | "none";
 
 export interface Alternative {
   categoryId: string;

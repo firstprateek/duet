@@ -43,3 +43,16 @@ Read the spec before changing behavior; it is the source of truth for words, mat
   desktop driver is a Rust command using rusqlite on one connection (tauri-plugin-sql pools
   connections, which breaks multi-statement transactions). So Rust is ~150 lines, not 30.
 - **SheetJS** is vendored in `vendor/` (it isn't on npm, and pnpm needs a verifiable tarball).
+- **Charts** are small hand-drawn SVG Lit components in `packages/ui/src/charts.ts`, not
+  ECharts: four simple charts didn't justify a megabyte, and SVG follows the tokens and dark mode.
+- **Files waiting for their one-time setup** keep the dates and row count read loosely from the
+  unknown layout, and Uploads guesses their account from the file name (display only; the setup
+  still asks, and can add the file to an account we already have).
+
+## Sample data and the designs
+
+`apps/desktop/src/demo/seed.ts` builds Jack and Jill's year for the browser preview. Its numbers
+are the designs' numbers (August $7,842, Jill +$262, typical $6,980, the History and Trends
+screens), and `apps/desktop/test/seed.test.ts` checks them against the real queries. When you
+change insight wording or math, run that test: a failure means the app no longer matches the
+designs, or the seed needs to follow a deliberate change.

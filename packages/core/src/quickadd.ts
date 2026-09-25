@@ -1,6 +1,6 @@
 import type { Category } from "./categories.ts";
 import { type ISODate, makeDate, relativeDay, WEEKDAYS } from "./dates.ts";
-import { findKnownMerchant } from "./merchants.ts";
+import { findKnownMerchant, KNOWN_MERCHANTS } from "./merchants.ts";
 import { type Cents, parseCents } from "./money.ts";
 import type { Share } from "./words.ts";
 
@@ -78,6 +78,11 @@ function titleCase(words: string[]): string {
   return words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
+function sentenceCase(words: string[]): string {
+  const text = words.join(" ");
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 const MONTHS = [
   "january",
   "february",
@@ -114,6 +119,8 @@ export function parseQuickAdd(
   const tokens = text.toLowerCase().replace(/[,;]+/g, " ").split(/\s+/).filter(Boolean);
   const rest: string[] = [];
   let categoryWord: string | null = null;
+  /** Whether the category word came before the other words ("parking downtown"). */
+  let categoryFirst = false;
 
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i]!;
@@ -186,6 +193,7 @@ export function parseQuickAdd(
         result.categoryId = byWord ?? byName!.id;
         result.fromWords.category = true;
         categoryWord = t;
+        categoryFirst = rest.length === 0;
         continue;
       }
     }
@@ -194,8 +202,13 @@ export function parseQuickAdd(
 
   if (rest.length > 0) {
     const phrase = rest.join(" ");
-    const known = findKnownMerchant(phrase);
-    result.merchant = known ? known.name : titleCase(rest);
+    const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const known =
+      findKnownMerchant(phrase) ?? KNOWN_MERCHANTS.find((m) => squash(m.name) === squash(phrase));
+    if (known) result.merchant = known.name;
+    // "12 parking downtown" is Parking downtown; "42 trader joes groceries" is Trader Joe's.
+    else if (categoryWord && categoryFirst) result.merchant = sentenceCase([categoryWord, ...rest]);
+    else result.merchant = titleCase(rest);
     result.fromWords.merchant = true;
     if (!result.categoryId && known) result.categoryId = known.categoryId;
   } else if (categoryWord) {

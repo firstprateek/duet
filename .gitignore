@@ -24,3 +24,6 @@ services/sync/bin/
 *.p12
 .env
 .env.*
+
+# Claude Code: per-person settings stay local
+.claude/settings.local.json

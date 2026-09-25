@@ -1,6 +1,11 @@
-import type { ParsedRow, ParsedStatement } from "@duet/importers";
+import {
+  type ColumnMapping,
+  type ParsedRow,
+  type ParsedStatement,
+  readStatement,
+} from "@duet/importers";
 import type { Category } from "./categories.ts";
-import { addDays, dayLabel, type MonthKey, monthOf } from "./dates.ts";
+import { addDays, dayLabel, daysBetween, type MonthKey, monthOf } from "./dates.ts";
 import { chunk, placeholders, type SqlValue, type Statement } from "./db/driver.ts";
 import {
   type DetectRow,
@@ -109,7 +114,11 @@ function layoutNote(parsed: ParsedStatement): string | null {
 export async function beginImport(store: Store, input: FileInput): Promise<ImportOutcome> {
   const sha256 = await fileSha256(input.bytes);
   const existing = await findFileBySha(store, sha256);
-  if (existing && existing.status !== "removed") return { status: "already", file: existing };
+  if (existing && existing.status !== "removed" && existing.status !== "needs-setup") {
+    return { status: "already", file: existing };
+  }
+  const custom = await applyCustomProfile(store, input);
+  if (custom) input = { ...input, parsed: custom };
   const { parsed } = input;
   if (!parsed.profileId && parsed.rows.length === 0)
     return { status: "needs-setup", parsed, sha256 };
@@ -147,6 +156,7 @@ export async function finishImport(
   const accounts = await getAccounts(store, true);
   const account = accounts.find((a) => a.id === accountId);
   if (!account) throw new Error("That account doesn't exist.");
+  await forgetSetupFile(store, sha256);
   const fileId = await createDrafts(store, input, account, sha256);
   return { status: "ready", fileId, accountId };
 }
@@ -448,8 +458,9 @@ async function createDrafts(
             };
           }
         }
+        // A rule decides the row, unless it might be a duplicate: those wait for one of us.
         const rule = findRule(ctx.rules, row.description, merchant);
-        if (suggestion.tier === "rule" && rule?.share) decision = rule.share;
+        if (!flags.duplicate && suggestion.tier === "rule" && rule?.share) decision = rule.share;
       }
 
       statements.push({
@@ -534,6 +545,7 @@ interface FileRow {
   id: string;
   file_name: string;
   sha256: string;
+  path: string | null;
   account_id: string | null;
   profile_id: string | null;
   format: string | null;
@@ -568,6 +580,7 @@ async function listFiles(
     id: r.id,
     fileName: r.file_name,
     sha256: r.sha256,
+    path: r.path,
     accountId: r.account_id,
     profileId: r.profile_id,
     format: r.format,
@@ -994,15 +1007,78 @@ export function rereadFile(store: Store, fileId: string, parsed: ParsedStatement
 }
 
 /** The accounts we expect a statement from each month, and which have one. */
-export async function accountCoverage(
-  store: Store,
+const INSTITUTION_ALIASES: Record<string, string[]> = {
+  "American Express": ["AMEX", "AMERICANEXPRESS"],
+  "Capital One": ["CAPITALONE", "CAPONE"],
+  Discover: ["DISCOVER"],
+  Chase: ["CHASE"],
+  "Apple Card": ["APPLECARD", "APPLE"],
+  "Bread Cashback": ["BREAD"],
+  Citi: ["CITI"],
+  DCU: ["DCU"],
+  "Wells Fargo": ["WF", "WELLSFARGO"],
+  "Bank of America": ["BOFA", "BANKOFAMERICA"],
+};
+
+/**
+ * Which of our accounts a file probably comes from, going by its name ("DCU_Export_0901.xlsx",
+ * "Chase4417_Activity.CSV"). Only a hint for Uploads: the one-time setup still asks.
+ */
+export function guessAccountFromName(
+  fileName: string,
+  accounts: readonly Account[],
+): Account | null {
+  const upper = fileName.toUpperCase().replace(/\.[A-Z0-9]+$/, "");
+  const tokens = new Set(upper.split(/[^A-Z0-9]+/).filter(Boolean));
+  const joined = upper.replace(/[^A-Z]/g, "");
+  const named = (institution: string) => {
+    const first = institution.toUpperCase().split(/\s+/)[0] ?? "";
+    const aliases = INSTITUTION_ALIASES[institution] ?? (first.length >= 3 ? [first] : []);
+    return aliases.some((a) => (a.length <= 4 ? tokens.has(a) : joined.includes(a)));
+  };
+  const candidates = accounts.filter(
+    (a) => a.kind !== "cash" && a.kind !== "wallet" && named(a.institution),
+  );
+  if (candidates.length === 1) return candidates[0]!;
+  const byDigits = candidates.filter((a) => a.last4 && upper.includes(a.last4));
+  return byDigits.length === 1 ? byDigits[0]! : null;
+}
+
+/**
+ * Whether a statement belongs to a month. One of about a month (Jul 2 to Aug 1) belongs to
+ * the month most of it falls in; a longer export belongs to every month it spans.
+ */
+export function fileCoversMonth(
+  firstDate: string | null,
+  lastDate: string | null,
   month: MonthKey,
-): Promise<Array<{ account: Account; covered: boolean }>> {
+): boolean {
+  if (!firstDate || !lastDate) return false;
+  const span = daysBetween(firstDate, lastDate);
+  if (span <= 45) return monthOf(addDays(firstDate, Math.floor(span / 2))) === month;
+  return firstDate <= `${month}-31` && lastDate >= `${month}-01`;
+}
+
+export interface AccountCoverage {
+  account: Account;
+  /** A statement for the month is in (or waiting for its one-time setup). */
+  covered: boolean;
+  /** The month's statement is waiting for its one-time setup. */
+  needsSetup: boolean;
+}
+
+export async function accountCoverage(store: Store, month: MonthKey): Promise<AccountCoverage[]> {
   const accounts = (await getAccounts(store)).filter(
     (a) => a.kind !== "cash" && a.kind !== "wallet",
   );
-  const files = await store.db.all<{ account_id: string }>(
-    `SELECT DISTINCT account_id FROM statement_files
+  const files = await store.db.all<{
+    account_id: string | null;
+    file_name: string;
+    status: string;
+    first_date: string;
+    last_date: string;
+  }>(
+    `SELECT account_id, file_name, status, first_date, last_date FROM statement_files
      WHERE removed_at IS NULL AND first_date <= ? AND last_date >= ?`,
     [`${month}-31`, `${month}-01`],
   );
@@ -1010,6 +1086,123 @@ export async function accountCoverage(
     "SELECT DISTINCT account_id FROM transactions WHERE deleted_at IS NULL AND source = 'statement' AND month = ?",
     [month],
   );
-  const covered = new Set([...files, ...fromTx].map((r) => r.account_id));
-  return accounts.map((account) => ({ account, covered: covered.has(account.id) }));
+  // Our own statements are on this Mac; the other person's show through what they added.
+  const inMonth = files.filter((f) => fileCoversMonth(f.first_date, f.last_date, month));
+  const fromFiles = new Set(inMonth.filter((f) => f.account_id).map((f) => f.account_id!));
+  const mine = accounts.filter((a) => a.ownerId === store.memberId);
+  const waiting = new Set(
+    inMonth
+      .filter((f) => f.status === "needs-setup")
+      .map((f) => guessAccountFromName(f.file_name, mine)?.id)
+      .filter((id): id is string => !!id),
+  );
+  const added = new Set(fromTx.map((r) => r.account_id));
+  return accounts.map((account) => {
+    const inFiles =
+      fromFiles.has(account.id) || (account.ownerId !== store.memberId && added.has(account.id));
+    const needsSetup = !inFiles && waiting.has(account.id);
+    return { account, covered: inFiles || needsSetup, needsSetup };
+  });
+}
+
+/**
+ * Keeps an unfamiliar file in Uploads ("New layout · one quick setup") when we choose to
+ * match its columns later. Only its name, hash and location are kept.
+ */
+export async function rememberForSetup(
+  store: Store,
+  input: {
+    fileName: string;
+    sha256: string;
+    path: string | null;
+    format: string;
+    firstDate?: string | null;
+    lastDate?: string | null;
+    rowCount?: number;
+  },
+): Promise<string> {
+  const existing = await findFileBySha(store, input.sha256);
+  if (existing && existing.status === "needs-setup") return existing.id;
+  const id = uuidv7();
+  await store.db.run(
+    `INSERT INTO statement_files (id, file_name, sha256, path, format, first_date, last_date, brought_in_at, status, row_count)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'needs-setup', ?)`,
+    [
+      id,
+      input.fileName,
+      input.sha256,
+      input.path,
+      input.format,
+      input.firstDate ?? null,
+      input.lastDate ?? null,
+      new Date().toISOString(),
+      input.rowCount ?? 0,
+    ],
+  );
+  store.notify(["files"]);
+  return id;
+}
+
+/** Forgets a waiting file once it has been set up (its rows now come from a real import). */
+export async function forgetSetupFile(store: Store, sha256: string): Promise<void> {
+  await store.db.run("DELETE FROM statement_files WHERE sha256 = ? AND status = 'needs-setup'", [
+    sha256,
+  ]);
+  store.notify(["files"]);
+}
+
+/** A column mapping we made by hand for one bank's layout, kept on this Mac. */
+export interface CustomProfile {
+  id: string;
+  institution: string;
+  /** The file's header row, normalized, as its signature. */
+  signature: string;
+  mapping: ColumnMapping;
+}
+
+function signatureOf(headers: readonly string[]): string {
+  return headers.map((h) => h.trim().toLowerCase()).join("|");
+}
+
+export async function getCustomProfiles(store: Store): Promise<CustomProfile[]> {
+  const meta = await store.getMeta(["customProfiles"]);
+  try {
+    return meta.customProfiles ? (JSON.parse(meta.customProfiles) as CustomProfile[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Remembers a column mapping, so the next file with the same columns reads by itself. */
+export async function saveCustomProfile(
+  store: Store,
+  input: { institution: string; headers: readonly string[]; mapping: ColumnMapping },
+): Promise<CustomProfile> {
+  const profiles = await getCustomProfiles(store);
+  const signature = signatureOf(input.headers);
+  const existing = profiles.find((p) => p.signature === signature);
+  const profile: CustomProfile = {
+    id: existing?.id ?? `custom-${uuidv7()}`,
+    institution: input.institution,
+    signature,
+    mapping: input.mapping,
+  };
+  const next = [...profiles.filter((p) => p.signature !== signature), profile];
+  await store.setMeta({ customProfiles: JSON.stringify(next) });
+  return profile;
+}
+
+/** Reads a file with a saved mapping when its columns match one we set up before. */
+export async function applyCustomProfile(
+  store: Store,
+  input: FileInput,
+): Promise<ParsedStatement | null> {
+  const { parsed } = input;
+  if (parsed.profileId || parsed.rows.length > 0 || parsed.format === "ofx") return null;
+  const profile = (await getCustomProfiles(store)).find(
+    (p) => p.signature === signatureOf(parsed.headers),
+  );
+  if (!profile) return null;
+  const read = readStatement(input.bytes, input.fileName, { mapping: profile.mapping });
+  return { ...read, profileId: profile.id, institution: profile.institution };
 }
