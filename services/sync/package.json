@@ -6,6 +6,7 @@
   "license": "AGPL-3.0-only",
   "description": "The relay on the Mac mini: numbers and hands out encrypted changes it can't read.",
   "scripts": {
+    "dev": "node src/dev-server.ts",
     "start": "bun src/main.ts serve",
     "build": "bun build --compile --minify src/main.ts --outfile bin/duet-sync",
     "typecheck": "tsc -p tsconfig.json"

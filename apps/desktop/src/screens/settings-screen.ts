@@ -6,6 +6,7 @@ import {
   getSharePlans,
   monthName,
   renameMember,
+  replacePhrase,
   rhythmLabel,
   type SharePlan,
   setLocalSettings,
@@ -19,6 +20,7 @@ import { tint } from "@duet/ui";
 import { css, html, nothing } from "lit";
 import { Loader } from "../app/loader.ts";
 import { Screen } from "../app/screen.ts";
+import { timeAgo } from "../app/sync.ts";
 import type { UpdateInfo } from "../platform/index.ts";
 
 interface SettingsData {
@@ -33,6 +35,7 @@ export class SettingsScreen extends Screen {
     ...Screen.properties,
     editing: { state: true },
     available: { state: true },
+    confirmPhrase: { state: true },
     checking: { state: true },
     newCategory: { state: true },
   };
@@ -257,6 +260,7 @@ export class SettingsScreen extends Screen {
 
   declare editing: string | null;
   declare available: UpdateInfo | null | undefined;
+  declare confirmPhrase: boolean;
   declare checking: boolean;
   declare newCategory: { name: string; parentId: string };
 
@@ -277,6 +281,7 @@ export class SettingsScreen extends Screen {
     super();
     this.editing = null;
     this.available = undefined;
+    this.confirmPhrase = false;
     this.checking = false;
     this.newCategory = { name: "", parentId: "food" };
   }
@@ -366,18 +371,7 @@ export class SettingsScreen extends Screen {
           </section>
         </div>
         <div class="col">
-          <section class="card">
-            <h2>Sync &amp; security</h2>
-            <div class="line">
-              <du-bubble icon="server" color="var(--du-sky-bg)" size="44"></du-bubble>
-              <div>
-                <div style="font-size:15px;font-weight:800">${s.relayUrl ? "Mac mini is home" : "Not connected yet"}</div>
-                <div style="font-size:13px;font-weight:600;color:var(--du-muted)">${s.relayUrl ? "Syncing" : "Works on this Mac for now"}</div>
-              </div>
-            </div>
-            ${s.relayUrl ? html`<div class="mono">${s.relayUrl}</div>` : nothing}
-            <p style="margin:0;font-size:13.5px;font-weight:600;line-height:1.5">Locked end to end. The Mac mini only stores encrypted data.</p>
-          </section>
+          ${this.renderSync()}
           <section class="card">
             <h2>Smart sorting</h2>
             ${
@@ -515,6 +509,86 @@ export class SettingsScreen extends Screen {
     const to = monthName(endMonth).slice(0, 3);
     return `${from}–${to} ${endMonth.slice(0, 4)}`;
   }
+
+  private renderSync() {
+    const status = this.app.sync.status.get();
+    const partner = this.basics.partner;
+    const promise = html`<p style="margin:0;font-size:13.5px;font-weight:600;line-height:1.5">Locked end to end. The Mac mini only stores encrypted data.</p>`;
+    if (status.state === "off") {
+      return html`<section class="card">
+        <h2>Sync &amp; security</h2>
+        <div class="line">
+          <du-bubble icon="server" color="var(--du-sky-bg)" size="44"></du-bubble>
+          <div>
+            <div style="font-size:15px;font-weight:800">Not connected yet</div>
+            <div style="font-size:13px;font-weight:600;color:var(--du-muted)">Works on this Mac for now</div>
+          </div>
+        </div>
+        ${promise}
+        <div><button class="btn small" @click=${() => this.app.openSheet({ kind: "sync-setup" })}>Set up sync</button></div>
+      </section>`;
+    }
+    const healthy = status.state === "ok" || status.state === "syncing";
+    const title =
+      status.state === "stopped"
+        ? "Sync is paused"
+        : status.state === "offline"
+          ? "Mac mini is away"
+          : "Mac mini is home";
+    const detail =
+      status.state === "ok"
+        ? `Synced ${timeAgo(status.lastAt)}`
+        : status.state === "syncing"
+          ? "Syncing…"
+          : status.state === "offline"
+            ? `${status.message} Changes wait here and go out later.`
+            : status.message;
+    const host = (this.app.sync.relayUrl.get() ?? "").replace(/^https?:\/\//, "");
+    return html`<section class="card">
+      <h2>Sync &amp; security</h2>
+      <div class="line">
+        <du-bubble icon="server" color=${healthy ? "var(--du-good-bg)" : "var(--du-warn-bg)"} size="44"></du-bubble>
+        <div class="grow">
+          <div style="font-size:15px;font-weight:800">${title}</div>
+          <div style="font-size:13px;font-weight:600;color:var(--du-muted)">${detail}</div>
+        </div>
+        <button class="linkish" @click=${() => void this.app.sync.syncNow()}>Sync now</button>
+      </div>
+      <div class="mono">${host}</div>
+      ${promise}
+      <div class="line">
+        <span class="grow" style="font-size:14px;font-weight:800">Recovery phrase</span>
+        ${
+          this.confirmPhrase
+            ? html`<span style="font-size:12.5px;font-weight:700;color:var(--du-muted)">The old one stops working.</span>
+                <button class="linkish muted" @click=${() => (this.confirmPhrase = false)}>Keep it</button>
+                <button class="linkish" @click=${this.newPhrase}>Make a new one</button>`
+            : html`<button class="linkish" @click=${() => (this.confirmPhrase = true)}>Make a new one</button>`
+        }
+      </div>
+      <div class="line">
+        <span class="grow" style="font-size:14px;font-weight:800">Our devices</span>
+        <button class="linkish" @click=${() => this.app.openSheet({ kind: "devices" })}>See all</button>
+      </div>
+      ${
+        partner
+          ? html`<div><button class="btn small soft" @click=${() => this.app.openSheet({ kind: "join-code" })}>Join code for ${partner.name}</button></div>`
+          : nothing
+      }
+    </section>`;
+  }
+
+  private newPhrase = async () => {
+    this.confirmPhrase = false;
+    try {
+      const phrase = await replacePhrase(this.app.store, this.app.platform.secret);
+      this.app.openSheet({ kind: "phrase", phrase });
+    } catch (error) {
+      this.app.toast(
+        error instanceof Error ? error.message : "Couldn't make a new phrase right now.",
+      );
+    }
+  };
 
   private addCategory = async () => {
     const name = this.newCategory.name.trim();

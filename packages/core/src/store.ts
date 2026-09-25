@@ -162,8 +162,10 @@ export interface ChangeRecord {
 
 /** Thrown when a record comes from a newer Duet: the app should update rather than guess. */
 export class NewerDataError extends Error {
-  constructor(readonly schema: number) {
+  readonly schema: number;
+  constructor(schema: number) {
     super(`Data from a newer version of Duet (schema ${schema}). Please update.`);
+    this.schema = schema;
   }
 }
 
@@ -200,16 +202,18 @@ class Mutex {
 export type ChangeListener = (entities: ReadonlySet<string>) => void;
 
 export class Store {
+  readonly db: SqlDriver;
+  readonly deviceId: string;
+  memberId: string | null;
   readonly clock: HybridClock;
   private readonly listeners = new Set<ChangeListener>();
   private readonly mutex = new Mutex();
 
-  private constructor(
-    readonly db: SqlDriver,
-    readonly deviceId: string,
-    public memberId: string | null,
-    now: () => number,
-  ) {
+  // Plain fields rather than parameter properties, so Node can run core as TypeScript.
+  private constructor(db: SqlDriver, deviceId: string, memberId: string | null, now: () => number) {
+    this.db = db;
+    this.deviceId = deviceId;
+    this.memberId = memberId;
     this.clock = new HybridClock(deviceId, now);
   }
 

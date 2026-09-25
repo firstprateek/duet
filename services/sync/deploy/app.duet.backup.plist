@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- A nightly copy of the relay database: 30 daily and 12 monthly copies are kept. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>app.duet.backup</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/duet-sync</string>
+    <string>backup</string>
+    <string>/usr/local/var/duet/backups</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>DUET_DATA</key>
+    <string>/usr/local/var/duet</string>
+  </dict>
+  <key>UserName</key>
+  <string>__USER__</string>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>3</integer>
+    <key>Minute</key>
+    <integer>15</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/usr/local/var/log/duet-backup.log</string>
+  <key>StandardErrorPath</key>
+  <string>/usr/local/var/log/duet-backup.log</string>
+</dict>
+</plist>

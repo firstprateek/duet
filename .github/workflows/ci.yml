@@ -27,6 +27,12 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - uses: oven-sh/setup-bun@v2
+      - name: The relay compiles with Bun
+        working-directory: services/sync
+        run: |
+          bun build --compile src/main.ts --outfile bin/duet-sync
+          ./bin/duet-sync version
 
   desktop:
     name: Desktop shell (macOS)

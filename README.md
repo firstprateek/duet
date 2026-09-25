@@ -19,7 +19,7 @@ ever stores ciphertext.
 | M0 Foundations | Monorepo, Tauri + Lit shell, tokens, SQLite, pipelines, installer, updater | In progress |
 | M1 Uploads and sorting | CSV / XLSX / OFX, ten bank profiles, duplicates, transfers, refunds, To sort | In progress |
 | M2 Month view and Ebb & flow | Month, Trends, Transactions, Our rhythm, Clean slate, insights | In progress |
-| M3 Sync and encryption | Keys, recovery phrases, pairing, relay, merging, export CLI | Not started |
+| M3 Sync and encryption | Keys, recovery phrases, pairing, relay, merging, export CLI | In progress |
 | M4 Smart sorting | Embeddings, local LLM, Laya, evaluation | Not started |
 | M5 v1.0 | Accessibility, first run, README and self-hosting guide | Not started |
 
@@ -35,7 +35,11 @@ pnpm dev       # the desktop app
 ```
 
 The browser preview keeps everything in memory, so a reload starts over. With `?sample` it
-opens on Jack and Jill's year, whose numbers are the ones in the designs.
+opens on Jack and Jill's year, whose numbers are the ones in the designs. To try sync in the
+preview, run `pnpm relay:dev` and use `http://127.0.0.1:8787` as the Mac mini's address.
+
+Setting up the Mac mini (the relay, Tailscale, backups, `duet export`) is in
+[docs/self-hosting.md](docs/self-hosting.md).
 
 ## License
 

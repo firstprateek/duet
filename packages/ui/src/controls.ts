@@ -161,6 +161,7 @@ export class DuSegmented extends LitElement {
 export class DuSheet extends LitElement {
   static override properties = {
     label: { type: String },
+    persistent: { type: Boolean },
   };
   static override styles = css`
     :host {
@@ -200,10 +201,13 @@ export class DuSheet extends LitElement {
     }
   `;
   declare label: string;
+  /** A click outside doesn't close it (Escape still does): for things too easy to lose. */
+  declare persistent: boolean;
 
   constructor() {
     super();
     this.label = "";
+    this.persistent = false;
   }
   private returnFocus: Element | null = null;
 
@@ -238,7 +242,7 @@ export class DuSheet extends LitElement {
   };
 
   private onScrim = (e: MouseEvent) => {
-    if (e.target === this) this.close();
+    if (e.target === this && !this.persistent) this.close();
   };
 
   close() {

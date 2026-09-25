@@ -16,6 +16,8 @@ import "../sheets/clean-slate-sheet.ts";
 import "../sheets/rhythm-sheet.ts";
 import "../sheets/transaction-sheet.ts";
 import "../sheets/account-sheet.ts";
+import "../sheets/phrase-sheet.ts";
+import "../sheets/sync-sheets.ts";
 import { Screen } from "./screen.ts";
 import { uploadFiles } from "./uploads.ts";
 
@@ -164,7 +166,9 @@ export class DuetApp extends Screen {
     if (!this.app) return nothing;
     const basics = this.app.basics.get();
     if (!basics) return nothing;
-    if (!basics.setUp) return html`<du-setup-screen .app=${this.app}></du-setup-screen>`;
+    if (!basics.setUp) {
+      return html`<du-setup-screen .app=${this.app}></du-setup-screen>${this.renderSheet()}${this.renderToasts()}`;
+    }
     const route = this.app.route.get();
     const tab =
       route.name === "month" || route.name === "history" || route.name === "transactions"
@@ -202,10 +206,14 @@ export class DuetApp extends Screen {
       <main>${this.renderRoute()}</main>
       ${this.renderSheet()}
       ${this.app.quickAdd.get() ? html`<du-quick-add .app=${this.app}></du-quick-add>` : nothing}
-      <div class="toasts" role="status" aria-live="polite">
-        ${this.app.toasts.get().map((t) => html`<div class="toast">${t.text}</div>`)}
-      </div>
+      ${this.renderToasts()}
     `;
+  }
+
+  private renderToasts() {
+    return html`<div class="toasts" role="status" aria-live="polite">
+      ${this.app.toasts.get().map((t) => html`<div class="toast">${t.text}</div>`)}
+    </div>`;
   }
 
   private renderRoute() {
@@ -253,6 +261,14 @@ export class DuetApp extends Screen {
         return html`<du-transaction-sheet .app=${this.app} .transactionId=${sheet.id}></du-transaction-sheet>`;
       case "add-account":
         return html`<du-account-sheet .app=${this.app}></du-account-sheet>`;
+      case "sync-setup":
+        return html`<du-sync-setup-sheet .app=${this.app}></du-sync-setup-sheet>`;
+      case "phrase":
+        return html`<du-phrase-sheet .app=${this.app} .sheet=${sheet}></du-phrase-sheet>`;
+      case "join-code":
+        return html`<du-join-code-sheet .app=${this.app}></du-join-code-sheet>`;
+      case "devices":
+        return html`<du-devices-sheet .app=${this.app}></du-devices-sheet>`;
       case "message":
         return html`<du-sheet label=${sheet.title} @close=${() => this.app.closeSheet()}>
           <h2 style="font-size:22px;margin-bottom:10px">${sheet.title}</h2>

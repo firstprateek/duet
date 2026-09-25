@@ -33,6 +33,7 @@ async function start() {
   const el = document.querySelector("duet-app") as DuetApp;
   el.app = app;
   el.hidden = false;
+  void app.sync.start();
   (window as unknown as { duet: App }).duet = app;
 }
 

@@ -19,6 +19,7 @@ import type { ColumnMapping, ParsedStatement, ReadOptions } from "@duet/importer
 import { signal } from "@lit-labs/signals";
 import type { PickedFile, Platform } from "../platform/index.ts";
 import { parseHash, type Route, toHash } from "./router.ts";
+import { SyncService } from "./sync.ts";
 
 export interface Basics {
   setUp: boolean;
@@ -59,7 +60,12 @@ export type Sheet =
   | { kind: "rhythm" }
   | { kind: "transaction"; id: string }
   | { kind: "add-account" }
-  | { kind: "message"; title: string; body: string };
+  | { kind: "message"; title: string; body: string }
+  | { kind: "sync-setup" }
+  /** A recovery phrase shown once, then three of its words checked; `next` opens after. */
+  | { kind: "phrase"; phrase: string; next?: Sheet }
+  | { kind: "join-code" }
+  | { kind: "devices" };
 
 export interface Toast {
   id: number;
@@ -86,11 +92,14 @@ export class App extends EventTarget {
     { resolve: (p: ParsedStatement) => void; reject: (e: Error) => void }
   >();
 
+  readonly sync: SyncService;
+
   constructor(
     readonly store: Store,
     readonly platform: Platform,
   ) {
     super();
+    this.sync = new SyncService(store, platform);
     store.onChange(() => this.changed());
     window.addEventListener("hashchange", () => this.route.set(parseHash(location.hash)));
   }
