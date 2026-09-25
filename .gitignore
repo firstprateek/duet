@@ -1,0 +1,26 @@
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+
+# Tauri / Rust
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+
+# Python
+services/sorter/.venv/
+__pycache__/
+*.pyc
+
+# Relay binaries and data
+services/sync/bin/
+*.db
+*.db-wal
+*.db-shm
+
+# Secrets that must never be committed
+*.key
+*.p12
+.env
+.env.*

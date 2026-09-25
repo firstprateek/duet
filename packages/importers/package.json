@@ -1,0 +1,24 @@
+{
+  "name": "@duet/importers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Reads bank and card statements (CSV, XLSX, OFX/QFX) into plain rows. Bank profiles are plain data, so adding a bank is a small pull request.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./values": "./src/values.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "papaparse": "^5.7.0",
+    "xlsx": "file:../../vendor/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "@types/papaparse": "^5.5.2"
+  }
+}

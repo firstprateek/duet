@@ -1,0 +1,26 @@
+{
+  "name": "duet",
+  "private": true,
+  "type": "module",
+  "description": "A local-first money app for two: upload statements, sort them together, and see where our money goes.",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "pnpm -r --parallel --if-present typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "pnpm --filter @duet/desktop tauri dev",
+    "dev:web": "pnpm --filter @duet/desktop dev:web",
+    "build": "pnpm -r --if-present build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@types/node": "^26.6.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
+  }
+}

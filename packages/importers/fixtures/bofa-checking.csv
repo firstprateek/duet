@@ -1,0 +1,11 @@
+Description,,Summary Amt.
+Beginning balance as of 08/01/2026,,"1,234.56"
+Total credits,,"4,200.00"
+Total debits,,"-2,000.00"
+Ending balance as of 08/31/2026,,"3,434.56"
+
+Date,Description,Amount,Running Bal.
+08/01/2026,"Beginning balance as of 08/01/2026",,"1,234.56"
+08/03/2026,"CHECKCARD 0802 CVS/PHARMACY #09876 OAKLAND CA","-23.45","1,211.11"
+08/07/2026,"DISCOVER DES:E-PAYMENT ID:1234 INDN:JILL RIVERA","-250.00","961.11"
+08/15/2026,"ACME PAYROLL DES:DIR DEP","4,200.00","5,161.11"

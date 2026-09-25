@@ -1,0 +1,5 @@
+Transaction Date,Clearing Date,Description,Merchant,Category,Type,Amount (USD),Purchased By
+08/20/2026,08/21/2026,"STARBUCKS STORE 05331 SAN FRANCISCO CA 94103 USA",Starbucks,Restaurants,Purchase,6.45,Jill Rivera
+08/18/2026,08/18/2026,"ACH DEPOSIT INTERNET TRANSFER FROM ACCOUNT ENDING IN 5521",Ach Deposit Internet Transfer From Account Ending In 5521,Payment,Payment,-300.00,Jill Rivera
+08/16/2026,08/17/2026,"APPLE.COM/BILL ONE APPLE PARK WAY 866-712-7753 CUPERTINO 95014 CA USA",Apple Services,Other,Purchase,10.99,Jill Rivera
+08/31/2026,08/31/2026,"DAILY CASH ADJUSTMENT",Daily Cash Adjustment,Other,Daily Cash Adjustment,-1.20,Jill Rivera

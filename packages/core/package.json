@@ -1,0 +1,21 @@
+{
+  "name": "@duet/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "description": "Duet's business logic: money, Ebb & flow, sorting rules, the local store and sync. Plain TypeScript with no Tauri imports.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@duet/importers": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2"
+  }
+}
