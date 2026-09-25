@@ -1,7 +1,9 @@
 {
   "name": "duet",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.34.5",
   "description": "A local-first money app for two: upload statements, sort them together, and see where our money goes.",
   "license": "AGPL-3.0-only",
   "engines": {

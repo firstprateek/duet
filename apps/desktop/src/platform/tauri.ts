@@ -33,7 +33,8 @@ function baseName(path: string): string {
 }
 
 async function readAt(path: string): Promise<Uint8Array> {
-  const bytes = await invoke<number[] | Uint8Array>("read_statement_file", { path });
+  // The command answers with raw bytes (an ArrayBuffer), not a JSON list of numbers.
+  const bytes = await invoke<ArrayBuffer | Uint8Array | number[]>("read_statement_file", { path });
   return bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
 }
 
