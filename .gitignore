@@ -13,8 +13,9 @@ services/sorter/.venv/
 __pycache__/
 *.pyc
 
-# Relay binaries and data
+# Relay binaries and data (Bun can leave a *.bun-build temp file behind when it compiles)
 services/sync/bin/
+*.bun-build
 *.db
 *.db-wal
 *.db-shm
