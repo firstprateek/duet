@@ -199,6 +199,12 @@ export class DuSheet extends LitElement {
         opacity: 0;
       }
     }
+    @media (prefers-reduced-motion: reduce) {
+      :host,
+      .sheet {
+        animation: none;
+      }
+    }
   `;
   declare label: string;
   /** A click outside doesn't close it (Escape still does): for things too easy to lose. */
@@ -216,23 +222,31 @@ export class DuSheet extends LitElement {
     this.returnFocus = document.activeElement;
     this.addEventListener("keydown", this.onKey);
     this.addEventListener("mousedown", this.onScrim);
+    document.addEventListener("focusin", this.keepFocus, true);
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener("keydown", this.onKey);
     this.removeEventListener("mousedown", this.onScrim);
+    document.removeEventListener("focusin", this.keepFocus, true);
     if (this.returnFocus instanceof HTMLElement) this.returnFocus.focus();
   }
 
   override firstUpdated() {
-    requestAnimationFrame(() => {
-      const target = this.querySelector<HTMLElement>(
-        "[autofocus], input, button, select, textarea",
-      );
-      target?.focus();
-    });
+    requestAnimationFrame(() => this.focusFirst());
   }
+
+  private focusFirst() {
+    this.querySelector<HTMLElement>(
+      "[autofocus], input, button, select, textarea, a[href]",
+    )?.focus();
+  }
+
+  /** While a sheet is open, Tab stays inside it. */
+  private keepFocus = (e: FocusEvent) => {
+    if (!e.composedPath().includes(this)) this.focusFirst();
+  };
 
   private onKey = (e: KeyboardEvent) => {
     if (e.key === "Escape") {

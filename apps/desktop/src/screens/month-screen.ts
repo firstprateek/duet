@@ -67,10 +67,11 @@ export class MonthScreen extends Screen {
         opacity: 0.4;
         cursor: default;
       }
-      .monthnav span {
+      .monthnav h1 {
         font-family: var(--du-font-display);
         font-weight: 500;
         font-size: 18px;
+        margin: 0;
       }
       .spent-label {
         margin-top: 26px;
@@ -328,7 +329,8 @@ export class MonthScreen extends Screen {
         margin-top: auto;
         font-size: 13px;
         font-weight: 800;
-        color: var(--du-link);
+        /* The darker link color keeps 4.5:1 on the pastel cards. */
+        color: var(--du-link-hover);
       }
       .insight .white {
         width: 38px;
@@ -416,7 +418,7 @@ export class MonthScreen extends Screen {
           <div class="lead">
             <div class="monthnav">
               <button aria-label="Previous month" @click=${() => this.go(-1)}>‹</button>
-              <span>${monthName(v.month, true)}</span>
+              <h1>${monthName(v.month, true)}</h1>
               <button aria-label="Next month" ?disabled=${v.month >= b.latestMonth && v.month >= this.today()} @click=${() => this.go(1)}>›</button>
             </div>
             <div class="spent-label">In ${name} we spent</div>

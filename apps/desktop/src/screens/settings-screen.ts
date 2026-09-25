@@ -416,7 +416,7 @@ export class SettingsScreen extends Screen {
           <div class="cats">${this.renderCategories(b.categories)}</div>
           <div class="add-cat">
             <input class="input" placeholder="New category" .value=${this.newCategory.name} @input=${(e: Event) => (this.newCategory = { ...this.newCategory, name: (e.target as HTMLInputElement).value })} />
-            <select .value=${this.newCategory.parentId} @change=${(e: Event) => (this.newCategory = { ...this.newCategory, parentId: (e.target as HTMLSelectElement).value })}>
+            <select aria-label="Where the new category goes" .value=${this.newCategory.parentId} @change=${(e: Event) => (this.newCategory = { ...this.newCategory, parentId: (e.target as HTMLSelectElement).value })}>
               ${b.categories.filter((c) => !c.parentId).map((c) => html`<option value=${c.id} ?selected=${c.id === this.newCategory.parentId}>in ${c.name}</option>`)}
             </select>
             <button class="btn small" ?disabled=${!this.newCategory.name.trim()} @click=${this.addCategory}>Add</button>

@@ -329,7 +329,7 @@ export class HistoryScreen extends Screen {
           <div style="flex-grow:1">
             <div class="small-label">${words.ourRhythm}</div>
             <div class="value">${rhythmLabel(v.currentFirstBp)}
-              ${v.rhythmSince ? html`<span class="muted" style="font-family:var(--du-font-text);font-size:13px;font-weight:700">since ${monthName(v.rhythmSince)}</span>` : nothing}
+              ${v.rhythmSince ? html`<span class="muted" style="font-family:var(--du-font-text);font-size:13px;font-weight:700">since ${monthName(v.rhythmSince, v.rhythmSince.slice(0, 4) !== this.month.slice(0, 4))}</span>` : nothing}
             </div>
           </div>
           <button class="linkish" @click=${() => this.app.openSheet({ kind: "rhythm" })}>Change</button>

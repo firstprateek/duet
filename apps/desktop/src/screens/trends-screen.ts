@@ -318,7 +318,9 @@ export class TrendsScreen extends Screen {
               : html`<p class="muted" style="font-weight:600;margin:0">After a couple of months, this shows what a usual month looks like for us.</p>`
           }
           <div class="foot dotted-top">
-            <span style="font-size:14px;font-weight:800">A typical month <span class="total">${formatMoney(v.typicalTotal)}</span></span>
+            <span style="font-size:14px;font-weight:800"
+              >A typical month <span class="total">${v.typicalTotal ? formatMoney(v.typicalTotal) : "—"}</span></span
+            >
             ${
               latest?.total && v.typicalTotal
                 ? html`<span class="pill ${latest.difference > 0 ? "peach" : "good"}"
