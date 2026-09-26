@@ -38,7 +38,9 @@ if [ ! -f "$KEYS/signing.p12" ]; then
     -subj "/CN=$IDENTITY" \
     -addext "keyUsage=critical,digitalSignature" \
     -addext "extendedKeyUsage=critical,codeSigning"
+  # 3DES and a SHA-1 MAC: OpenSSL 3's newer defaults don't always import into the macOS keychain.
   openssl pkcs12 -export -out "$KEYS/signing.p12" \
+    -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1 \
     -inkey "$KEYS/signing.key.pem" -in "$KEYS/signing.cert.pem" -passout "pass:$PASSWORD"
 fi
 base64 < "$KEYS/signing.p12" | gh secret set APPLE_CERTIFICATE

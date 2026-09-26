@@ -42,6 +42,18 @@ jobs:
         with:
           workspaces: apps/desktop/src-tauri
       - run: pnpm install --frozen-lockfile
+      # Our certificate is self-signed, and codesign only signs with one this Mac trusts.
+      - name: Trust Duet's signing certificate on this runner
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$APPLE_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/signing.p12"
+          openssl pkcs12 -in "$RUNNER_TEMP/signing.p12" -nokeys -clcerts \
+            -passin env:APPLE_CERTIFICATE_PASSWORD -out "$RUNNER_TEMP/signing.pem"
+          sudo security add-trusted-cert -d -r trustRoot -p codeSign \
+            -k /Library/Keychains/System.keychain "$RUNNER_TEMP/signing.pem"
+          rm -f "$RUNNER_TEMP/signing.p12"
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
