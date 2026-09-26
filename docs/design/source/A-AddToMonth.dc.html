@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A · Journal · Add to the month</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5EFE4;-webkit-font-smoothing:antialiased}
+a{color:#A64B25}a:hover{color:#7E3719}
+button{font:inherit;color:inherit}
+summary{cursor:pointer}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; background: #F5EFE4; color: #2A2420; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden">
+
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #BFB2A0">
+<div style="display: flex; align-items: baseline; gap: 14px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; font-size: 30px; letter-spacing: -0.01em">Duet</span>
+<span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6F6358">Jack &amp; Jill</span>
+</div>
+<nav aria-label="Main" style="display: flex; align-items: center; gap: 28px; font-size: 14px">
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">The month</a>
+<a href="A-LookOver.dc.html" aria-current="page" style="color: #2A2420; font-weight: 600; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #A64B25; display: flex; align-items: center; gap: 7px">{{t.lookOver}}<span style="font-size: 11px; font-weight: 600; background: #2A2420; color: #F5EFE4; border-radius: 999px; padding: 1px 7px">23</span></a>
+<a href="A-Statements.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">{{t.statements}}</a>
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Trends</a>
+<a href="A-Settings.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Settings</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 18px">
+<span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: #6F6358"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6B8A66"></span>Synced</span>
+<a href="A-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #2A2420; font-size: 13px; border: 1px solid #CFC3B0; border-radius: 6px; padding: 8px 12px; background: #FBF8F2">Add something<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6F6358">⌘K</span></a>
+</div>
+</header>
+
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 36px 48px; display: flex; justify-content: center; align-items: flex-start">
+<article style="width: 820px; box-sizing: border-box; background: #FBF8F2; border: 1px solid #DDD2C1; border-radius: 4px; padding: 36px 48px 32px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 0 #E4DACB, 0 18px 40px -24px rgba(42, 36, 32, 0.35)">
+<div>
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6F6358">{{t.lookOver}} · Amex Gold · Jack</div>
+<h1 style="margin: 6px 0 8px; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 46px; line-height: 1; letter-spacing: -0.015em">{{t.adding}}</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4A4038">38 transactions from Amex Gold. The 23 you haven't reached yet will wait here for next time.</p>
+</div>
+
+<div style="border-top: 1px solid #2A2420">
+<div style="display: grid; grid-template-columns: 170px 90px minmax(0, 1fr) 130px; column-gap: 18px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #DDD2C1">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 20px">{{t.ours}}</span>
+<span style="font-size: 13px; color: #6F6358">27 items</span>
+<span style="font-size: 13.5px; color: #4A4038">Jill sees these in full</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 22px">$2,184.60</span>
+</div>
+<div style="display: grid; grid-template-columns: 170px 90px minmax(0, 1fr) 130px; column-gap: 18px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #DDD2C1">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 20px">{{t.part}}</span>
+<span style="font-size: 13px; color: #6F6358">2 items</span>
+<span style="font-size: 13.5px; color: #4A4038">$168.00 of it is shared · Jill sees these in full</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 22px">$241.20</span>
+</div>
+<div style="display: grid; grid-template-columns: 170px 90px minmax(0, 1fr) 130px; column-gap: 18px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #DDD2C1">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 20px">{{t.mine}}</span>
+<span style="font-size: 13px; color: #6F6358">9 items</span>
+<span style="font-size: 13.5px; color: #4A4038">Jill sees only the totals below</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 22px">$312.45</span>
+</div>
+<div style="display: grid; grid-template-columns: 170px 90px minmax(0, 1fr) 130px; column-gap: 18px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #DDD2C1; color: #6F6358">
+<span style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 20px">{{t.setAside}}</span>
+<span style="font-size: 13px">3 items</span>
+<span style="font-size: 13.5px">1 card payment, 1 duplicate, 1 you left out. They stay on this Mac.</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 22px">—</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 28px; background: #F5EFE4; border-radius: 4px; padding: 14px 18px">
+<span style="font-size: 12.5px; color: #6F6358; width: 170px; line-height: 1.4">What Jill sees of {{t.mine}}</span>
+<span style="font-size: 14px">Food <span style="font-family: 'Fraunces', Georgia, serif; font-size: 17px">$96.25</span></span>
+<span style="font-size: 14px">Shopping <span style="font-family: 'Fraunces', Georgia, serif; font-size: 17px">$131.20</span></span>
+<span style="font-size: 14px">Personal care <span style="font-family: 'Fraunces', Georgia, serif; font-size: 17px">$85.00</span></span>
+</div>
+
+<details style="font-size: 13.5px; color: #4A4038">
+<summary style="color: #A64B25">How this changes {{t.gt}}</summary>
+<p style="margin: 8px 0 0; line-height: 1.5">Jack paid all $2,352.60 of the shared amount here. At 58 / 42, Jack's part is $1,364.51, so Jack covered $988.09 more.</p>
+</details>
+
+<div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px">
+<a href="A-LookOver.dc.html" style="font-size: 14px">Back to {{t.lookOver}}</a>
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; background: #2A2420; color: #F5EFE4; text-decoration: none; border-radius: 6px; padding: 12px 22px; font-size: 15px; font-weight: 500">{{addLabel}}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; opacity: 0.75">⌘↵</span></a>
+</div>
+</article>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wording":{"editor":"enum","options":["Warm","Simple","Playful"],"default":"Warm","section":"Words"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const W = {
+      Warm: { ours: "Ours", mine: "Mine", part: "Part ours", lookOver: "Look over", statements: "Inbox", setAside: "Left out", gt: "Ebb & flow", adding: "Adding to August", addLabel: "Add 38 to August" },
+      Simple: { ours: "Together", mine: "Just me", part: "Partly together", lookOver: "Go through", statements: "Inbox", setAside: "Left out", gt: "Ebb & flow", adding: "Adding to August", addLabel: "Add 38 to August" },
+      Playful: { ours: "Ours", mine: "Mine", part: "A bit of both", lookOver: "Tidy up", statements: "Inbox", setAside: "Set aside", gt: "Ebb & flow", adding: "Adding to August", addLabel: "Add 38 to August" }
+    };
+    const t = W[this.props.wording] || W.Warm;
+    return { t: t, addLabel: t.addLabel };
+  }
+}
+</script>
+</body>
+</html>

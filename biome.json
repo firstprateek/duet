@@ -11,7 +11,9 @@
       "!**/fixtures",
       "!**/*.lock",
       "!**/pnpm-lock.yaml",
-      "!apps/desktop/src-tauri/icons"
+      "!apps/desktop/src-tauri/icons",
+      "!_site",
+      "!docs/design/source"
     ]
   },
   "formatter": {
@@ -44,5 +46,17 @@
         "noForEach": "off"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["site/**/*.css"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDescendingSpecificity": "off"
+          }
+        }
+      }
+    }
+  ]
 }

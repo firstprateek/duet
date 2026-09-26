@@ -1,0 +1,285 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "A-AddToMonth.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Add to the month",
+      "w": 1280,
+      "x": 0,
+      "y": 1840
+    },
+    "A-LookOver.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Look over",
+      "w": 1280,
+      "x": 0,
+      "y": 920
+    },
+    "A-QuickAdd.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Quick add",
+      "w": 1280,
+      "x": 0,
+      "y": 3680
+    },
+    "A-Settings.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Settings",
+      "w": 1280,
+      "x": 0,
+      "y": 4600
+    },
+    "A-Statements.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Inbox",
+      "w": 1280,
+      "x": 0,
+      "y": 2760
+    },
+    "B-AddToMonth.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Add to the month",
+      "w": 1280,
+      "x": 1360,
+      "y": 1840
+    },
+    "B-LookOver.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Go through",
+      "w": 1280,
+      "x": 1360,
+      "y": 920
+    },
+    "B-Month.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Month",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "B-QuickAdd.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Quick add",
+      "w": 1280,
+      "x": 1360,
+      "y": 3680
+    },
+    "B-Settings.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Settings",
+      "w": 1280,
+      "x": 1360,
+      "y": 4600
+    },
+    "B-Statements.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "B · Inbox",
+      "w": 1280,
+      "x": 1360,
+      "y": 2760
+    },
+    "C-AddToMonth.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Add to the month",
+      "w": 1280,
+      "x": 1360,
+      "y": 920
+    },
+    "C-History.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Ebb & flow · History",
+      "w": 1280,
+      "x": 2720,
+      "y": 0
+    },
+    "C-LookOver.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "To sort",
+      "w": 1280,
+      "x": 0,
+      "y": 920
+    },
+    "C-Month-Peek.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "This month · Ebb & flow open",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "C-Month.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "This month",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "C-NewAccount.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Uploads · New card found",
+      "w": 1280,
+      "x": 1360,
+      "y": 1840
+    },
+    "C-QuickAdd.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Quick add",
+      "w": 1280,
+      "x": 0,
+      "y": 2760
+    },
+    "C-Settings.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Settings",
+      "w": 1280,
+      "x": 1360,
+      "y": 2760
+    },
+    "C-Statements.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Uploads",
+      "w": 1280,
+      "x": 0,
+      "y": 1840
+    },
+    "C-Trends.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "duet",
+      "title": "Trends",
+      "w": 1280,
+      "x": 4080,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 800,
+      "is_interactive": true,
+      "page": "explore",
+      "title": "A · Month",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-24T02:24:25.542Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "duet",
+    "view": "canvas"
+  },
+  "notes": {
+    "howto": {
+      "fill": "orange",
+      "page": "duet",
+      "text": "The final direction.\n\nOpen any screen in Play to click through: Peek on Ebb & flow and its History link, Trends, the rows and Ours / Mine buttons in To sort, Upload on the Citi card, and the switches in Settings.\n\nThe earlier directions A and B are on the Explorations page.",
+      "w": 360,
+      "x": -460,
+      "y": 0
+    },
+    "titleA": {
+      "kind": "title1",
+      "maxW": 1280,
+      "page": "explore",
+      "text": "A · Kitchen-table journal",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "titleB": {
+      "kind": "title1",
+      "maxW": 1280,
+      "page": "explore",
+      "text": "B · Quiet modern",
+      "w": 240,
+      "x": 1360,
+      "y": -300
+    },
+    "titleDuet": {
+      "kind": "title1",
+      "maxW": 5360,
+      "page": "duet",
+      "text": "Duet · Soft & friendly",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "A-LookOver.dc.html",
+    "A-AddToMonth.dc.html",
+    "A-Statements.dc.html",
+    "A-QuickAdd.dc.html",
+    "A-Settings.dc.html",
+    "B-Month.dc.html",
+    "B-LookOver.dc.html",
+    "B-AddToMonth.dc.html",
+    "B-Statements.dc.html",
+    "B-QuickAdd.dc.html",
+    "B-Settings.dc.html",
+    "C-Month.dc.html",
+    "C-LookOver.dc.html",
+    "C-AddToMonth.dc.html",
+    "C-Statements.dc.html",
+    "C-QuickAdd.dc.html",
+    "C-Settings.dc.html",
+    "C-Month-Peek.dc.html",
+    "C-History.dc.html",
+    "C-Trends.dc.html",
+    "C-NewAccount.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "duet",
+      "name": "Duet · Soft & friendly"
+    },
+    {
+      "id": "explore",
+      "name": "Explorations: A & B"
+    }
+  ],
+  "title": "Duet Design Directions"
+}

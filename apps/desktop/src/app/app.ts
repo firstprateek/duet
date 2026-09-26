@@ -22,6 +22,9 @@ import { parseHash, type Route, toHash } from "./router.ts";
 import { SortingService } from "./sorting.ts";
 import { SyncService } from "./sync.ts";
 
+/** The demo on the website: Jack and Jill's year, with sync switched off. */
+const DEMO = import.meta.env.MODE === "demo";
+
 export interface Basics {
   setUp: boolean;
   members: Member[];
@@ -161,6 +164,13 @@ export class App extends EventTarget {
   private sheetDone: ((result: unknown) => void) | null = null;
 
   openSheet(sheet: Sheet): void {
+    if (
+      DEMO &&
+      (sheet.kind === "sync-setup" || sheet.kind === "join-code" || sheet.kind === "devices")
+    ) {
+      this.toast("Sync needs the Duet app and a Mac mini, so it's off in the demo.");
+      return;
+    }
     this.sheetDone?.(undefined);
     this.sheetDone = null;
     this.sheet.set(sheet);

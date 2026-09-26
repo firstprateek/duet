@@ -15,7 +15,7 @@ import { Relay, type RelayDb, type SqlParam } from "./relay.ts";
  * change where it listens.
  */
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.0"; // x-release-please-version
 const dataDir = process.env.DUET_DATA ?? join(process.env.HOME ?? ".", ".duet-sync");
 
 function open(): Database {

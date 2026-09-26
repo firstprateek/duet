@@ -2,8 +2,10 @@ import { defineConfig } from "vite";
 
 const host = process.env.TAURI_DEV_HOST;
 
-// Tauri expects a fixed port; the browser preview (`pnpm dev:web`) uses 5174.
+// Tauri expects a fixed port; the browser preview (`pnpm dev:web`) uses 5174. The demo on the
+// website (`--mode demo`) lives in a subfolder, so its paths are relative.
 export default defineConfig(({ mode }) => ({
+  base: mode === "demo" ? "./" : "/",
   clearScreen: false,
   server: {
     port: mode === "web" ? 5174 : 1420,

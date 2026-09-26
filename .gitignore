@@ -28,3 +28,6 @@ services/sync/bin/
 
 # Claude Code: per-person settings stay local
 .claude/settings.local.json
+
+# The website build (pnpm site)
+_site/

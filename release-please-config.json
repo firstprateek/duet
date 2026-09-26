@@ -7,7 +7,11 @@
       "package-name": "duet",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        { "type": "json", "path": "apps/desktop/package.json", "jsonpath": "$.version" },
+        {
+          "type": "json",
+          "path": "apps/desktop/package.json",
+          "jsonpath": "$.version"
+        },
         {
           "type": "json",
           "path": "apps/desktop/src-tauri/tauri.conf.json",
@@ -17,6 +21,25 @@
           "type": "toml",
           "path": "apps/desktop/src-tauri/Cargo.toml",
           "jsonpath": "$.package.version"
+        },
+        {
+          "type": "json",
+          "path": "services/sync/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "tools/cli/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "toml",
+          "path": "services/sorter/pyproject.toml",
+          "jsonpath": "$.project.version"
+        },
+        {
+          "type": "generic",
+          "path": "services/sync/src/main.ts"
         }
       ]
     }

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C · Soft &amp; friendly · Uploads</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBF6EF;-webkit-font-smoothing:antialiased}
+a{color:#B4461A}a:hover{color:#8A3412}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; background: #FBF6EF; color: #2B2536; font-family: 'Nunito', system-ui, sans-serif; overflow: hidden">
+
+<header style="height: 76px; flex-shrink: 0; box-sizing: border-box; padding: 0 32px; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 10px; width: 260px">
+<svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2F6FB0"></circle><circle cx="22" cy="12" r="11" fill="#F5C451" style="mix-blend-mode: multiply"></circle></svg>
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: -0.01em">duet</span>
+</div>
+<nav aria-label="Main" style="display: flex; align-items: center; gap: 2px; background: #FFFFFF; border-radius: 999px; padding: 5px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 8px 20px -12px rgba(64, 44, 24, 0.2)">
+<a href="C-Month.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 18px; font-size: 14px; font-weight: 700">This month</a>
+<a href="C-Statements.dc.html" aria-current="page" style="text-decoration: none; color: #FFFFFF; background: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700">{{t.statements}}</a>
+<a href="C-LookOver.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 7px">{{t.lookOver}}<span style="background: #F07A4A; color: #2B2536; border-radius: 999px; font-size: 11px; font-weight: 800; padding: 1px 7px">23</span></a>
+<a href="C-Trends.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700">Trends</a>
+</nav>
+<div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; width: 260px">
+<a href="C-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none; background: #F07A4A; color: #2B2536; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 800"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Quick add</a>
+<a href="C-Settings.dc.html" aria-label="Settings" style="width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.08)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></a>
+<span style="display: flex"><span style="width: 32px; height: 32px; border-radius: 50%; background: #2F6FB0; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #FBF6EF">Ja</span><span style="width: 32px; height: 32px; border-radius: 50%; background: #F5C451; color: #2B2536; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-left: -8px; box-shadow: 0 0 0 3px #FBF6EF">Ji</span></span>
+</div>
+</header>
+
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 10px 32px 24px; display: flex; gap: 18px">
+
+<section style="width: 800px; flex-shrink: 0; display: flex; flex-direction: column">
+<h1 style="margin: 0 0 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.15">{{t.statements}} <span style="color: #6B6478; font-weight: 500">· August</span></h1>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+<article style="background: #FFFFFF; border-radius: 24px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 50%; background: #DCEEFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">AX</span><div style="min-width: 0"><div style="font-size: 15px; font-weight: 800">Amex Gold</div><div style="font-size: 12.5px; font-weight: 600; color: #6B6478; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">amex-activity-aug.csv · 64 rows · Sep 3</div></div></div>
+<div style="display: flex; align-items: center; justify-content: space-between"><span style="background: #FFE6DA; color: #7A2E0C; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 800">{{t.lookingOver}} · 23 left</span><a href="C-LookOver.dc.html" style="font-size: 13.5px; font-weight: 800">Keep going</a></div>
+</article>
+<article style="background: #FFFFFF; border-radius: 24px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 50%; background: #DCE9F7; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">CH</span><div style="min-width: 0"><div style="font-size: 15px; font-weight: 800">Chase Sapphire</div><div style="font-size: 12.5px; font-weight: 600; color: #6B6478; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Chase_Activity_20260901.CSV · 38 rows · Sep 2</div></div></div>
+<div style="display: flex; align-items: center; justify-content: space-between"><span style="background: #D9F4E6; color: #1E5B3C; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 800">{{t.done}} · 2 {{t.leftOut}}</span><a href="C-LookOver.dc.html" style="font-size: 13.5px; font-weight: 800">Open</a></div>
+</article>
+<article style="background: #FFFFFF; border-radius: 24px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 50%; background: #FFE3D3; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">WF</span><div style="min-width: 0"><div style="font-size: 15px; font-weight: 800">Wells Fargo Checking</div><div style="font-size: 12.5px; font-weight: 600; color: #6B6478; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">WF_Checking_Aug2026.csv · 17 rows · Sep 2</div></div></div>
+<div style="display: flex; align-items: center; justify-content: space-between"><span style="background: #D9F4E6; color: #1E5B3C; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 800">{{t.done}} · 6 transfers {{t.leftOut}}</span><a href="C-LookOver.dc.html" style="font-size: 13.5px; font-weight: 800">Open</a></div>
+</article>
+<article style="background: #FFFFFF; border-radius: 24px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 50%; background: #FFF0C2; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">DC</span><div style="min-width: 0"><div style="font-size: 15px; font-weight: 800">DCU Checking</div><div style="font-size: 12.5px; font-weight: 600; color: #6B6478; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">DCU_Export_0901.xlsx · 22 rows · Sep 3</div></div></div>
+<div style="display: flex; align-items: center; justify-content: space-between"><span style="background: #FFF1C9; color: #5E4800; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 800">New layout · one quick setup</span><a href="C-Statements.dc.html" style="font-size: 13.5px; font-weight: 800">Set up</a></div>
+</article>
+</div>
+
+<div style="margin-top: 14px; border: 2px dashed #E3D8C8; border-radius: 24px; padding: 16px 20px; display: flex; align-items: center; gap: 14px">
+<span style="width: 44px; height: 44px; border-radius: 50%; background: #F4EFE8; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; color: #6B6478; flex-shrink: 0">CI</span>
+<div style="flex-grow: 1"><div style="font-size: 15px; font-weight: 800">Citi Double Cash</div><div style="font-size: 13px; font-weight: 600; color: #6B6478">Still waiting for August</div></div>
+<a href="C-NewAccount.dc.html" style="text-decoration: none; background: #2B2536; color: #FFFFFF; border-radius: 999px; padding: 9px 18px; font-size: 14px; font-weight: 800">{{t.bringIn}}</a>
+</div>
+
+<div style="margin-top: 18px; display: flex; align-items: center; gap: 8px">
+<span style="font-size: 13.5px; font-weight: 800; color: #4E475C; margin-right: 4px">Earlier</span>
+<button type="button" style="border: 0; background: #FFFFFF; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.08)">July · 5 files · all in</button>
+<button type="button" style="border: 0; background: #FFFFFF; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.08)">June · 5 files · all in</button>
+<button type="button" style="border: 0; background: #FFFFFF; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.08)">May · 6 files · all in</button>
+</div>
+</section>
+
+<aside style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<section style="background: #FFFFFF; border: 2px dashed #E3D8C8; border-radius: 26px; padding: 26px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<svg width="120" height="86" viewBox="0 0 120 86" aria-hidden="true">
+<rect x="30" y="6" width="44" height="54" rx="8" fill="#DCEEFF" transform="rotate(-10 52 33)"></rect>
+<rect x="48" y="4" width="44" height="54" rx="8" fill="#FFF0C2" transform="rotate(8 70 31)"></rect>
+<path d="M58 22h20M58 30h20M58 38h12" stroke="#2B2536" stroke-width="2.4" stroke-linecap="round" transform="rotate(8 70 31)"></path>
+<rect x="12" y="44" width="96" height="38" rx="14" fill="#FFE3D3"></rect>
+<path d="M12 56h28l6 8h28l6-8h28" fill="none" stroke="#F07A4A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+</svg>
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 21px">Drop statements here</div>
+<div style="font-size: 13.5px; font-weight: 600; color: #6B6478; line-height: 1.45">CSV, XLSX, OFX or QFX.<br>One month or a whole year.</div>
+<button type="button" style="margin-top: 6px; border: 0; background: #2B2536; color: #FFFFFF; border-radius: 999px; padding: 10px 22px; font-size: 14px; font-weight: 800; cursor: pointer">Choose files</button>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 26px; padding: 20px 24px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<h2 style="margin: 0 0 2px; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 18px">Your accounts for August</h2>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700"><span style="width: 22px; height: 22px; border-radius: 50%; background: #D9F4E6; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E5B3C" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Amex Gold</div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700"><span style="width: 22px; height: 22px; border-radius: 50%; background: #D9F4E6; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E5B3C" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Chase Sapphire</div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700"><span style="width: 22px; height: 22px; border-radius: 50%; background: #D9F4E6; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E5B3C" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Wells Fargo Checking</div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700"><span style="width: 22px; height: 22px; border-radius: 50%; background: #FFF1C9; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-size: 12px; color: #5E4800">!</span>DCU Checking <span style="font-weight: 600; color: #6B6478">· quick setup</span></div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: #6B6478"><span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; border: 2px dashed #D9D2E3"></span>Citi Double Cash</div>
+<p style="margin: 4px 0 0; font-size: 13px; font-weight: 600; color: #6B6478; line-height: 1.45">4 of 5 in.</p>
+</section>
+</aside>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { lookOver: "To sort", statements: "Uploads", lookingOver: "Sorting", done: "Added", leftOut: "set aside", bringIn: "Upload" };
+    return { t: T };
+  }
+}
+</script>
+</body>
+</html>

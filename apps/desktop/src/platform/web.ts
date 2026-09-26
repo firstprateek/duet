@@ -103,7 +103,8 @@ export async function createWebPlatform(): Promise<Platform> {
       },
     },
     async appVersion() {
-      return `${import.meta.env.VITE_APP_VERSION ?? "0.1.0"} (preview)`;
+      const where = import.meta.env.MODE === "demo" ? "demo" : "preview";
+      return `${import.meta.env.VITE_APP_VERSION ?? "0.1.0"} (${where})`;
     },
     async checkForUpdate() {
       return null;

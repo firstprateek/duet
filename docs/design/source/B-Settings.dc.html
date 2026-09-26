@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B · Quiet modern · Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;-webkit-font-smoothing:antialiased}
+a{color:#0E6B55}a:hover{color:#0A5040}
+button,select{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; background: #FFFFFF; color: #141414; font-family: 'Geist', system-ui, sans-serif; overflow: hidden">
+
+<nav aria-label="Main" style="width: 232px; flex-shrink: 0; box-sizing: border-box; background: #F4F4F1; border-right: 1px solid #E7E7E3; padding: 20px 14px; display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 10px 22px">
+<svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="#141414" stroke-width="1.5"></circle><circle cx="14" cy="8" r="6.5" fill="none" stroke="#141414" stroke-width="1.5"></circle></svg>
+<span style="font-weight: 600; font-size: 17px; letter-spacing: -0.02em">duet</span>
+</div>
+<a href="B-Month.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg><span style="flex-grow: 1">Month</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G M</span></a>
+<a href="B-LookOver.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"></path><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"></path></svg><span style="flex-grow: 1">{{t.lookOver}}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; background: #141414; color: #FFFFFF; border-radius: 4px; padding: 1px 5px">23</span></a>
+<a href="B-Statements.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v5h16v-5"></path><path d="M12 4v10M8 10l4 4 4-4"></path></svg><span style="flex-grow: 1">{{t.statements}}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G I</span></a>
+<a href="B-Month.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18l5-6 4 3 7-9"></path></svg><span style="flex-grow: 1">Trends</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G T</span></a>
+<a href="B-Month.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"></path></svg><span style="flex-grow: 1">Transactions</span></a>
+<a href="B-Settings.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; background: #E6E6E1; color: #141414; text-decoration: none; font-size: 14px; font-weight: 500"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg><span style="flex-grow: 1">Settings</span></a>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+<a href="B-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 12px; border: 1px solid #DADAD5; border-radius: 8px; background: #FFFFFF; color: #141414; text-decoration: none; font-size: 13.5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span style="flex-grow: 1">Quick add</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">⌘K</span></a>
+<div style="display: flex; align-items: center; gap: 8px; padding: 0 10px; font-size: 12px; color: #62625E"><span style="width: 6px; height: 6px; border-radius: 50%; background: #0E6B55"></span>Mac mini · synced 2m ago</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 12px 10px 0; border-top: 1px solid #E7E7E3">
+<span style="display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #141414; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">Ja</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #CFCFCA; color: #141414; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-left: -6px; box-shadow: 0 0 0 2px #F4F4F1">Ji</span></span>
+<span style="font-size: 13px">Jack &amp; Jill</span>
+</div>
+</div>
+</nav>
+
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 32px 44px 28px; display: flex; flex-direction: column">
+<h1 style="margin: 0 0 26px; font-size: 30px; font-weight: 500; letter-spacing: -0.025em">Settings</h1>
+<div style="display: flex; gap: 32px">
+
+<nav aria-label="Settings" style="width: 156px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; font-size: 13.5px">
+<a href="B-Settings.dc.html" aria-current="page" style="color: #141414; text-decoration: none; padding: 6px 10px; border-radius: 6px; background: #F4F4F1; font-weight: 500">Us</a>
+<a href="B-Settings.dc.html" style="color: #62625E; text-decoration: none; padding: 6px 10px">Accounts</a>
+<a href="B-Settings.dc.html" style="color: #62625E; text-decoration: none; padding: 6px 10px">Categories</a>
+<a href="B-Settings.dc.html" style="color: #62625E; text-decoration: none; padding: 6px 10px">Sync &amp; security</a>
+<a href="B-Settings.dc.html" style="color: #62625E; text-decoration: none; padding: 6px 10px">Smart sorting</a>
+<a href="B-Settings.dc.html" style="color: #62625E; text-decoration: none; padding: 6px 10px">Updates</a>
+</nav>
+
+<section style="width: 408px; flex-shrink: 0; display: flex; flex-direction: column; gap: 28px">
+<div>
+<h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">Us</h2>
+<div style="display: flex; align-items: center; gap: 12px; height: 48px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span style="width: 24px; height: 24px; border-radius: 50%; background: #141414; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">Ja</span><span style="flex-grow: 1">Jack</span><span style="font-size: 12.5px; color: #62625E">this Mac</span></div>
+<div style="display: flex; align-items: center; gap: 12px; height: 48px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span style="width: 24px; height: 24px; border-radius: 50%; background: #CFCFCA; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">Ji</span><span style="flex-grow: 1">Jill</span><span style="font-size: 12.5px; color: #62625E">MacBook Pro</span></div>
+</div>
+
+<div>
+<h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">{{t.ratio}}</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 0 10px">
+<div><div style="font-size: 40px; font-weight: 300; letter-spacing: -0.03em; line-height: 1">58 / 42</div><div style="font-size: 12.5px; color: #62625E; margin-top: 6px">From January 2026 · Jill updated this Jan 4</div></div>
+<button type="button" style="border: 1px solid #E7E7E3; background: #FFFFFF; border-radius: 8px; padding: 7px 12px; font-size: 13px; cursor: pointer">Change</button>
+</div>
+<div style="display: flex; height: 6px; gap: 2px; margin-bottom: 12px"><div style="flex: 58 1 0; background: #141414; border-radius: 3px 0 0 3px"></div><div style="flex: 42 1 0; background: #CFCFCA; border-radius: 0 3px 3px 0"></div></div>
+<div style="display: flex; justify-content: space-between; align-items: center; height: 42px; border-top: 1px solid #F0F0EC; font-size: 13.5px"><span style="color: #62625E">Before</span><span style="font-family: 'Geist Mono', monospace; font-size: 13px">60 / 40 · Jan–Dec 2025</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; height: 42px; border-top: 1px solid #F0F0EC; border-bottom: 1px solid #F0F0EC; font-size: 13.5px"><span>Work it out from our salaries</span><a href="B-Settings.dc.html" style="font-size: 13px">Open · not saved</a></div>
+</div>
+
+<div>
+<h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">{{t.gt}}</h2>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F0F0EC">
+<div style="flex-grow: 1"><div style="font-size: 14px">Keep it visible on the month</div><div style="font-size: 12.5px; color: #62625E; margin-top: 2px">Only on this Mac. Jill chooses separately.</div></div>
+<button type="button" role="switch" aria-checked="{{keep}}" aria-label="Keep it visible on the month" onClick="{{toggleKeep}}" style="width: 36px; height: 20px; flex-shrink: 0; border-radius: 999px; border: 0; background: {{switchBg}}; position: relative; padding: 0; cursor: pointer"><span style="position: absolute; top: 2px; left: {{knobLeft}}; width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)"></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F0F0EC">
+<label for="b-evened" style="flex-grow: 1; font-size: 14px">New “{{t.evened}}” entries apply to</label>
+<select id="b-evened" style="border: 1px solid #E7E7E3; background: #FFFFFF; border-radius: 8px; padding: 6px 8px; font-size: 13px"><option>Month on screen</option><option>Overall</option></select>
+</div>
+</div>
+</section>
+
+<section style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div>
+<h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">Sync &amp; security</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 48px; border-bottom: 1px solid #F0F0EC; font-size: 13.5px"><span>Mac mini</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; background: #E3F0EC; color: #0A5040; border-radius: 999px; padding: 3px 9px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #0E6B55"></span>Connected</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Address</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px">mac-mini.your-tailnet.ts.net</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Encryption</span><span>End to end · the Mac mini can't read it</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Devices</span><a href="B-Settings.dc.html">2 · Manage</a></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Recovery phrase</span><a href="B-Settings.dc.html">Show</a></div>
+</div>
+<div>
+<h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">Smart sorting</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Laya</span><span>Trained Sep 2 · 2,418 of ours</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">Small LLM</span><span>Ready</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #F0F0EC; font-size: 13px"><span style="color: #62625E">August</span><span><span style="font-family: 'Geist Mono', monospace">94%</span> sorted without help</span></div>
+</div>
+</section>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wording":{"editor":"enum","options":["Warm","Simple","Playful"],"default":"Simple","section":"Words"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const W = {
+      Warm: { lookOver: "Look over", statements: "Inbox", ratio: "How we share", gt: "Ebb & flow", evened: "Clean slate" },
+      Simple: { lookOver: "Go through", statements: "Inbox", ratio: "Our mix", gt: "Ebb & flow", evened: "Clean slate" },
+      Playful: { lookOver: "Tidy up", statements: "Inbox", ratio: "Our rhythm", gt: "Ebb & flow", evened: "Clean slate" }
+    };
+    const s = this.state || {};
+    const keep = !!s.keep;
+    return {
+      t: W[this.props.wording] || W.Simple,
+      keep: keep,
+      switchBg: keep ? "#0E6B55" : "#DADAD5",
+      knobLeft: keep ? "18px" : "2px",
+      toggleKeep: () => this.setState({ keep: !keep })
+    };
+  }
+}
+</script>
+</body>
+</html>

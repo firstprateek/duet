@@ -17,6 +17,7 @@
     "test:watch": "vitest",
     "dev": "pnpm --filter @duet/desktop tauri dev",
     "dev:web": "pnpm --filter @duet/desktop dev:web",
+    "site": "node site/build.mjs",
     "build": "pnpm -r --if-present build",
     "duet": "node --no-warnings tools/cli/src/main.ts",
     "relay:dev": "node --no-warnings services/sync/src/dev-server.ts"

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A · Journal · Look over</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5EFE4;-webkit-font-smoothing:antialiased}
+a{color:#A64B25}a:hover{color:#7E3719}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; background: #F5EFE4; color: #2A2420; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden">
+
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #BFB2A0">
+<div style="display: flex; align-items: baseline; gap: 14px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; font-size: 30px; letter-spacing: -0.01em">Duet</span>
+<span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6F6358">Jack &amp; Jill</span>
+</div>
+<nav aria-label="Main" style="display: flex; align-items: center; gap: 28px; font-size: 14px">
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">The month</a>
+<a href="A-LookOver.dc.html" aria-current="page" style="color: #2A2420; font-weight: 600; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #A64B25; display: flex; align-items: center; gap: 7px">{{t.lookOver}}<span style="font-size: 11px; font-weight: 600; background: #2A2420; color: #F5EFE4; border-radius: 999px; padding: 1px 7px">{{leftCount}}</span></a>
+<a href="A-Statements.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">{{t.statements}}</a>
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Trends</a>
+<a href="A-Settings.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Settings</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 18px">
+<span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: #6F6358"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6B8A66"></span>Synced</span>
+<a href="A-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #2A2420; font-size: 13px; border: 1px solid #CFC3B0; border-radius: 6px; padding: 8px 12px; background: #FBF8F2">Add something<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6F6358">⌘K</span></a>
+</div>
+</header>
+
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px 48px 0; display: flex; gap: 32px">
+
+<section style="width: 812px; flex-shrink: 0; display: flex; flex-direction: column">
+<div style="display: flex; align-items: flex-end; justify-content: space-between">
+<div>
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6F6358">{{t.lookOver}}</div>
+<h1 style="margin: 4px 0 4px; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 36px; line-height: 1.05; letter-spacing: -0.01em">Amex Gold <span style="font-style: italic; font-size: 20px; color: #6F6358">August 1–31</span></h1>
+<div style="font-size: 12.5px; color: #6F6358">Jack · amex-activity-aug.csv · 64 transactions</div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-bottom: 4px">
+<span style="font-size: 13px">{{progressText}}</span>
+<div style="width: 180px; height: 4px; background: #DDD2C1; border-radius: 2px"><div style="height: 4px; border-radius: 2px; background: #2A2420; width: {{progressPct}}"></div></div>
+</div>
+</div>
+
+<div role="group" aria-label="Show" style="display: flex; gap: 22px; margin-top: 14px; font-size: 13px; border-bottom: 1px solid #DDD2C1">
+<button type="button" aria-pressed="true" style="background: none; border: 0; border-bottom: 2px solid #2A2420; padding: 6px 0; font-weight: 600; cursor: pointer">All <span style="color: #6F6358; font-weight: 400">64</span></button>
+<button type="button" aria-pressed="false" style="background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer">Needs you <span style="color: #A64B25">3</span></button>
+<button type="button" aria-pressed="false" style="background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer">Possible duplicates <span style="color: #6F6358">1</span></button>
+<button type="button" aria-pressed="false" style="background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer">Card payments <span style="color: #6F6358">1</span></button>
+<button type="button" aria-pressed="false" style="background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer">Refunds <span style="color: #6F6358">1</span></button>
+</div>
+
+<div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 160px 96px 150px; column-gap: 14px; align-items: center; height: 30px; padding: 0 12px; margin-top: 6px; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6F6358; border-bottom: 1px solid #BFB2A0">
+<span>Date</span><span>Merchant</span><span>Category</span><span style="text-align: right">Amount</span><span>For</span>
+</div>
+
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+<button type="button" onClick="{{r.pick}}" aria-pressed="{{r.selected}}" style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 160px 96px 150px; column-gap: 14px; align-items: center; width: 100%; height: 46px; box-sizing: border-box; padding: 0 12px; border: 0; border-bottom: 1px solid #E4DACB; background: {{r.bg}}; text-align: left; cursor: pointer">
+<span style="font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: #6F6358">{{r.date}}</span>
+<span style="display: flex; flex-direction: column; min-width: 0; gap: 1px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.merchant}}</span>
+<sc-if value="{{r.hasFlag}}" hint-placeholder-val="{{false}}"><span style="font-size: 11.5px; font-style: italic; color: #A64B25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.flag}}</span></sc-if>
+<sc-if value="{{r.noFlag}}" hint-placeholder-val="{{true}}"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6F6358; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.raw}}</span></sc-if>
+</span>
+<span style="display: flex; align-items: center; gap: 7px; font-size: 13.5px; min-width: 0">
+<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.cat}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6F6358">{{r.conf}}</span>
+<sc-if value="{{r.isMaybe}}" hint-placeholder-val="{{false}}"><span title="Fairly sure" style="width: 6px; height: 6px; border-radius: 50%; background: #B7862B; flex-shrink: 0"></span></sc-if>
+</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 16px">{{r.amount}}</span>
+<span><span style="display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; white-space: nowrap; background: {{r.chipBg}}; color: {{r.chipFg}}; border: {{r.chipBorder}}; font-style: {{r.chipStyle}}">{{r.chipText}}</span></span>
+</button>
+</sc-for>
+
+<div style="margin-top: auto; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #DDD2C1">
+<div style="display: flex; align-items: center; gap: 16px; font-size: 12.5px; color: #6F6358">
+<span><kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">O</kbd> {{t.ours}}</span>
+<span><kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">M</kbd> {{t.mine}}</span>
+<span><kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">P</kbd> {{t.part}}</span>
+<span><kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">C</kbd> category</span>
+<span><kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">J</kbd> <kbd style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #2A2420; border: 1px solid #CFC3B0; border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: #FBF8F2">K</kbd> move</span>
+</div>
+<a href="A-AddToMonth.dc.html" style="display: flex; align-items: center; gap: 10px; background: #2A2420; color: #F5EFE4; text-decoration: none; border-radius: 6px; padding: 11px 18px; font-size: 14px; font-weight: 500">{{addLabel}}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; opacity: 0.75">⌘↵</span></a>
+</div>
+</section>
+
+<aside style="width: 340px; flex-shrink: 0; margin-top: -24px; box-sizing: border-box; padding: 24px 24px 22px; background: #FBF8F2; border-left: 1px solid #DDD2C1; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6F6358">On this line</div>
+<div>
+<div style="font-family: 'Fraunces', Georgia, serif; font-size: 28px; line-height: 1.1">{{sel.merchant}}</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6F6358; margin-top: 6px; line-height: 1.4; word-break: break-all">{{sel.raw}}</div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-size: 13px; color: #6F6358">{{sel.date}} · Amex Gold · Jack</span>
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 26px">{{sel.amount}}</span>
+</div>
+<div style="height: 1px; background: #DDD2C1"></div>
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600">Category</div>
+<sc-for list="{{alts}}" as="a" hint-placeholder-count="3">
+<div style="display: block; margin-bottom: 8px">
+<div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 4px"><span>{{a.name}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6F6358">{{a.pct}}</span></div>
+<div style="height: 3px; background: #E4DACB"><div style="height: 3px; width: {{a.w}}; background: {{a.color}}"></div></div>
+</div>
+</sc-for>
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.45; color: #4A4038">{{sel.why}}</p>
+<div style="height: 1px; background: #DDD2C1"></div>
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600">Who it was for</div>
+<div style="display: flex; gap: 8px">
+<sc-for list="{{shares}}" as="b" hint-placeholder-count="3">
+<button type="button" onClick="{{b.pick}}" aria-pressed="{{b.on}}" style="width: 92px; display: inline-flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 6px; cursor: pointer; font-size: 13px; background: {{b.bg}}; color: {{b.fg}}; border: {{b.border}}">{{b.label}}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; opacity: 0.7">{{b.kbd}}</span></button>
+</sc-for>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 13px"><input type="checkbox" style="width: 16px; height: 16px; margin: 0; accent-color: #2A2420">Always treat {{sel.merchant}} this way</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #6F6358">Note<input type="text" placeholder="Add a note" style="font: inherit; font-size: 13px; color: #2A2420; background: #F5EFE4; border: 1px solid #CFC3B0; border-radius: 6px; padding: 8px 10px"></label>
+<button type="button" onClick="{{remove}}" style="margin-top: auto; align-self: flex-start; background: none; border: 0; padding: 0; font-size: 13px; color: #6F6358; text-decoration: underline; cursor: pointer">Leave this one out</button>
+</aside>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wording":{"editor":"enum","options":["Warm","Simple","Playful"],"default":"Warm","section":"Words"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const W = {
+      Warm: { ours: "Ours", mine: "Mine", part: "Part ours", lookOver: "Look over", lookedOver: "looked over", statements: "Inbox", setAside: "Left out", addVerb: "Add", addPrep: "to" },
+      Simple: { ours: "Together", mine: "Just me", part: "Partly together", lookOver: "Go through", lookedOver: "gone through", statements: "Inbox", setAside: "Left out", addVerb: "Add", addPrep: "to" },
+      Playful: { ours: "Ours", mine: "Mine", part: "A bit of both", lookOver: "Tidy up", lookedOver: "tidied", statements: "Inbox", setAside: "Set aside", addVerb: "Add", addPrep: "to" }
+    };
+    const t = W[this.props.wording] || W.Warm;
+    const T = {
+      selBg: "#EFE5D3", unsureBg: "#F7E6DB", plainBg: "transparent",
+      chip: {
+        ours: ["#E2EADD", "#2F4A2C", "1px solid transparent"],
+        mine: ["#E1E7F0", "#2F4B73", "1px solid transparent"],
+        part: ["#EFE5D0", "#5E4A26", "1px solid transparent"],
+        aside: ["transparent", "#6F6358", "1px dashed #BDB09C"],
+        pending: ["transparent", "#6F6358", "1px dashed #CFC3B0"]
+      },
+      on: ["#2A2420", "#F5EFE4", "1px solid #2A2420"],
+      off: ["#F5EFE4", "#2A2420", "1px solid #CFC3B0"],
+      altTop: "#2A2420", altRest: "#B5A794"
+    };
+    const ROWS = [
+      { id: 1, date: "Aug 28", merchant: "Trader Joe's", raw: "TRADER JOE S #552 OAKLAND CA", cat: "Groceries", conf: "rule", level: "sure", amount: "$86.42", decided: "ours", why: "Your rule: Trader Joe's is Groceries and Ours.", alts: [["Groceries", "rule", "100%"]] },
+      { id: 2, date: "Aug 27", merchant: "Blue Bottle Coffee", raw: "SQ *BLUE BOTTLE COFFE 0423", cat: "Coffee", conf: "94%", level: "sure", amount: "$11.50", decided: "mine", why: "The last 12 Blue Bottle visits were Coffee, and all of them were Mine.", alts: [["Coffee", "94%", "94%"], ["Dining out", "5%", "5%"]] },
+      { id: 3, date: "Aug 26", merchant: "Alaska Airlines", raw: "ALASKA AIR 0272174 SEATTLE WA", cat: "Flights", conf: "91%", level: "sure", amount: "$612.40", decided: "ours", why: "An airline, so Flights rather than Stays.", alts: [["Flights", "91%", "91%"], ["Stays", "6%", "6%"]] },
+      { id: 4, date: "Aug 25", merchant: "Target", raw: "TARGET 00012345 EMERYVILLE CA", cat: "Household goods", conf: "76%", level: "maybe", amount: "$143.20", decided: "part", partNote: "$98", why: "Target is usually Household goods. You shared part of it last time too.", alts: [["Household goods", "76%", "76%"], ["Clothes", "14%", "14%"], ["Groceries", "7%", "7%"]] },
+      { id: 5, date: "Aug 24", merchant: "Autopay payment", raw: "AUTOPAY PAYMENT - THANK YOU", cat: "Card payment", conf: "transfer", level: "sure", amount: "−$2,340.18", decided: "aside", flag: "Card payment, left out automatically", why: "Matches a $2,340.18 payment from Wells Fargo Checking on Aug 24, so it is not spending.", alts: [] },
+      { id: 6, date: "Aug 22", merchant: "Amazon", raw: "AMZN Mktp US*2K4L81JQ3 Amzn.com/bill WA", cat: "Household goods", conf: "48%", level: "unsure", amount: "$39.99", decided: null, suggest: "ours", why: "Past Amazon orders were Household goods four times and Electronics twice.", alts: [["Household goods", "48%", "48%"], ["Electronics", "31%", "31%"], ["Clothes", "9%", "9%"]] },
+      { id: 7, date: "Aug 21", merchant: "Amazon", raw: "AMZN Mktp US REFUND", cat: "Household goods", conf: "refund", level: "sure", amount: "−$24.99", decided: null, suggest: "ours", flag: "Refund of an Aug 9 order", why: "A refund of the Aug 9 order, so it takes that order's category and Ours.", alts: [["Household goods", "match", "100%"]] },
+      { id: 8, date: "Aug 20", merchant: "Sweetgreen", raw: "SWEETGREEN BERKELEY CA", cat: "Dining out", conf: "88%", level: "sure", amount: "$18.75", decided: null, suggest: "mine", why: "A weekday lunch spot. Seven of the last eight visits were Mine.", alts: [["Dining out", "88%", "88%"], ["Groceries", "4%", "4%"]] },
+      { id: 9, date: "Aug 19", merchant: "PG&E", raw: "PGANDE WEB ONLINE", cat: "Utilities", conf: "rule", level: "sure", amount: "$142.10", decided: null, suggest: "ours", why: "Your rule: PG&E is Utilities and Ours.", alts: [["Utilities", "rule", "100%"]] },
+      { id: 10, date: "Aug 1", merchant: "Trader Joe's", raw: "TRADER JOE S #552 OAKLAND CA", cat: "Groceries", conf: "rule", level: "sure", amount: "$64.10", decided: null, suggest: "ours", flag: "Might already be in amex-jul.csv", why: "The same store and amount on Aug 1 appear in last month's file.", alts: [["Groceries", "rule", "100%"]] }
+    ];
+    const s = this.state || {};
+    const selId = s.sel || 6;
+    const dec = s.dec || {};
+    const label = (k) => k === "ours" ? t.ours : k === "mine" ? t.mine : k === "part" ? t.part : k === "aside" ? t.setAside : "";
+    let visDecided = 0;
+    let visAdd = 0;
+    const rows = ROWS.map((r) => {
+      const d = dec[r.id] !== undefined ? dec[r.id] : r.decided;
+      if (d) { visDecided += 1; if (d !== "aside") { visAdd += 1; } }
+      const c = T.chip[d || "pending"];
+      const isSel = r.id === selId;
+      return {
+        id: r.id, date: r.date, merchant: r.merchant, raw: r.raw, cat: r.cat, conf: r.conf, amount: r.amount, flag: r.flag || "",
+        hasFlag: !!r.flag, noFlag: !r.flag,
+        isMaybe: r.level === "maybe",
+        selected: isSel,
+        bg: isSel ? T.selBg : (r.level === "unsure" && !d ? T.unsureBg : T.plainBg),
+        chipText: d ? (d === "part" && r.partNote ? label(d) + " · " + r.partNote : label(d)) : label(r.suggest) + "?",
+        chipBg: c[0], chipFg: c[1], chipBorder: c[2], chipStyle: d ? "normal" : "italic",
+        pick: () => this.setState({ sel: r.id })
+      };
+    });
+    const src = ROWS.find((r) => r.id === selId) || ROWS[5];
+    const cur = rows.find((r) => r.id === selId) || rows[5];
+    const curDec = dec[src.id] !== undefined ? dec[src.id] : src.decided;
+    const setDec = (k) => () => { const n = Object.assign({}, dec); n[src.id] = k; this.setState({ dec: n }); };
+    const shares = [["ours", t.ours, "O"], ["mine", t.mine, "M"], ["part", t.part, "P"]].map((x) => {
+      const st = curDec === x[0] ? T.on : T.off;
+      return { label: x[1], kbd: x[2], on: curDec === x[0], bg: st[0], fg: st[1], border: st[2], pick: setDec(x[0]) };
+    });
+    const alts = src.alts.map((a, i) => ({ name: a[0], pct: a[1], w: a[2], color: i === 0 ? T.altTop : T.altRest }));
+    const looked = 36 + visDecided;
+    const add = 34 + visAdd;
+    return {
+      t: t,
+      rows: rows,
+      sel: { merchant: src.merchant, raw: src.raw, date: src.date, amount: src.amount, why: src.why },
+      alts: alts,
+      shares: shares,
+      remove: setDec("aside"),
+      leftCount: String(64 - looked),
+      progressText: looked + " of 64 " + t.lookedOver,
+      progressPct: Math.round(looked / 64 * 100) + "%",
+      addLabel: t.addVerb + " " + add + " " + t.addPrep + " August"
+    };
+  }
+}
+</script>
+</body>
+</html>
