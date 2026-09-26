@@ -56,8 +56,9 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 - **Relay updates** (`duet-server update`) check the release's SHA-256; the spec also asks for a
   signature, which needs the release key set up first (a later step).
 - **Installs and updates come from the Mac mini, not GitHub.** The repository stays private, so
-  `duet-server update` (signed in with `gh`) copies each release to `/usr/local/var/duet/app`
-  and `tailscale serve` publishes it at `/app`, with `latest.json` rewritten to point there.
+  `duet-server update` (signed in with `gh`) copies each release to `/usr/local/var/duet/app`,
+  with `latest.json` rewritten to point at the Mac mini, and the relay serves those four files
+  at `/app` (the Tailscale app can't serve folders on macOS; only the open-source daemon can).
   The app asks the relay's address plus `/app/latest.json` through the `update_check` Rust
   command, since the updater's endpoint is only known at runtime; the release key's signature
   is still checked before anything installs.

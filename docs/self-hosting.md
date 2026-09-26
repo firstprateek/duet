@@ -9,7 +9,7 @@ a recovery phrase can open the data, and nobody else can, including the Mac mini
 | Tailscale | The open-source `tailscaled` daemon, so it runs with nobody logged in | — |
 | Duet relay | `duet-sync`, one binary, a LaunchDaemon that restarts it if it stops | 127.0.0.1:8787, published over HTTPS by `tailscale serve` |
 | Nightly backup | `duet-sync backup`, a LaunchDaemon at 03:15 | `/usr/local/var/duet/backups` |
-| The app | A copy of the latest release, made by `duet-server update` | `/app` on the same address, for our Macs to install and update from |
+| The app | A copy of the latest release, made by `duet-server update` and served by the relay | `/app` on the same address, for our Macs to install and update from |
 
 The repository is private, so our Macs never download anything from GitHub: the Mac mini copies
 each release and hands it to them over Tailscale.

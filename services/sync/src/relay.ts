@@ -107,6 +107,18 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * What the Mac mini hands to our Macs at /app, since the repository is private: the update
+ * manifest, the app bundle, its checksum and the installer. `duet-server update` puts them in
+ * the relay's data folder. Nothing else is ever read.
+ */
+const APP_FILES: Record<string, string> = {
+  "latest.json": "application/json; charset=utf-8",
+  "install.sh": "text/plain; charset=utf-8",
+  "Duet.app.tar.gz": "application/gzip",
+  "Duet.app.tar.gz.sha256": "text/plain; charset=utf-8",
+};
+
 function json(value: unknown, status = 200): Response {
   return new Response(JSON.stringify(value), {
     status,
@@ -173,6 +185,8 @@ export interface RelayOptions {
   now?: () => Date;
   /** How often an open event stream says it's still there. */
   keepAliveMs?: number;
+  /** Reads one of the app's files by name, or null when there isn't one yet. */
+  appFile?: (name: string) => Promise<Blob | null>;
 }
 
 export class Relay {
@@ -180,6 +194,7 @@ export class Relay {
   private readonly version: string;
   private readonly now: () => Date;
   private readonly keepAliveMs: number;
+  private readonly appFile: (name: string) => Promise<Blob | null>;
   private readonly listeners = new Map<string, Set<(latest: number) => void>>();
   private readonly failedRestores: number[] = [];
 
@@ -188,6 +203,7 @@ export class Relay {
     this.version = options.version ?? "0.1.0";
     this.now = options.now ?? (() => new Date());
     this.keepAliveMs = options.keepAliveMs ?? 25_000;
+    this.appFile = options.appFile ?? (async () => null);
     this.db.exec(RELAY_SCHEMA);
   }
 
@@ -198,6 +214,8 @@ export class Relay {
     const method = request.method;
     try {
       if (method === "GET" && path === "/v1/health") return json(this.health());
+      const appName = path.match(/^\/app\/([^/]+)$/)?.[1];
+      if (method === "GET" && appName !== undefined) return await this.app(appName);
       this.checkProtocol(request);
       if (method === "POST" && path === "/v1/households") {
         return json(this.createHousehold(await readJson<CreateHouseholdRequest>(request)), 201);
@@ -236,6 +254,16 @@ export class Relay {
       console.error(error);
       return json({ error: "Something went wrong on the Mac mini." }, 500);
     }
+  }
+
+  /** The app for our Macs to install and update from; anyone on the tailnet may fetch it. */
+  private async app(name: string): Promise<Response> {
+    const type = Object.hasOwn(APP_FILES, name) ? APP_FILES[name] : undefined;
+    const file = type ? await this.appFile(name) : null;
+    if (!type || !file) {
+      throw new HttpError(404, "The Mac mini doesn't have that yet; run duet-server update there.");
+    }
+    return new Response(file, { headers: { "content-type": type, "cache-control": "no-cache" } });
   }
 
   private checkProtocol(request: Request): void {

@@ -339,3 +339,26 @@ describe("backups", () => {
     expect(kept.length).toBe(30 + 11);
   });
 });
+
+describe("the app at /app", () => {
+  it("hands out only the app's own files", async () => {
+    const files: Record<string, string> = {
+      "latest.json": '{"version":"0.2.0"}',
+      "Duet.app.tar.gz": "bundle",
+    };
+    const relay = new Relay({
+      db: nodeRelayDb(),
+      appFile: async (name) => (name in files ? new Blob([files[name]!]) : null),
+    });
+    const get = (path: string) => relay.handle(new Request(BASE + path));
+    const manifest = await get("/app/latest.json");
+    expect(manifest.status).toBe(200);
+    expect(manifest.headers.get("content-type")).toContain("application/json");
+    expect(await manifest.json()).toEqual({ version: "0.2.0" });
+    expect(await (await get("/app/Duet.app.tar.gz")).text()).toBe("bundle");
+    // Not there yet, not the app's, or reaching for something else.
+    for (const path of ["/app/install.sh", "/app/relay.db", "/app/..%2Frelay.db", "/app/"]) {
+      expect((await get(path)).status).toBe(404);
+    }
+  });
+});

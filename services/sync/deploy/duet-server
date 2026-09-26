@@ -63,9 +63,10 @@ tailnet_url() {
   echo "https://${name%.}"
 }
 
-# Hands a release's app to our Macs at /app: the bundle the updater installs, a checksum,
-# install.sh, and the update manifest, which has to point here because our Macs can't download
-# from a private repository. The manifest goes last, so it never names a half-copied bundle.
+# Hands a release's app to our Macs: the relay serves $APP at /app. That's the bundle the
+# updater installs, a checksum, install.sh, and the update manifest, which has to point here
+# because our Macs can't download from a private repository. The manifest goes last, so it
+# never names a half-copied bundle.
 publish_app() {
   from="$1"
   bundle="$(find "$from" -maxdepth 1 -name '*.app.tar.gz' | head -n 1)"
@@ -81,7 +82,6 @@ publish_app() {
   sed "s#__DUET_FROM__#$base#" "$HERE/../../../install.sh" > "$APP/install.sh"
   sed -E "s#\"url\": *\"[^\"]*\"#\"url\": \"$base/Duet.app.tar.gz\"#g" "$from/latest.json" > "$APP/latest.json.new"
   mv "$APP/latest.json.new" "$APP/latest.json"
-  serve --https=443 --set-path /app "$APP"
   say "Our Macs can install Duet $(grep -o '"version": *"[^"]*"' "$APP/latest.json" | head -n 1 | sed 's/.*"\([^"]*\)"$/\1/') with:"
   say "  curl -fsSL $base/install.sh | sh"
 }

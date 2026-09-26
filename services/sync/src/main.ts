@@ -11,8 +11,8 @@ import { Relay, type RelayDb, type SqlParam } from "./relay.ts";
  *   duet-sync backup [folder]  copy the database and keep 30 daily + 12 monthly copies
  *   duet-sync version
  *
- * DUET_DATA is where the database lives (default ~/.duet-sync); DUET_PORT and DUET_HOST
- * change where it listens.
+ * DUET_DATA is where the database lives (default ~/.duet-sync), and its app folder holds what
+ * the relay hands to our Macs at /app; DUET_PORT and DUET_HOST change where it listens.
  */
 
 const VERSION = "0.1.0";
@@ -41,7 +41,14 @@ function adapter(db: Database): RelayDb {
 const [command = "serve", ...args] = process.argv.slice(2);
 
 if (command === "serve") {
-  const relay = new Relay({ db: adapter(open()), version: VERSION });
+  const relay = new Relay({
+    db: adapter(open()),
+    version: VERSION,
+    appFile: async (name) => {
+      const file = Bun.file(join(dataDir, "app", name));
+      return (await file.exists()) ? file : null;
+    },
+  });
   const server = Bun.serve({
     hostname: process.env.DUET_HOST ?? "127.0.0.1",
     port: Number(process.env.DUET_PORT ?? 8787),

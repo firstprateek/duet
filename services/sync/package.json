@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node src/dev-server.ts",
     "start": "bun src/main.ts serve",
-    "build": "bun build --compile --minify src/main.ts --outfile bin/duet-sync",
+    "build": "bun build --compile --minify src/main.ts --outfile bin/duet-sync && rm -f .*.bun-build",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
