@@ -2,10 +2,16 @@ name: Release
 
 # Release Please keeps a release PR open with the next version and changelog. Merging it tags
 # the release, and the build job below signs the app and attaches it with the update manifest.
+# Run it by hand with a tag to build that release again.
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: An existing release to build and attach the app and relay to, like v0.1.0
+        required: true
 
 permissions:
   contents: write
@@ -13,6 +19,7 @@ permissions:
 
 jobs:
   release-please:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -26,10 +33,14 @@ jobs:
 
   build:
     needs: release-please
-    if: needs.release-please.outputs.release_created == 'true'
+    if: ${{ !cancelled() && (needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch') }}
     runs-on: macos-latest
+    env:
+      TAG: ${{ inputs.tag || needs.release-please.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.sha }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -42,43 +53,59 @@ jobs:
         with:
           workspaces: apps/desktop/src-tauri
       - run: pnpm install --frozen-lockfile
-      # Our certificate is self-signed, and codesign only signs with one this Mac trusts.
-      - name: Trust Duet's signing certificate on this runner
+      # Our certificate is self-signed. Tauri only picks Apple-issued certificates out of a
+      # certificate file, and codesign only signs with a certificate the Mac trusts, so this
+      # puts ours in a keychain on the runner, trusts it for code signing, and Tauri signs by name.
+      - name: Put Duet's signing certificate in a keychain this runner trusts
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
+          keychain="$RUNNER_TEMP/duet-signing.keychain-db"
+          keychain_password="$(openssl rand -hex 16)"
           echo "$APPLE_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/signing.p12"
+          security create-keychain -p "$keychain_password" "$keychain"
+          security set-keychain-settings -t 3600 -u "$keychain"
+          security unlock-keychain -p "$keychain_password" "$keychain"
+          security import "$RUNNER_TEMP/signing.p12" -k "$keychain" \
+            -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s \
+            -k "$keychain_password" "$keychain" > /dev/null
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
           openssl pkcs12 -in "$RUNNER_TEMP/signing.p12" -nokeys -clcerts \
             -passin env:APPLE_CERTIFICATE_PASSWORD -out "$RUNNER_TEMP/signing.pem"
           sudo security add-trusted-cert -d -r trustRoot -p codeSign \
             -k /Library/Keychains/System.keychain "$RUNNER_TEMP/signing.pem"
           rm -f "$RUNNER_TEMP/signing.p12"
+          security find-identity -v -p codesigning "$keychain"
+          security find-identity -v -p codesigning "$keychain" | grep -q "Duet Self-Signed"
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # A self-signed certificate: no Apple Developer account, but a stable identity,
           # so the keychain keeps trusting Duet across updates. See scripts/release-keys.sh.
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
           # Signs the update bundles the app checks before installing.
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: apps/desktop
-          tagName: ${{ needs.release-please.outputs.tag_name }}
-          releaseName: Duet ${{ needs.release-please.outputs.tag_name }}
+          tagName: ${{ env.TAG }}
+          releaseName: Duet ${{ env.TAG }}
           releaseDraft: false
           includeUpdaterJson: true
           args: '--target universal-apple-darwin --config {"bundle":{"createUpdaterArtifacts":true}}'
 
   relay:
     needs: release-please
-    if: needs.release-please.outputs.release_created == 'true'
+    if: ${{ !cancelled() && (needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || needs.release-please.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.sha }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -96,4 +123,4 @@ jobs:
       - name: Attach it to the release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ needs.release-please.outputs.tag_name }}" services/sync/bin/duet-sync-* --clobber
+        run: gh release upload "$TAG" services/sync/bin/duet-sync-* --clobber
