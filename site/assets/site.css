@@ -392,14 +392,16 @@ p {
   color: var(--du-muted);
 }
 
+/* Hung off the frame's corners, over its edge and the empty space below the cards, never over
+   what the screenshot says. */
 .float.left {
-  left: -150px;
-  bottom: 48px;
+  left: -36px;
+  bottom: -30px;
 }
 
 .float.right {
-  right: -150px;
-  top: 40px;
+  right: -36px;
+  top: -30px;
 }
 
 .bubble {
@@ -819,7 +821,7 @@ footer nav a:hover {
 }
 
 /* Narrow screens */
-@media (max-width: 1400px) {
+@media (max-width: 1180px) {
   .float {
     display: none;
   }
