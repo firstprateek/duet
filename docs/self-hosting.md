@@ -25,7 +25,11 @@ sudo tailscale up --operator=$USER
 ```
 
 `--operator` lets `duet-server` publish the relay and the app without asking for a password each
-time.
+time. The Tailscale app works too if the Mac mini logs in by itself after a restart (automatic
+login on, FileVault off).
+
+Then, in the admin console's **Machines** list, open the Mac mini's **⋯** menu and choose **Disable
+key expiry**. Otherwise its login lapses after a few months and it drops off the tailnet quietly.
 
 In the Tailscale admin console, let only our two Macs reach the Mac mini, and only on 443. With
 the Mac mini tagged `tag:duet`, the policy's rule looks like this (use our real login names):

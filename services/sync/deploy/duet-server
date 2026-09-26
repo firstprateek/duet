@@ -37,6 +37,15 @@ arch_name() {
   esac
 }
 
+# Waits up to 20 seconds for a service to answer its health check.
+healthy() {
+  for _ in $(seq 20); do
+    curl -fsS "$1" >/dev/null 2>&1 && return 0
+    sleep 1
+  done
+  return 1
+}
+
 # tailscale serve works without sudo once we're its operator (tailscale up --operator=$USER).
 serve() {
   tailscale serve --bg "$@" >/dev/null 2>&1 || sudo tailscale serve --bg "$@" >/dev/null
@@ -99,8 +108,7 @@ case "${1:-help}" in
     sudo chown "$user" "$LOGS/duet-sync.log" "$LOGS/duet-backup.log"
     sudo install -m 755 "$source_bin" "$BIN"
     install_plists app.duet.sync app.duet.backup
-    sleep 1
-    curl -fsS http://127.0.0.1:8787/v1/health >/dev/null || fail "the relay didn't start; see duet-server logs"
+    healthy http://127.0.0.1:8787/v1/health || fail "the relay didn't start; see duet-server logs"
     if command -v tailscale >/dev/null; then
       serve --https=443 http://127.0.0.1:8787
       say "The relay is running and published on the tailnet:"
@@ -156,8 +164,7 @@ case "${1:-help}" in
     ollama pull "${DUET_EMBED_MODEL:-nomic-embed-text}"
     ollama pull "${DUET_LLM_MODEL:-qwen2.5:7b-instruct}"
     install_plists app.duet.sorter
-    sleep 2
-    curl -fsS http://127.0.0.1:8788/v1/health >/dev/null || fail "the sorting service didn't start; see $LOGS/duet-sorter.log"
+    healthy http://127.0.0.1:8788/v1/health || fail "the sorting service didn't start; see $LOGS/duet-sorter.log"
     if command -v tailscale >/dev/null; then
       serve --https=443 --set-path /sort http://127.0.0.1:8788
     fi
