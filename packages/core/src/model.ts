@@ -71,6 +71,8 @@ export interface StatementFile {
   id: string;
   fileName: string;
   sha256: string;
+  /** Where the file was on disk, so it can be read again (the one-time setup, rereads). */
+  path: string | null;
   accountId: string | null;
   profileId: string | null;
   format: string | null;

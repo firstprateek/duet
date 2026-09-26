@@ -13,7 +13,10 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@duet/importers": "workspace:*"
+    "@duet/importers": "workspace:*",
+    "@noble/ciphers": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
+    "@scure/bip39": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.2"

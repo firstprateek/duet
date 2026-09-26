@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- The relay, always on, even with nobody logged in. duet-server install fills in __USER__. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>app.duet.sync</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/duet-sync</string>
+    <string>serve</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>DUET_DATA</key>
+    <string>/usr/local/var/duet</string>
+    <key>DUET_PORT</key>
+    <string>8787</string>
+  </dict>
+  <key>UserName</key>
+  <string>__USER__</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+  <key>StandardOutPath</key>
+  <string>/usr/local/var/log/duet-sync.log</string>
+  <key>StandardErrorPath</key>
+  <string>/usr/local/var/log/duet-sync.log</string>
+</dict>
+</plist>

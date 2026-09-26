@@ -1,0 +1,21 @@
+{
+  "name": "@duet/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "description": "duet export, inspect and phrase: our household's data outside the app.",
+  "bin": {
+    "duet": "./src/main.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@duet/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@duet/sync": "workspace:*",
+    "@types/node": "^26.6.2"
+  }
+}

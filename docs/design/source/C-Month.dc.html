@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C · Soft &amp; friendly · This month</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBF6EF;-webkit-font-smoothing:antialiased}
+a{color:#B4461A}a:hover{color:#8A3412}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; background: #FBF6EF; color: #2B2536; font-family: 'Nunito', system-ui, sans-serif; overflow: hidden">
+
+<header style="height: 76px; flex-shrink: 0; box-sizing: border-box; padding: 0 32px; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 10px; width: 260px">
+<svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2F6FB0"></circle><circle cx="22" cy="12" r="11" fill="#F5C451" style="mix-blend-mode: multiply"></circle></svg>
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: -0.01em">duet</span>
+</div>
+<nav aria-label="Main" style="display: flex; align-items: center; gap: 2px; background: #FFFFFF; border-radius: 999px; padding: 5px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 8px 20px -12px rgba(64, 44, 24, 0.2)">
+<a href="C-Month.dc.html" aria-current="page" style="text-decoration: none; color: #FFFFFF; background: #2B2536; border-radius: 999px; padding: 8px 18px; font-size: 14px; font-weight: 700">This month</a>
+<a href="C-Statements.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700">{{t.statements}}</a>
+<a href="C-LookOver.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 7px">{{t.lookOver}}<span style="background: #F07A4A; color: #2B2536; border-radius: 999px; font-size: 11px; font-weight: 800; padding: 1px 7px">23</span></a>
+<a href="C-Trends.dc.html" style="text-decoration: none; color: #2B2536; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700">Trends</a>
+</nav>
+<div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; width: 260px">
+<a href="C-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none; background: #F07A4A; color: #2B2536; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 800"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Quick add</a>
+<a href="C-Settings.dc.html" aria-label="Settings" style="width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.08)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></a>
+<span style="display: flex"><span style="width: 32px; height: 32px; border-radius: 50%; background: #2F6FB0; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #FBF6EF">Ja</span><span style="width: 32px; height: 32px; border-radius: 50%; background: #F5C451; color: #2B2536; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-left: -8px; box-shadow: 0 0 0 3px #FBF6EF">Ji</span></span>
+</div>
+</header>
+
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 6px 32px 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; gap: 18px; height: 356px; flex-shrink: 0">
+
+<section style="width: 700px; flex-shrink: 0; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 26px 28px; display: flex; gap: 18px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="width: 290px; flex-shrink: 0; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 8px">
+<button type="button" aria-label="Previous month" style="width: 30px; height: 30px; border-radius: 50%; border: 0; background: #F4EFE8; cursor: pointer; font-weight: 800">‹</button>
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 18px">August 2026</span>
+<button type="button" aria-label="Next month" style="width: 30px; height: 30px; border-radius: 50%; border: 0; background: #F4EFE8; cursor: pointer; font-weight: 800">›</button>
+</div>
+<div style="margin-top: 26px; font-size: 15px; font-weight: 700; color: #6B6478">In August we spent</div>
+<div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 68px; line-height: 1.05; letter-spacing: -0.01em">$7,842</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px">
+<span style="background: #FFE3D3; color: #7A2E0C; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700">A bit more than usual · +$862</span>
+<span style="background: #F4EFE8; color: #4E475C; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700">9 of 10 accounts in</span>
+</div>
+<div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 600">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: #DCEEFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"></rect><path d="M9 7V5h6v2"></path></svg></span>
+<span>Mostly the Portland trip. Every other category was close to usual.</span>
+</div>
+</div>
+<div style="width: 180px; flex-shrink: 0; display: flex; align-items: center">
+<svg width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="August by category: Home $3,304, Food $1,452, Travel $1,180, Shopping $731, five smaller categories $1,175.">
+<g transform="rotate(-90 90 90)">
+<circle cx="90" cy="90" r="70" fill="none" stroke="#F9B98F" stroke-width="26" stroke-dasharray="183.31 256.51" stroke-dashoffset="0"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#F2CF5B" stroke-width="26" stroke-dasharray="79.44 360.38" stroke-dashoffset="-185.31"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#8EC3F2" stroke-width="26" stroke-dasharray="64.18 375.64" stroke-dashoffset="-266.75"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#BBA2F0" stroke-width="26" stroke-dasharray="39 400.82" stroke-dashoffset="-332.93"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#86D5A9" stroke-width="26" stroke-dasharray="21.22 418.6" stroke-dashoffset="-373.93"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#F39DBE" stroke-width="26" stroke-dasharray="10.79 429.03" stroke-dashoffset="-397.15"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#F4A293" stroke-width="26" stroke-dasharray="9.78 430.04" stroke-dashoffset="-409.94"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#7ED0C8" stroke-width="26" stroke-dasharray="7.31 432.51" stroke-dashoffset="-421.72"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#D8BF97" stroke-width="26" stroke-dasharray="6.81 433.01" stroke-dashoffset="-431.03"></circle>
+</g>
+<text x="90" y="92" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="600" font-size="26" fill="#2B2536">42%</text>
+<text x="90" y="112" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">on home</text>
+</svg>
+</div>
+<ul style="flex-grow: 1; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; justify-content: center; gap: 12px; font-size: 14px; font-weight: 700">
+<li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #F9B98F; flex-shrink: 0"></span><span style="flex-grow: 1">Home</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500">$3,304</span></li>
+<li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #F2CF5B; flex-shrink: 0"></span><span style="flex-grow: 1">Food</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500">$1,452</span></li>
+<li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #8EC3F2; flex-shrink: 0"></span><span style="flex-grow: 1">Travel</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500">$1,180</span></li>
+<li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #BBA2F0; flex-shrink: 0"></span><span style="flex-grow: 1">Shopping</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500">$731</span></li>
+<li style="display: flex; align-items: center; gap: 8px; color: #6B6478"><span style="width: 10px; height: 10px; border-radius: 50%; background: #D9D2E3; flex-shrink: 0"></span><span style="flex-grow: 1">5 more</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500">$1,175</span></li>
+</ul>
+</section>
+
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<section style="height: 186px; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 18px">Who it was for</h2>
+<div style="display: flex; height: 18px; gap: 3px">
+<div style="flex: 6318 1 0; background: #F07A4A; border-radius: 9px 4px 4px 9px"></div>
+<div style="flex: 812 1 0; background: #2F6FB0; border-radius: 4px"></div>
+<div style="flex: 712 1 0; background: #F5C451; border-radius: 4px 9px 9px 4px"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; font-weight: 700">
+<div style="display: flex; align-items: center; gap: 10px; height: 24px"><span style="display: flex; width: 34px"><span style="width: 20px; height: 20px; border-radius: 50%; background: #2F6FB0"></span><span style="width: 20px; height: 20px; border-radius: 50%; background: #F5C451; margin-left: -8px; box-shadow: 0 0 0 2px #FFFFFF"></span></span><span style="width: 10px; height: 10px; border-radius: 3px; background: #F07A4A"></span><span style="flex-grow: 1">{{t.ours}}</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 17px">$6,318</span></div>
+<div style="display: flex; align-items: center; gap: 10px; height: 24px"><span style="display: flex; width: 34px"><span style="width: 20px; height: 20px; border-radius: 50%; background: #2F6FB0; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-size: 11px; display: flex; align-items: center; justify-content: center">Ja</span></span><span style="width: 10px; height: 10px; border-radius: 3px; background: #2F6FB0"></span><span style="flex-grow: 1">{{t.justJack}}</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 17px">$812</span></div>
+<div style="display: flex; align-items: center; gap: 10px; height: 24px"><span style="display: flex; width: 34px"><span style="width: 20px; height: 20px; border-radius: 50%; background: #F5C451; color: #2B2536; font-family: 'Fredoka', sans-serif; font-size: 11px; display: flex; align-items: center; justify-content: center">Ji</span></span><span style="width: 10px; height: 10px; border-radius: 3px; background: #F5C451"></span><span style="flex-grow: 1">{{t.justJill}}</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 17px">$712</span></div>
+</div>
+</section>
+
+<section style="height: 152px; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 18px 24px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<sc-if value="{{gtClosed}}" hint-placeholder-val="{{true}}">
+<div style="height: 100%; display: flex; align-items: center; gap: 16px">
+<span style="width: 60px; height: 60px; border-radius: 50%; background: #FBF6EF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F5C451"></circle><path d="M12 2A10 10 0 0 1 12 22A5 5 0 0 1 12 12A5 5 0 0 0 12 2Z" fill="#2F6FB0"></path><circle cx="12" cy="7" r="1.6" fill="#2F6FB0"></circle><circle cx="12" cy="17" r="1.6" fill="#F5C451"></circle><circle cx="12" cy="12" r="10" fill="none" stroke="#2B2536" stroke-width="1.1"></circle></svg></span>
+<div style="flex-grow: 1; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 20px">{{gtName}}</div>
+<button type="button" onClick="{{openGt}}" style="border: 0; background: #2B2536; color: #FFFFFF; border-radius: 999px; padding: 9px 18px; font-size: 14px; font-weight: 700; cursor: pointer">Peek</button>
+</div>
+</sc-if>
+<sc-if value="{{gtOpen}}" hint-placeholder-val="{{false}}">
+<div style="height: 100%; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 17px">{{gtName}}</span>
+<div role="group" aria-label="Period" style="display: flex; background: #F4EFE8; border-radius: 999px; padding: 3px">
+<button type="button" onClick="{{showMonth}}" aria-pressed="{{scopeMonth}}" style="border: 0; border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: {{monthBg}}; color: {{monthFg}}">August</button>
+<button type="button" onClick="{{showAll}}" aria-pressed="{{scopeAll}}" style="border: 0; border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: {{allBg}}; color: {{allFg}}">Overall</button>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="display: flex; align-items: center; gap: 4px; flex-shrink: 0"><span style="width: 28px; height: 28px; border-radius: 50%; background: #F5C451; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center">Ji</span><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F5C451"></circle><path d="M12 2A10 10 0 0 1 12 22A5 5 0 0 1 12 12A5 5 0 0 0 12 2Z" fill="#2F6FB0"></path><circle cx="12" cy="7" r="1.6" fill="#2F6FB0"></circle><circle cx="12" cy="17" r="1.6" fill="#F5C451"></circle><circle cx="12" cy="12" r="10" fill="none" stroke="#2B2536" stroke-width="1.2"></circle></svg><span style="width: 28px; height: 28px; border-radius: 50%; background: #2F6FB0; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center">Ja</span></span>
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 16.5px; line-height: 1.3">{{sentence}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; font-size: 13px; font-weight: 700; margin-top: auto">
+<a href="C-Month.dc.html">{{evenOut}}</a>
+<a href="C-History.dc.html">History</a>
+<button type="button" onClick="{{closeGt}}" style="margin-left: auto; background: none; border: 0; padding: 0; font-size: 13px; font-weight: 700; color: #6B6478; cursor: pointer">Tuck away</button>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+</div>
+
+<div style="display: flex; gap: 18px; flex-grow: 1; min-height: 0">
+<section style="width: 700px; flex-shrink: 0; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 22px 28px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 18px">Little things we noticed</h2>
+<div style="display: flex; gap: 14px; flex-grow: 1">
+<article style="flex: 1 1 0; background: #DCEEFF; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"></rect><path d="M9 7V5h6v2"></path></svg></span>
+<p style="margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.45">Portland was most of the difference. Travel came to $1,180, about $840 over usual.</p>
+<a href="C-Month.dc.html" style="margin-top: auto; font-size: 13px; font-weight: 800">See travel</a>
+</article>
+<article style="flex: 1 1 0; background: #FFF0C2; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16a8 8 0 0 1-16 0z"></path><path d="M9 8c0-1.2 1-1.8 1-3M14 8c0-1.2 1-1.8 1-3"></path></svg></span>
+<p style="margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.45">Dining out was the lightest since March: $486, about $190 under usual.</p>
+<a href="C-Month.dc.html" style="margin-top: auto; font-size: 13px; font-weight: 800">See food</a>
+</article>
+<article style="flex: 1 1 0; background: #FFE0EC; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="16" r="2"></circle></svg></span>
+<p style="margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.45">Two music services, Spotify and Apple Music: $22.98 a month together.</p>
+<a href="C-Month.dc.html" style="margin-top: auto; font-size: 13px; font-weight: 800">See subscriptions</a>
+</article>
+</div>
+</section>
+
+<section style="flex-grow: 1; min-width: 0; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 22px 28px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22)">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 18px">Last six months</h2><span style="font-size: 12.5px; font-weight: 700; color: #6B6478">- - typical $6,980</span></div>
+<svg width="442" height="192" viewBox="0 0 442 192" role="img" aria-label="Monthly spending from March to August 2026: $6,940, $7,310, $6,880, $7,450, $7,020 and $7,842, against a typical $6,980." style="display: block">
+<rect x="14.8" y="45" width="44" height="115" rx="12" fill="#DCEEFF"></rect>
+<rect x="88.5" y="38.8" width="44" height="121.2" rx="12" fill="#DCEEFF"></rect>
+<rect x="162.2" y="45.9" width="44" height="114.1" rx="12" fill="#DCEEFF"></rect>
+<rect x="235.8" y="36.5" width="44" height="123.5" rx="12" fill="#DCEEFF"></rect>
+<rect x="309.5" y="43.6" width="44" height="116.4" rx="12" fill="#DCEEFF"></rect>
+<rect x="383.2" y="30" width="44" height="130" rx="12" fill="#F07A4A"></rect>
+<line x1="4" y1="44.3" x2="438" y2="44.3" stroke="#6B6478" stroke-width="1.2" stroke-dasharray="4 4"></line>
+<text x="36.8" y="36" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#6B6478">6.9k</text>
+<text x="110.5" y="30" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#6B6478">7.3k</text>
+<text x="184.2" y="36" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#6B6478">6.9k</text>
+<text x="257.8" y="28" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#6B6478">7.5k</text>
+<text x="331.5" y="35" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#6B6478">7.0k</text>
+<text x="405.2" y="21" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="600" font-size="13" fill="#2B2536">7.8k</text>
+<text x="36.8" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">Mar</text>
+<text x="110.5" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">Apr</text>
+<text x="184.2" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">May</text>
+<text x="257.8" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">Jun</text>
+<text x="331.5" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="700" font-size="12" fill="#6B6478">Jul</text>
+<text x="405.2" y="182" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="12" fill="#2B2536">Aug</text>
+</svg>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"keepVisible":{"editor":"boolean","default":false,"section":"Ebb &amp; flow"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { ours: "Ours", justJack: "Jack", justJill: "Jill", lookOver: "To sort", statements: "Uploads", gt: "Ebb & flow", evenOut: "Clean slate", gtMonth: "In August, Jill carried $262 extra.", gtAll: "Jill's been carrying a little extra: $418 overall." };
+    const t = T;
+    const s = this.state || {};
+    const open = s.gtOpen === undefined ? !!this.props.keepVisible : s.gtOpen;
+    const isM = (s.scope || "month") === "month";
+    const on = ["#2B2536", "#FFFFFF"];
+    const off = ["transparent", "#2B2536"];
+    const m = isM ? on : off;
+    const a = isM ? off : on;
+    return {
+      t: t,
+      gtName: t.gt,
+      evenOut: t.evenOut,
+      gtOpen: open,
+      gtClosed: !open,
+      scopeMonth: isM,
+      scopeAll: !isM,
+      monthBg: m[0], monthFg: m[1], allBg: a[0], allFg: a[1],
+      sentence: isM ? t.gtMonth : t.gtAll,
+      openGt: () => this.setState({ gtOpen: true }),
+      closeGt: () => this.setState({ gtOpen: false }),
+      showMonth: () => this.setState({ scope: "month" }),
+      showAll: () => this.setState({ scope: "all" })
+    };
+  }
+}
+</script>
+</body>
+</html>

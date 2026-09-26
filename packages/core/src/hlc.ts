@@ -33,15 +33,16 @@ export function compareHlc(a: Hlc, b: Hlc): number {
 }
 
 export class HybridClock {
+  readonly deviceId: string;
+  private readonly now: () => number;
   private lastMs = 0;
   private counter = 0;
 
-  constructor(
-    readonly deviceId: string,
-    private readonly now: () => number = () => Date.now(),
-  ) {
+  constructor(deviceId: string, now: () => number = () => Date.now()) {
     if (!/^[A-Za-z0-9_.-]+$/.test(deviceId))
       throw new Error("Device ids use letters, digits, . _ -");
+    this.deviceId = deviceId;
+    this.now = now;
   }
 
   /** A new stamp for a local change, always later than anything seen so far. */

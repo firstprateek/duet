@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex" />
+    <title>Join us on Duet</title>
+    <meta name="theme-color" content="#fbf6ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1d1922" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/site.css" />
+    <script type="module" src="../assets/join.js"></script>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <a class="logo" href="../" aria-label="Duet, home">
+          <svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2F6FB0" /><circle cx="22" cy="12" r="11" fill="#F5C451" /></svg>
+          duet
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="join wrap">
+      <section class="card join-card" data-state="code" aria-labelledby="join-title">
+        <span class="bubble peach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1 M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg></span>
+        <h1 id="join-title">Join us on Duet</h1>
+        <p class="lede">This link adds this Mac to a household that's already on Duet. Three steps, and everything added so far comes down.</p>
+
+        <ol class="join-steps">
+          <li>
+            <h2>Install Duet</h2>
+            <p>Skip this if Duet is already in Applications.</p>
+            <div class="command">
+              <code><span class="prompt">$ </span>curl -fsSL https://firstprateek.github.io/duet/install.sh | sh</code>
+              <button class="copy" type="button" data-copy="curl -fsSL https://firstprateek.github.io/duet/install.sh | sh">Copy</button>
+            </div>
+            <p class="fine">Open Terminal (Applications → Utilities), paste, and press Return. Or <a href="../#download">download it</a>.</p>
+          </li>
+          <li>
+            <h2>Turn on Tailscale</h2>
+            <p>Duet reaches your Mac mini at <b data-host>your Mac mini</b> over your tailnet, so this Mac needs Tailscale on.</p>
+          </li>
+          <li>
+            <h2>Open in Duet</h2>
+            <p>Duet opens on Join with the code filled in. Name this Mac and choose Join; it gets its own recovery phrase.</p>
+            <div class="actions">
+              <a class="btn primary" href="duet://join" data-open>Open in Duet</a>
+              <button class="btn soft" type="button" data-copy-code>Copy the code</button>
+            </div>
+            <p class="fine">If nothing opens, copy the code, open Duet, choose Join with a code from the other Mac, and paste it there.</p>
+          </li>
+        </ol>
+
+        <p class="fine">This link works once, within a day of being made. Its code stays on this page: it sits after the # in the link, which browsers never send to a server, and this page sends it nowhere.</p>
+      </section>
+
+      <section class="card join-card" data-state="missing" hidden aria-labelledby="missing-title">
+        <span class="bubble butter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1 M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg></span>
+        <h1 id="missing-title">This link is missing its code</h1>
+        <p class="lede">On the Mac that already has your household, open Settings → Sync &amp; security and make a new join link.</p>
+        <div class="actions"><a class="btn soft" href="../">What's Duet?</a></div>
+      </section>
+    </main>
+  </body>
+</html>

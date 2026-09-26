@@ -1,9 +1,9 @@
 # Duet — notes for agents
 
-A local-first money app for two people (Jack and Jill in the mocks). The v1 spec is a Claude Doc:
-https://claude.ai/code/artifact/073b8ed5-cfd8-4987-83e3-78ed159a7dba. Final screens (direction C,
-"Soft & friendly") are on the design canvas: https://claude.ai/artifact/UnZ2oXSq1s6K4jHUdHq4da.
-Read the spec before changing behavior; it is the source of truth for words, math and privacy.
+A local-first money app for two people (Jack and Jill in the mocks). The v1 spec is
+[docs/spec.md](docs/spec.md), and the final screens (direction C, "Soft & friendly") are in
+[docs/design](docs/design). Read the spec before changing behavior; it is the source of truth for
+words, math and privacy.
 
 ## Layout
 
@@ -16,6 +16,8 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 | `services/sync` | Bun relay (stores ciphertext only) |
 | `services/sorter` | Python sorting service (Ollama, Laya) |
 | `tools/cli` | `duet export` and key tools |
+| `site` | The website on GitHub Pages: download page, join page, and the demo (the web build) |
+| `docs` | The spec, the designs, and setting up the Mac mini |
 
 ## Commands
 
@@ -23,7 +25,9 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 - `pnpm lint` / `pnpm format` — Biome
 - `pnpm typecheck` — `tsc` per package (TypeScript 7)
 - `pnpm dev:web` — the app in a browser with sample data (sql.js), no Tauri needed
-- `pnpm dev` — the real desktop app (needs Rust)
+- `pnpm dev` — the real desktop app (needs Rust). Debug builds use `duet-dev.db` and the keychain
+  service `app.duet.desktop.dev`, so they never touch the household we use
+- `pnpm site` — builds the website into `_site/` (the demo is the web build with `--mode demo`)
 
 ## Conventions that matter
 
@@ -43,3 +47,42 @@ Read the spec before changing behavior; it is the source of truth for words, mat
   desktop driver is a Rust command using rusqlite on one connection (tauri-plugin-sql pools
   connections, which breaks multi-statement transactions). So Rust is ~150 lines, not 30.
 - **SheetJS** is vendored in `vendor/` (it isn't on npm, and pnpm needs a verifiable tarball).
+- **Charts** are small hand-drawn SVG Lit components in `packages/ui/src/charts.ts`, not
+  ECharts: four simple charts didn't justify a megabyte, and SVG follows the tokens and dark mode.
+- **Files waiting for their one-time setup** keep the dates and row count read loosely from the
+  unknown layout, and Uploads guesses their account from the file name (display only; the setup
+  still asks, and can add the file to an account we already have).
+
+- **Tauri plugins**: deep-link, dialog, updater and process only. The spec lists sql and fs too; SQLite
+  goes through our Rust command instead (see above), and statement files are read by path
+  through `read_statement_file`, which only opens statement extensions under 50 MB.
+- **Relay updates** (`duet-server update`) check the release's SHA-256; the spec also asks for a
+  signature, which needs the release key set up first (a later step).
+- **Join codes work for a day, not ten minutes, and travel as links**
+  (`https://firstprateek.github.io/duet/join/#DUET1-…`). The code sits after the `#`, so no
+  server sees it; the join page installs Duet and opens `duet://join#…`, which fills in the
+  Join screen (it never joins by itself). A code alone only works from inside our tailnet.
+- **The personal vault** (Mine details backed up under the owner's own key) is still an open
+  question in the spec, so it isn't built; the envelope's `stream` field leaves room for it.
+
+## Sync and sorting, in short
+
+- One household per relay. The first Mac creates it; the second joins with a one-time code that
+  carries the relay address, an invite, the household key and the joiner's member id. Anyone
+  holding a recovery phrase can restore a Mac, or read the log read-only (`duet export`), with
+  the key id and proof derived from the phrase; the relay stores only the proof's hash.
+- The relay is plain `Request`/`Response` code (`services/sync/src/relay.ts`): Bun serves it on
+  the Mac mini, Node serves it in tests and in `pnpm relay:dev`.
+- Core runs under Node's type stripping (for the CLI), so avoid TypeScript-only runtime syntax
+  there: no parameter properties, enums or namespaces.
+- Smart sorting lives in `core/sorter.ts`. The sorting service is found at the relay's address
+  plus `/sort` unless Settings says otherwise. An LLM answer never shows as sure (its confidence
+  is capped at 0.84); only our rules and close agreement among our own past rows do.
+
+## Sample data and the designs
+
+`apps/desktop/src/demo/seed.ts` builds Jack and Jill's year for the browser preview. Its numbers
+are the designs' numbers (August $7,842, Jill +$262, typical $6,980, the History and Trends
+screens), and `apps/desktop/test/seed.test.ts` checks them against the real queries. When you
+change insight wording or math, run that test: a failure means the app no longer matches the
+designs, or the seed needs to follow a deliberate change.

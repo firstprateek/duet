@@ -79,8 +79,12 @@ export interface ParsedStatement {
   skipped: number;
   /** The header row, for the column-matching step. */
   headers: string[];
+  /** Where the header row is in the file (for a column mapping). */
+  headerRow?: number;
   /** A few raw rows, for the column-matching step. */
   sample: string[][];
+  /** Rows under the header of a file whose layout we don't know yet. */
+  dataRows?: number;
   firstDate: ISODate | null;
   lastDate: ISODate | null;
   warnings: string[];

@@ -378,6 +378,16 @@ describe("quick add", () => {
     expect(r.fromWords.amount).toBe(false);
   });
 
+  it("keeps a plain phrase as the merchant", () => {
+    expect(parseQuickAdd("12 parking downtown", { today, categories }).merchant).toBe(
+      "Parking downtown",
+    );
+    expect(parseQuickAdd("42.18 trader joes groceries", { today, categories }).merchant).toBe(
+      "Trader Joe's",
+    );
+    expect(parseQuickAdd("30 groceries costco", { today, categories }).merchant).toBe("Costco");
+  });
+
   it("reads dates like 9/5 and Sep 5", () => {
     expect(parseQuickAdd("12 parking 9/5", { today, categories }).date).toBe("2026-09-05");
     expect(parseQuickAdd("12 parking sep 5", { today, categories }).date).toBe("2026-09-05");
@@ -409,7 +419,12 @@ describe("insights", () => {
   it("headline says how the month compares", () => {
     const h = monthHeadline(august, typicalMonth(top, "2026-08"), name);
     expect(h.label).toBe("A bit more than usual · +$897");
-    expect(h.sentence).toBe("Mostly Travel.");
+    expect(h.sentence).toBe("Mostly Travel. Every other category was close to usual.");
+    const bigShop = { ...august, byCategory: new Map([...august.byCategory, ["shopping", 95000]]) };
+    bigShop.total = [...bigShop.byCategory.values()].reduce((a, b) => a + b, 0);
+    expect(monthHeadline(bigShop, typicalMonth(top, "2026-08"), name).sentence).toBe(
+      "Mostly Travel.",
+    );
   });
 
   it("notices the difference, the lightest month and overlapping subscriptions", () => {
@@ -449,8 +464,22 @@ describe("insights", () => {
       month("2026-08", { groceries: 92000, subscriptions: 8600 }),
     ];
     expect(trendNotes(history, name).map((n) => n.text)).toEqual([
-      "Groceries have been above $850 three months running.",
+      "Groceries have been above $850 three months running. They used to be about $800.",
       "Subscriptions are $86 a month now, up from $58 in March.",
+    ]);
+  });
+
+  it("notices something getting lighter", () => {
+    const history = [
+      month("2026-03", { "dining-out": 47000 }),
+      month("2026-04", { "dining-out": 69000 }),
+      month("2026-05", { "dining-out": 72000 }),
+      month("2026-06", { "dining-out": 66200 }),
+      month("2026-07", { "dining-out": 56000 }),
+      month("2026-08", { "dining-out": 48600 }),
+    ];
+    expect(trendNotes(history, name).map((n) => n.text)).toEqual([
+      "Dining out keeps getting lighter: $486 in August, the least since March.",
     ]);
   });
 });

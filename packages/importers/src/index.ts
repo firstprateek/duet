@@ -59,6 +59,13 @@ export function readXlsxGrid(bytes: Uint8Array): Grid {
   return [];
 }
 
+/** A one-sheet XLSX file from rows, for tests and the sample household. */
+export function writeXlsx(rows: unknown[][], sheetName = "Sheet1"): Uint8Array {
+  const book = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(book, XLSX.utils.aoa_to_sheet(rows), sheetName);
+  return new Uint8Array(XLSX.write(book, { type: "array", bookType: "xlsx" }));
+}
+
 /** Reads a statement file of any supported format into rows. */
 export function readStatement(
   bytes: Uint8Array,

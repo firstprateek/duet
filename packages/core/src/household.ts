@@ -247,6 +247,8 @@ export async function updateAccount(
     archived: boolean;
     ownerId: string;
     kind: AccountKind;
+    profileId: string | null;
+    last4: string | null;
   }>,
 ): Promise<void> {
   await store.write([{ entity: "account", id, fields }]);

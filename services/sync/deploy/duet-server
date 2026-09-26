@@ -1,0 +1,150 @@
+#!/bin/sh
+# duet-server: the Duet relay on the Mac mini.
+#
+#   duet-server install [path/to/duet-sync]   put the relay in place, start it under launchd,
+#                                             and publish it on the tailnet with tailscale serve
+#   duet-server update                        the relay from the latest GitHub release, checked
+#                                             against its SHA-256, if it's newer, then a restart
+#   duet-server auto-update                   run update every night at 04:30
+#   duet-server status                        is it running, and what does it answer
+#   duet-server backup                        a backup right now (one also runs every night)
+#   duet-server logs                          follow the relay's log
+#   duet-server keep-awake                    never sleep, and start again after a power cut
+#   duet-server install-sorter                the sorting service (needs uv and Ollama), published
+#                                             on the tailnet under /sort
+#
+# install, install-sorter, update, auto-update and keep-awake change the system, so they ask
+# for your password (sudo).
+set -eu
+
+REPO="${DUET_REPO:-firstprateek/duet}"
+BIN=/usr/local/bin/duet-sync
+DATA=/usr/local/var/duet
+LOGS=/usr/local/var/log
+DAEMONS=/Library/LaunchDaemons
+HERE="$(cd "$(dirname "$0")" && pwd)"
+
+say() { printf '%s\n' "$*"; }
+fail() { say "duet-server: $*" >&2; exit 1; }
+
+arch_name() {
+  case "$(uname -m)" in
+    arm64) echo "darwin-arm64" ;;
+    x86_64) echo "darwin-x64" ;;
+    *) fail "unknown CPU $(uname -m)" ;;
+  esac
+}
+
+# Waits up to 20 seconds for a service to answer its health check.
+healthy() {
+  for _ in $(seq 20); do
+    curl -fsS "$1" >/dev/null 2>&1 && return 0
+    sleep 1
+  done
+  return 1
+}
+
+# tailscale serve works without sudo once we're its operator (tailscale up --operator=$USER).
+serve() {
+  tailscale serve --bg "$@" >/dev/null 2>&1 || sudo tailscale serve --bg "$@" >/dev/null
+}
+
+install_plists() {
+  user="${SUDO_USER:-$(id -un)}"
+  for name in "$@"; do
+    sed "s/__USER__/$user/" "$HERE/$name.plist" | sudo tee "$DAEMONS/$name.plist" >/dev/null
+    sudo chown root:wheel "$DAEMONS/$name.plist"
+    sudo chmod 644 "$DAEMONS/$name.plist"
+    sudo launchctl bootout "system/$name" 2>/dev/null || true
+    sudo launchctl bootstrap system "$DAEMONS/$name.plist"
+  done
+}
+
+case "${1:-help}" in
+  install)
+    source_bin="${2:-$HERE/../bin/duet-sync}"
+    [ -x "$source_bin" ] || fail "no relay binary at $source_bin (build it with: pnpm --filter @duet/sync build)"
+    user="${SUDO_USER:-$(id -un)}"
+    sudo mkdir -p "$DATA/backups" "$LOGS" /usr/local/bin
+    sudo chown -R "$user" "$DATA"
+    sudo touch "$LOGS/duet-sync.log" "$LOGS/duet-backup.log"
+    sudo chown "$user" "$LOGS/duet-sync.log" "$LOGS/duet-backup.log"
+    sudo install -m 755 "$source_bin" "$BIN"
+    install_plists app.duet.sync app.duet.backup
+    healthy http://127.0.0.1:8787/v1/health || fail "the relay didn't start; see duet-server logs"
+    if command -v tailscale >/dev/null; then
+      serve --https=443 http://127.0.0.1:8787
+      say "The relay is running and published on the tailnet:"
+      tailscale serve status 2>/dev/null | head -n 3 || true
+    else
+      say "The relay is running on 127.0.0.1:8787. Install Tailscale, then run:"
+      say "  tailscale serve --bg --https=443 http://127.0.0.1:8787"
+    fi
+    say "Use that https address in Duet: Settings, Sync & security."
+    ;;
+  update)
+    asset="duet-sync-$(arch_name)"
+    base="https://github.com/$REPO/releases/latest/download"
+    latest="$(curl -fsSI "https://github.com/$REPO/releases/latest" | tr -d '\r' \
+      | sed -n 's#^[Ll]ocation: .*/tag/v\{0,1\}##p')"
+    current="$("$BIN" version 2>/dev/null || true)"
+    if [ -n "$latest" ] && [ "$latest" = "$current" ]; then
+      say "The relay is up to date ($current)."
+      exit 0
+    fi
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    curl -fsSL "$base/$asset" -o "$tmp/$asset" || fail "couldn't download the latest relay"
+    curl -fsSL "$base/$asset.sha256" -o "$tmp/$asset.sha256" || fail "couldn't download its checksum"
+    expected="$(cut -d' ' -f1 < "$tmp/$asset.sha256")"
+    actual="$(shasum -a 256 "$tmp/$asset" | cut -d' ' -f1)"
+    [ "$expected" = "$actual" ] || fail "the download doesn't match its checksum; nothing was changed"
+    chmod 755 "$tmp/$asset"
+    new_version="$("$tmp/$asset" version)"
+    sudo install -m 755 "$tmp/$asset" "$BIN"
+    sudo launchctl kickstart -k system/app.duet.sync
+    say "The relay is now $new_version."
+    ;;
+  auto-update)
+    sudo install -m 755 "$0" /usr/local/bin/duet-server
+    install_plists app.duet.update
+    say "Every night at 04:30 the Mac mini takes a newer relay from GitHub, if there is one."
+    ;;
+  status)
+    if sudo launchctl print system/app.duet.sync >/dev/null 2>&1; then say "launchd: running"; else say "launchd: not loaded"; fi
+    curl -fsS http://127.0.0.1:8787/v1/health && say "" || say "The relay isn't answering on 127.0.0.1:8787."
+    ;;
+  backup)
+    DUET_DATA="$DATA" "$BIN" backup "$DATA/backups"
+    ;;
+  logs)
+    tail -n 50 -f "$LOGS/duet-sync.log"
+    ;;
+  install-sorter)
+    command -v uv >/dev/null || fail "the sorting service needs uv: brew install uv"
+    command -v ollama >/dev/null || fail "the sorting service needs Ollama: brew install ollama && brew services start ollama"
+    user="${SUDO_USER:-$(id -un)}"
+    sudo mkdir -p /usr/local/lib/duet-sorter "$LOGS"
+    sudo chown -R "$user" /usr/local/lib/duet-sorter
+    sudo touch "$LOGS/duet-sorter.log"
+    sudo chown "$user" "$LOGS/duet-sorter.log"
+    rsync -a --delete --exclude .venv --exclude __pycache__ "$HERE/../../sorter/" /usr/local/lib/duet-sorter/
+    (cd /usr/local/lib/duet-sorter && uv sync --frozen --no-dev) || fail "couldn't install the sorting service"
+    say "Pulling the models (a few GB the first time)…"
+    ollama pull "${DUET_EMBED_MODEL:-nomic-embed-text}"
+    ollama pull "${DUET_LLM_MODEL:-qwen2.5:7b-instruct}"
+    install_plists app.duet.sorter
+    healthy http://127.0.0.1:8788/v1/health || fail "the sorting service didn't start; see $LOGS/duet-sorter.log"
+    if command -v tailscale >/dev/null; then
+      serve --https=443 --set-path /sort http://127.0.0.1:8788
+    fi
+    say "The sorting service is running. Duet finds it next to the relay, at /sort."
+    ;;
+  keep-awake)
+    sudo pmset -a sleep 0 disksleep 0 autorestart 1
+    say "The Mac mini won't sleep, and starts again after a power cut."
+    ;;
+  *)
+    sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
+    ;;
+esac

@@ -1,0 +1,153 @@
+/*
+ * Duet design tokens — direction C, "Soft & friendly".
+ * Light values come straight from the final mocks. The dark palette is a first draft
+ * (the spec says it is still to be drawn): warm plum greys, the same accents.
+ */
+:root {
+  --du-bg: #fbf6ef;
+  --du-card: #ffffff;
+  --du-ink: #2b2536;
+  --du-on-ink: #ffffff;
+  --du-ink-2: #4e475c;
+  --du-muted: #6b6478;
+  --du-faint: #c9c0d3;
+  --du-line: #efe7dc;
+  --du-soft: #f4efe8;
+  --du-soft-2: #f7f2ea;
+  --du-dash: #e3d8c8;
+  --du-dash-2: #d9d2e3;
+
+  --du-ours: #f07a4a;
+  --du-first: #2f6fb0;
+  --du-second: #f5c451;
+  --du-link: #b4461a;
+  --du-link-hover: #8a3412;
+
+  --du-good-bg: #d9f4e6;
+  --du-good-fg: #1e5b3c;
+  --du-warn-bg: #fff1c9;
+  --du-warn-fg: #5e4800;
+  --du-ours-bg: #ffe6da;
+  --du-ours-fg: #7a2e0c;
+  --du-mine-bg: #dce9f7;
+  --du-mine-fg: #1f4f82;
+  --du-aside-bg: #f0ece6;
+  --du-aside-fg: #5e5868;
+  --du-peach-bg: #ffe3d3;
+  --du-sky-bg: #dceeff;
+  --du-butter-bg: #fff0c2;
+  --du-pink-bg: #ffe0ec;
+  --du-select-bg: #eef4fb;
+  --du-unsure-bg: #fff4e8;
+  --du-error: #c2371f;
+
+  --du-shadow-card: 0 1px 2px rgba(64, 44, 24, 0.06), 0 12px 32px -18px rgba(64, 44, 24, 0.22);
+  --du-shadow-nav: 0 1px 2px rgba(64, 44, 24, 0.06), 0 8px 20px -12px rgba(64, 44, 24, 0.2);
+  --du-shadow-small: 0 1px 2px rgba(64, 44, 24, 0.08);
+  --du-shadow-sheet: 0 30px 80px -30px rgba(43, 37, 54, 0.55);
+  --du-scrim: rgba(43, 37, 54, 0.34);
+
+  --du-radius-card: 26px;
+  --du-radius-tile: 20px;
+  --du-radius-sheet: 30px;
+
+  --du-font-display: "Fredoka", system-ui, sans-serif;
+  --du-font-text: "Nunito", system-ui, sans-serif;
+
+  /* Category pastels at full strength on light backgrounds, softened on dark ones. */
+  --du-tint: 100%;
+  --du-logo-blend: multiply;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --du-bg: #1d1922;
+    --du-card: #2a2431;
+    --du-ink: #f6f1ea;
+    --du-on-ink: #1d1922;
+    --du-ink-2: #ddd5e6;
+    --du-muted: #b2a9bf;
+    --du-faint: #6b6478;
+    --du-line: #3a3343;
+    --du-soft: #362f3f;
+    --du-soft-2: #322b3a;
+    --du-dash: #4a4254;
+    --du-dash-2: #4a4254;
+    --du-link: #ff9b6e;
+    --du-link-hover: #ffb894;
+    --du-good-bg: #1f3e30;
+    --du-good-fg: #a9e7c7;
+    --du-warn-bg: #45391a;
+    --du-warn-fg: #f5dc8e;
+    --du-ours-bg: #4a2a1d;
+    --du-ours-fg: #ffc9b0;
+    --du-mine-bg: #1f3350;
+    --du-mine-fg: #b9d5f5;
+    --du-aside-bg: #3a3343;
+    --du-aside-fg: #cfc6da;
+    --du-peach-bg: #4a3024;
+    --du-sky-bg: #22384f;
+    --du-butter-bg: #45391a;
+    --du-pink-bg: #4a2536;
+    --du-select-bg: #2f3a4d;
+    --du-unsure-bg: #45321f;
+    --du-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -18px rgba(0, 0, 0, 0.6);
+    --du-shadow-nav: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.6);
+    --du-shadow-small: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --du-scrim: rgba(10, 8, 14, 0.6);
+    --du-tint: 18%;
+    --du-logo-blend: screen;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --du-bg: #1d1922;
+  --du-card: #2a2431;
+  --du-ink: #f6f1ea;
+  --du-on-ink: #1d1922;
+  --du-ink-2: #ddd5e6;
+  --du-muted: #b2a9bf;
+  --du-faint: #6b6478;
+  --du-line: #3a3343;
+  --du-soft: #362f3f;
+  --du-soft-2: #322b3a;
+  --du-dash: #4a4254;
+  --du-dash-2: #4a4254;
+  --du-link: #ff9b6e;
+  --du-link-hover: #ffb894;
+  --du-good-bg: #1f3e30;
+  --du-good-fg: #a9e7c7;
+  --du-warn-bg: #45391a;
+  --du-warn-fg: #f5dc8e;
+  --du-ours-bg: #4a2a1d;
+  --du-ours-fg: #ffc9b0;
+  --du-mine-bg: #1f3350;
+  --du-mine-fg: #b9d5f5;
+  --du-aside-bg: #3a3343;
+  --du-aside-fg: #cfc6da;
+  --du-peach-bg: #4a3024;
+  --du-sky-bg: #22384f;
+  --du-butter-bg: #45391a;
+  --du-pink-bg: #4a2536;
+  --du-select-bg: #2f3a4d;
+  --du-unsure-bg: #45321f;
+  --du-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -18px rgba(0, 0, 0, 0.6);
+  --du-shadow-nav: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.6);
+  --du-shadow-small: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --du-scrim: rgba(10, 8, 14, 0.6);
+  --du-tint: 18%;
+  --du-logo-blend: screen;
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--du-bg);
+  color: var(--du-ink);
+  font-family: var(--du-font-text);
+  -webkit-font-smoothing: antialiased;
+}

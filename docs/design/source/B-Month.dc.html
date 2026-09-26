@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B · Quiet modern · Month</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;-webkit-font-smoothing:antialiased}
+a{color:#0E6B55}a:hover{color:#0A5040}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; position: relative; background: #FFFFFF; color: #141414; font-family: 'Geist', system-ui, sans-serif; overflow: hidden">
+
+<nav aria-label="Main" style="width: 232px; flex-shrink: 0; box-sizing: border-box; background: #F4F4F1; border-right: 1px solid #E7E7E3; padding: 20px 14px; display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 10px 22px">
+<svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="#141414" stroke-width="1.5"></circle><circle cx="14" cy="8" r="6.5" fill="none" stroke="#141414" stroke-width="1.5"></circle></svg>
+<span style="font-weight: 600; font-size: 17px; letter-spacing: -0.02em">duet</span>
+</div>
+<a href="B-Month.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; background: #E6E6E1; color: #141414; text-decoration: none; font-size: 14px; font-weight: 500"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg><span style="flex-grow: 1">Month</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G M</span></a>
+<a href="B-LookOver.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"></path><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"></path></svg><span style="flex-grow: 1">{{t.lookOver}}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; background: #141414; color: #FFFFFF; border-radius: 4px; padding: 1px 5px">23</span></a>
+<a href="B-Statements.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v5h16v-5"></path><path d="M12 4v10M8 10l4 4 4-4"></path></svg><span style="flex-grow: 1">{{t.statements}}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G I</span></a>
+<a href="B-Month.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18l5-6 4 3 7-9"></path></svg><span style="flex-grow: 1">Trends</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">G T</span></a>
+<a href="B-Month.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"></path></svg><span style="flex-grow: 1">Transactions</span></a>
+<a href="B-Settings.dc.html" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px; color: #141414; text-decoration: none; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62625E" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg><span style="flex-grow: 1">Settings</span></a>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+<a href="B-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 12px; border: 1px solid #DADAD5; border-radius: 8px; background: #FFFFFF; color: #141414; text-decoration: none; font-size: 13.5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span style="flex-grow: 1">Quick add</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #62625E">⌘K</span></a>
+<div style="display: flex; align-items: center; gap: 8px; padding: 0 10px; font-size: 12px; color: #62625E"><span style="width: 6px; height: 6px; border-radius: 50%; background: #0E6B55"></span>Mac mini · synced 2m ago</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 12px 10px 0; border-top: 1px solid #E7E7E3">
+<span style="display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #141414; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">Ja</span><span style="width: 24px; height: 24px; border-radius: 50%; background: #CFCFCA; color: #141414; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-left: -6px; box-shadow: 0 0 0 2px #F4F4F1">Ji</span></span>
+<span style="font-size: 13px">Jack &amp; Jill</span>
+</div>
+</div>
+</nav>
+
+<main style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 32px 44px 28px; display: flex; flex-direction: column">
+
+<div style="display: flex; align-items: center; justify-content: space-between; height: 36px">
+<div style="display: flex; align-items: center; gap: 6px">
+<button type="button" aria-label="Previous month" style="width: 30px; height: 30px; border: 1px solid #E7E7E3; border-radius: 6px; background: #FFFFFF; cursor: pointer">‹</button>
+<span style="font-size: 15px; font-weight: 500; padding: 0 8px">August 2026</span>
+<button type="button" aria-label="Next month" style="width: 30px; height: 30px; border: 1px solid #E7E7E3; border-radius: 6px; background: #FFFFFF; cursor: pointer">›</button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div role="group" aria-label="View" style="display: flex; background: #F4F4F1; border-radius: 8px; padding: 3px">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 6px; padding: 5px 12px; font-size: 13px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); cursor: pointer">Month</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 6px; padding: 5px 12px; font-size: 13px; background: transparent; color: #62625E; cursor: pointer">Trends</button>
+</div>
+<button type="button" onClick="{{toggleGt}}" aria-expanded="{{gtOpen}}" style="display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border: 1px solid #E7E7E3; border-radius: 8px; background: {{gtBtnBg}}; font-size: 13px; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#CFCFCA"></circle><path d="M12 2A10 10 0 0 1 12 22A5 5 0 0 1 12 12A5 5 0 0 0 12 2Z" fill="#141414"></path><circle cx="12" cy="7" r="1.6" fill="#141414"></circle><circle cx="12" cy="17" r="1.6" fill="#CFCFCA"></circle><circle cx="12" cy="12" r="10" fill="none" stroke="#141414" stroke-width="1.3"></circle></svg>{{t.gt}}</button>
+</div>
+</div>
+
+<div style="margin-top: 30px; font-size: 13px; color: #62625E">Spent in August</div>
+<div style="display: flex; align-items: flex-end; gap: 30px; margin-top: 2px">
+<div style="display: flex; align-items: flex-start; font-weight: 300; letter-spacing: -0.045em; line-height: 1"><span style="font-size: 44px; margin-top: 12px; margin-right: 4px">$</span><span style="font-size: 108px; font-variant-numeric: tabular-nums">7,842</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px">
+<span style="font-family: 'Geist Mono', monospace; font-size: 15px">+12% <span style="color: #62625E">vs typical $6,980</span></span>
+<span style="font-size: 12.5px; color: #62625E">9 of 10 accounts in · Citi still to come</span>
+</div>
+</div>
+
+<div style="margin-top: 22px; display: flex; height: 8px; gap: 2px">
+<div style="flex: 6318 1 0; background: #141414; border-radius: 4px 0 0 4px"></div>
+<div style="flex: 812 1 0; background: #8C8C87"></div>
+<div style="flex: 712 1 0; background: #CFCFCA; border-radius: 0 4px 4px 0"></div>
+</div>
+<div style="margin-top: 10px; display: flex; gap: 28px; font-size: 13px">
+<span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; background: #141414; border-radius: 2px"></span>{{t.ours}}<span style="font-family: 'Geist Mono', monospace">$6,318</span><span style="color: #62625E">81%</span></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; background: #8C8C87; border-radius: 2px"></span>{{t.justJack}}<span style="font-family: 'Geist Mono', monospace">$812</span><span style="color: #62625E">10%</span></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; background: #CFCFCA; border-radius: 2px"></span>{{t.justJill}}<span style="font-family: 'Geist Mono', monospace">$712</span><span style="color: #62625E">9%</span></span>
+</div>
+
+<div style="margin-top: 34px; display: flex; gap: 52px; min-height: 0">
+<section style="width: 540px; flex-shrink: 0">
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #62625E; padding-bottom: 8px; border-bottom: 1px solid #E7E7E3"><span>Categories</span><span>vs typical</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Home</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 100%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$3,304</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">−46</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Food</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 43.9%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$1,452</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">−68</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px; font-weight: 500"><span>Travel</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 35.7%; background: #0E6B55; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$1,180</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #0E6B55; text-align: right">+840</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Shopping</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 22.1%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$731</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">+121</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Getting around</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 12.5%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$414</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">−16</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Fun</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 6.9%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$228</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">−32</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Gifts &amp; giving</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 6.4%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$210</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">+60</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; border-bottom: 1px solid #F0F0EC; font-size: 14px"><span>Health</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 5%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$166</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">−14</span></div>
+<div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 76px 64px; column-gap: 16px; align-items: center; height: 35px; font-size: 14px"><span>Personal care</span><span style="height: 4px; background: #F0F0EC; border-radius: 2px"><span style="display: block; height: 4px; width: 4.8%; background: #141414; border-radius: 2px"></span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13.5px; text-align: right">$157</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; color: #62625E; text-align: right">+17</span></div>
+</section>
+
+<section style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div>
+<div style="font-size: 12px; color: #62625E; padding-bottom: 8px; border-bottom: 1px solid #E7E7E3">Notes</div>
+<ol style="margin: 0; padding: 0; list-style: none">
+<li style="display: flex; gap: 14px; padding: 11px 0; border-bottom: 1px solid #F0F0EC; font-size: 13.5px; line-height: 1.5"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #62625E; padding-top: 2px">01</span><span>Portland was most of the difference: travel came to $1,180, about $840 over usual.</span></li>
+<li style="display: flex; gap: 14px; padding: 11px 0; border-bottom: 1px solid #F0F0EC; font-size: 13.5px; line-height: 1.5"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #62625E; padding-top: 2px">02</span><span>Dining out was the lightest since March: $486, about $190 under usual.</span></li>
+<li style="display: flex; gap: 14px; padding: 11px 0; font-size: 13.5px; line-height: 1.5"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #62625E; padding-top: 2px">03</span><span>Two music services, Spotify and Apple Music: $22.98 a month together.</span></li>
+</ol>
+</div>
+<div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #62625E; padding-bottom: 10px; border-bottom: 1px solid #E7E7E3"><span>Six months</span><span>- - typical $6,980</span></div>
+<svg width="366" height="118" viewBox="0 0 372 120" role="img" aria-label="Monthly spending from March to August 2026: $6,940, $7,310, $6,880, $7,450, $7,020 and $7,842, against a typical $6,980." style="display: block; margin-top: 8px">
+<rect x="13" y="25.2" width="36" height="70.8" rx="2" fill="#DCDCD7"></rect>
+<rect x="75" y="21.4" width="36" height="74.6" rx="2" fill="#DCDCD7"></rect>
+<rect x="137" y="25.8" width="36" height="70.2" rx="2" fill="#DCDCD7"></rect>
+<rect x="199" y="20" width="36" height="76" rx="2" fill="#DCDCD7"></rect>
+<rect x="261" y="24.4" width="36" height="71.6" rx="2" fill="#DCDCD7"></rect>
+<rect x="323" y="16" width="36" height="80" rx="2" fill="#141414"></rect>
+<line x1="0" y1="24.8" x2="372" y2="24.8" stroke="#62625E" stroke-width="1" stroke-dasharray="3 3"></line>
+<text x="31" y="19" text-anchor="middle" font-size="10" fill="#62625E" font-family="Geist Mono, monospace">6,940</text>
+<text x="93" y="15" text-anchor="middle" font-size="10" fill="#62625E" font-family="Geist Mono, monospace">7,310</text>
+<text x="155" y="19" text-anchor="middle" font-size="10" fill="#62625E" font-family="Geist Mono, monospace">6,880</text>
+<text x="217" y="14" text-anchor="middle" font-size="10" fill="#62625E" font-family="Geist Mono, monospace">7,450</text>
+<text x="279" y="18" text-anchor="middle" font-size="10" fill="#62625E" font-family="Geist Mono, monospace">7,020</text>
+<text x="341" y="10" text-anchor="middle" font-size="10" fill="#141414" font-family="Geist Mono, monospace">7,842</text>
+<text x="31" y="113" text-anchor="middle" font-size="11" fill="#62625E" font-family="Geist, sans-serif">Mar</text>
+<text x="93" y="113" text-anchor="middle" font-size="11" fill="#62625E" font-family="Geist, sans-serif">Apr</text>
+<text x="155" y="113" text-anchor="middle" font-size="11" fill="#62625E" font-family="Geist, sans-serif">May</text>
+<text x="217" y="113" text-anchor="middle" font-size="11" fill="#62625E" font-family="Geist, sans-serif">Jun</text>
+<text x="279" y="113" text-anchor="middle" font-size="11" fill="#62625E" font-family="Geist, sans-serif">Jul</text>
+<text x="341" y="113" text-anchor="middle" font-size="11" fill="#141414" font-weight="600" font-family="Geist, sans-serif">Aug</text>
+</svg>
+</div>
+</section>
+</div>
+</main>
+
+<sc-if value="{{gtOpen}}" hint-placeholder-val="{{false}}">
+<div role="dialog" aria-label="{{t.gt}}" style="position: absolute; right: 44px; top: 76px; width: 344px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E7E7E3; border-radius: 12px; box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.22); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#CFCFCA"></circle><path d="M12 2A10 10 0 0 1 12 22A5 5 0 0 1 12 12A5 5 0 0 0 12 2Z" fill="#141414"></path><circle cx="12" cy="7" r="1.6" fill="#141414"></circle><circle cx="12" cy="17" r="1.6" fill="#CFCFCA"></circle><circle cx="12" cy="12" r="10" fill="none" stroke="#141414" stroke-width="1.3"></circle></svg>{{t.gt}}</span>
+<div role="group" aria-label="Period" style="display: flex; background: #F4F4F1; border-radius: 7px; padding: 2px">
+<button type="button" onClick="{{showMonth}}" aria-pressed="{{scopeMonth}}" style="border: 0; border-radius: 5px; padding: 3px 10px; font-size: 12px; cursor: pointer; background: {{monthBg}}; box-shadow: {{monthShadow}}">August</button>
+<button type="button" onClick="{{showAll}}" aria-pressed="{{scopeAll}}" style="border: 0; border-radius: 5px; padding: 3px 10px; font-size: 12px; cursor: pointer; background: {{allBg}}; box-shadow: {{allShadow}}">Overall</button>
+</div>
+</div>
+<div style="font-size: 16px; font-weight: 500; line-height: 1.35">{{sentence}}</div>
+<div>
+<div style="position: relative; height: 16px">
+<div style="position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: #F0F0EC"></div>
+<div style="position: absolute; left: 151px; top: 0; width: 1px; height: 16px; background: #141414"></div>
+<div style="position: absolute; left: 152px; top: 4px; height: 8px; width: {{barW}}; background: #0E6B55; border-radius: 0 3px 3px 0"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #62625E; margin-top: 4px"><span>Jack carried more</span><span>Jill carried more</span></div>
+</div>
+<div style="font-size: 12.5px; color: #62625E; line-height: 1.5">{{detail}}</div>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 13px; border-top: 1px solid #F0F0EC; padding-top: 12px">
+<a href="B-Month.dc.html">{{t.evenOut}}</a>
+<a href="B-Month.dc.html">History</a>
+<button type="button" onClick="{{toggleGt}}" style="margin-left: auto; background: none; border: 0; padding: 0; font-size: 13px; color: #62625E; cursor: pointer">Hide</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wording":{"editor":"enum","options":["Warm","Simple","Playful"],"default":"Simple","section":"Words"},"keepVisible":{"editor":"boolean","default":false,"section":"Ebb &amp; flow"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const W = {
+      Warm: { ours: "Ours", justJack: "Just Jack", justJill: "Just Jill", lookOver: "Look over", statements: "Inbox", gt: "Ebb & flow", evened: "Clean slate", evenOut: "Clean slate", gtMonth: "In August, Jill carried $262 more.", gtAll: "Jill has carried a little more lately: $418 overall." },
+      Simple: { ours: "Together", justJack: "Jack's own", justJill: "Jill's own", lookOver: "Go through", statements: "Inbox", gt: "Ebb & flow", evened: "Clean slate", evenOut: "Clean slate", gtMonth: "August: Jill covered $262 more.", gtAll: "Jill has covered a bit more: $418 overall." },
+      Playful: { ours: "Ours", justJack: "Just Jack", justJill: "Just Jill", lookOver: "Tidy up", statements: "Inbox", gt: "Ebb & flow", evened: "Clean slate", evenOut: "Clean slate", gtMonth: "In August, Jill carried $262 extra.", gtAll: "Jill's been carrying a little extra: $418 overall." }
+    };
+    const t = W[this.props.wording] || W.Simple;
+    const s = this.state || {};
+    const open = s.gtOpen === undefined ? !!this.props.keepVisible : s.gtOpen;
+    const scope = s.scope || "month";
+    const isM = scope === "month";
+    const onBg = "#FFFFFF";
+    const onSh = "0 1px 2px rgba(0, 0, 0, 0.1)";
+    return {
+      t: t,
+      gtOpen: open,
+      gtBtnBg: open ? "#F4F4F1" : "#FFFFFF",
+      scopeMonth: isM,
+      scopeAll: !isM,
+      monthBg: isM ? onBg : "transparent", monthShadow: isM ? onSh : "none",
+      allBg: !isM ? onBg : "transparent", allShadow: !isM ? onSh : "none",
+      sentence: isM ? t.gtMonth : t.gtAll,
+      barW: isM ? "79px" : "125px",
+      detail: isM ? (t.ours + " came to $6,318, shared 58 / 42. Jack paid $3,402 and Jill paid $2,916.") : "Last clean slate on Jul 31: Jack to Jill, $500.",
+      toggleGt: () => this.setState({ gtOpen: !open }),
+      showMonth: () => this.setState({ scope: "month" }),
+      showAll: () => this.setState({ scope: "all" })
+    };
+  }
+}
+</script>
+</body>
+</html>

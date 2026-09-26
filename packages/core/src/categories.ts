@@ -19,7 +19,7 @@ export const PALETTE = {
   sky: { color: "#8EC3F2", bubble: "#DCEEFF" },
   lilac: { color: "#BBA2F0", bubble: "#ECE3FF" },
   mint: { color: "#86D5A9", bubble: "#D9F4E6" },
-  pink: { color: "#F39DBE", bubble: "#FFE1EC" },
+  pink: { color: "#F39DBE", bubble: "#FFE0EC" },
   coral: { color: "#F4A293", bubble: "#FFE4DE" },
   aqua: { color: "#7ED0C8", bubble: "#D8F3F0" },
   sand: { color: "#D8BF97", bubble: "#F5EBDD" },
@@ -111,7 +111,7 @@ const GROUPS: Group[] = [
     id: "health",
     name: "Health",
     icon: "heart",
-    swatch: "coral",
+    swatch: "aqua",
     children: [
       ["pharmacy", "Pharmacy", "pill"],
       ["doctor", "Doctors & dental", "heart"],
@@ -120,9 +120,9 @@ const GROUPS: Group[] = [
   },
   {
     id: "gifts",
-    name: "Gifts",
+    name: "Gifts & giving",
     icon: "gift",
-    swatch: "aqua",
+    swatch: "coral",
     children: [
       ["gifts-given", "Gifts", "gift"],
       ["giving", "Giving", "hand-heart"],

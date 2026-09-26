@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A · Journal · Inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5EFE4;-webkit-font-smoothing:antialiased}
+a{color:#A64B25}a:hover{color:#7E3719}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; background: #F5EFE4; color: #2A2420; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden">
+
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #BFB2A0">
+<div style="display: flex; align-items: baseline; gap: 14px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; font-size: 30px; letter-spacing: -0.01em">Duet</span>
+<span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6F6358">Jack &amp; Jill</span>
+</div>
+<nav aria-label="Main" style="display: flex; align-items: center; gap: 28px; font-size: 14px">
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">The month</a>
+<a href="A-LookOver.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; display: flex; align-items: center; gap: 7px">{{t.lookOver}}<span style="font-size: 11px; font-weight: 600; background: #2A2420; color: #F5EFE4; border-radius: 999px; padding: 1px 7px">23</span></a>
+<a href="A-Statements.dc.html" aria-current="page" style="color: #2A2420; font-weight: 600; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #A64B25">{{t.statements}}</a>
+<a href="Main.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Trends</a>
+<a href="A-Settings.dc.html" style="color: #2A2420; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent">Settings</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 18px">
+<span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: #6F6358"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6B8A66"></span>Synced</span>
+<a href="A-QuickAdd.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #2A2420; font-size: 13px; border: 1px solid #CFC3B0; border-radius: 6px; padding: 8px 12px; background: #FBF8F2">Add something<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6F6358">⌘K</span></a>
+</div>
+</header>
+
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 32px 48px; display: flex; gap: 48px">
+
+<section style="width: 776px; flex-shrink: 0; display: flex; flex-direction: column">
+<div style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6F6358">{{t.statements}}</div>
+<h1 style="margin: 6px 0 6px; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 46px; line-height: 1; letter-spacing: -0.015em">August <span style="font-style: italic; font-size: 24px; color: #6F6358">2026</span></h1>
+<p style="margin: 0 0 22px; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 15px; color: #4A4038">Files stay on this Mac. Only what you add to the month is shared.</p>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 44px 170px 60px; column-gap: 14px; align-items: center; height: 30px; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6F6358; border-bottom: 1px solid #2A2420">
+<span>File</span><span>Account</span><span>Dates</span><span style="text-align: right">Rows</span><span>Status</span><span></span>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 44px 170px 60px; column-gap: 14px; align-items: center; height: 60px; border-bottom: 1px solid #DDD2C1">
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">amex-activity-aug.csv</span><span style="font-size: 11.5px; color: #6F6358">uploaded Sep 3</span></span>
+<span style="font-size: 14px">Amex Gold</span>
+<span style="font-size: 13px; color: #6F6358">Aug 1–31</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 16px">64</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #A64B25; flex-shrink: 0"></span>{{t.lookingOver}} · 23 left</span>
+<a href="A-LookOver.dc.html" style="font-size: 13px; text-align: right">Continue</a>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 44px 170px 60px; column-gap: 14px; align-items: center; height: 60px; border-bottom: 1px solid #DDD2C1">
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Chase_Activity_20260901.CSV</span><span style="font-size: 11.5px; color: #6F6358">uploaded Sep 2</span></span>
+<span style="font-size: 14px">Chase Sapphire</span>
+<span style="font-size: 13px; color: #6F6358">Aug 1–31</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 16px">38</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #6B8A66; flex-shrink: 0"></span>Added · 2 {{t.leftOut}}</span>
+<a href="A-LookOver.dc.html" style="font-size: 13px; text-align: right">Open</a>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 44px 170px 60px; column-gap: 14px; align-items: center; height: 60px; border-bottom: 1px solid #DDD2C1">
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">WF_Checking_Aug2026.csv</span><span style="font-size: 11.5px; color: #6F6358">uploaded Sep 2</span></span>
+<span style="font-size: 14px">Wells Fargo Checking</span>
+<span style="font-size: 13px; color: #6F6358">Aug 1–31</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 16px">17</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #6B8A66; flex-shrink: 0"></span>Added · 6 transfers {{t.leftOut}}</span>
+<a href="A-LookOver.dc.html" style="font-size: 13px; text-align: right">Open</a>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 44px 170px 60px; column-gap: 14px; align-items: center; height: 60px; border-bottom: 1px solid #DDD2C1">
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">DCU_Export_0901.xlsx</span><span style="font-size: 11.5px; color: #6F6358">uploaded Sep 3</span></span>
+<span style="font-size: 14px">DCU Checking</span>
+<span style="font-size: 13px; color: #6F6358">Aug 1–31</span>
+<span style="text-align: right; font-family: 'Fraunces', Georgia, serif; font-size: 16px">22</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; border: 2px solid #B7862B; box-sizing: border-box; flex-shrink: 0"></span>New layout: match columns once</span>
+<a href="A-Statements.dc.html" style="font-size: 13px; text-align: right">Set up</a>
+</div>
+
+<div style="margin-top: 26px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600">Earlier</div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #DDD2C1; font-size: 14px"><span><span style="font-family: 'Fraunces', Georgia, serif; font-size: 18px">July</span> <span style="color: #6F6358">· 5 files · all added</span></span><a href="A-Statements.dc.html" style="font-size: 13px">Show</a></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #DDD2C1; font-size: 14px"><span><span style="font-family: 'Fraunces', Georgia, serif; font-size: 18px">June</span> <span style="color: #6F6358">· 5 files · all added</span></span><a href="A-Statements.dc.html" style="font-size: 13px">Show</a></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px; border-bottom: 1px solid #DDD2C1; font-size: 14px"><span><span style="font-family: 'Fraunces', Georgia, serif; font-size: 18px">May</span> <span style="color: #6F6358">· 6 files · all added</span></span><a href="A-Statements.dc.html" style="font-size: 13px">Show</a></div>
+</section>
+
+<aside style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; padding-top: 4px">
+<section style="background: #FBF8F2; border: 1px solid #DDD2C1; border-radius: 4px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600">Your accounts for August</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+<li style="display: flex; align-items: center; gap: 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B8A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span style="flex-grow: 1">Amex Gold</span><span style="font-size: 12px; color: #6F6358">{{t.lookingOverLower}}</span></li>
+<li style="display: flex; align-items: center; gap: 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B8A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span style="flex-grow: 1">Chase Sapphire</span><span style="font-size: 12px; color: #6F6358">added</span></li>
+<li style="display: flex; align-items: center; gap: 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B8A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span style="flex-grow: 1">Wells Fargo Checking</span><span style="font-size: 12px; color: #6F6358">added</span></li>
+<li style="display: flex; align-items: center; gap: 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B7862B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle></svg><span style="flex-grow: 1">DCU Checking</span><span style="font-size: 12px; color: #6F6358">needs a quick setup</span></li>
+<li style="display: flex; align-items: center; gap: 10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A8D7E" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle></svg><span style="flex-grow: 1">Citi Double Cash</span><a href="A-Statements.dc.html" style="font-size: 12.5px">{{t.bringIn}}</a></li>
+</ul>
+<p style="margin: 4px 0 0; font-size: 12.5px; color: #6F6358; line-height: 1.5">4 of 5 in. Jill uploads Jill's own accounts on Jill's Mac.</p>
+</section>
+
+<section style="border: 1.5px dashed #BFB2A0; border-radius: 4px; padding: 26px 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#6F6358" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v5h16v-5"></path><path d="M12 4v11"></path><path d="M7.5 10.5L12 15l4.5-4.5"></path></svg>
+<div style="font-family: 'Fraunces', Georgia, serif; font-size: 20px">Drop statements here</div>
+<div style="font-size: 12.5px; color: #6F6358">CSV, XLSX, OFX or QFX, one month or a whole year</div>
+<button type="button" style="margin-top: 6px; background: #2A2420; color: #F5EFE4; border: 0; border-radius: 6px; padding: 10px 18px; font-size: 14px; cursor: pointer">Choose files</button>
+</section>
+
+<p style="margin: 0; font-size: 12.5px; color: #6F6358; line-height: 1.5">Removing a file asks whether to also remove what it added. Reading a file again only changes rows you haven't decided yet.</p>
+</aside>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wording":{"editor":"enum","options":["Warm","Simple","Playful"],"default":"Warm","section":"Words"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const W = {
+      Warm: { lookOver: "Look over", statements: "Inbox", lookingOver: "Looking over", lookingOverLower: "looking over", leftOut: "left out", bringIn: "Upload" },
+      Simple: { lookOver: "Go through", statements: "Inbox", lookingOver: "Going through", lookingOverLower: "going through", leftOut: "left out", bringIn: "Upload" },
+      Playful: { lookOver: "Tidy up", statements: "Inbox", lookingOver: "Tidying up", lookingOverLower: "tidying up", leftOut: "set aside", bringIn: "Upload" }
+    };
+    return { t: W[this.props.wording] || W.Warm };
+  }
+}
+</script>
+</body>
+</html>

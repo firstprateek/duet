@@ -87,9 +87,10 @@ export function monthHeadline(
     Math.sign(top.diff) === Math.sign(difference) &&
     Math.abs(top.diff) >= Math.abs(difference) * 0.6
   ) {
+    // Close to usual: within 2% of a typical month, or a fifth of what the category usually is.
     const othersClose = deviations
       .slice(1)
-      .every((d) => Math.abs(d.diff) <= Math.max(5000, Math.abs(d.usual) * 0.15));
+      .every((d) => Math.abs(d.diff) <= Math.max(typical.total * 0.02, Math.abs(d.usual) * 0.2));
     sentence = `Mostly ${names(top.id)}.${othersClose ? " Every other category was close to usual." : ""}`;
   }
   return { label, sentence, difference, tone: more ? "more" : "less" };
@@ -250,7 +251,26 @@ export interface TrendNote {
   categoryId: string;
 }
 
-/** "Worth a look" on Trends: steady climbs and subscriptions creeping up. */
+const COUNT_LOWER = [
+  "",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+];
+
+/**
+ * "Worth a look" on Trends: a category that stepped up and stayed there, subscriptions
+ * creeping up over the year, and something getting steadily lighter.
+ */
 export function trendNotes(
   history: readonly MonthTotals[],
   names: (categoryId: string) => string,
@@ -260,53 +280,77 @@ export function trendNotes(
   if (!latest || sorted.length < 4) return [];
   const notes: TrendNote[] = [];
 
-  // A category above its usual several months running.
-  const typical = typicalMonth(sorted, addMonths(latest.month, 1));
-  let best: { id: string; months: number; line: Cents } | null = null;
-  for (const [id, usual] of typical.byCategory) {
-    if (usual < 5000) continue;
-    let run = 0;
-    for (let i = sorted.length - 1; i >= 0; i--) {
-      if ((sorted[i]!.byCategory.get(id) ?? 0) > usual) run++;
-      else break;
+  // Above a round line several months running, when it used to sit clearly below it:
+  // "Groceries have been above $850 four months running. They used to be about $780."
+  // The category that stepped up the most (every month of the run) wins.
+  let best: { id: string; months: number; line: Cents; before: Cents; step: Cents } | null = null;
+  for (const id of latest.byCategory.keys()) {
+    if (id === "subscriptions") continue;
+    const values = sorted.map((h) => h.byCategory.get(id) ?? 0);
+    for (let run = 3; run <= values.length - 2; run++) {
+      const before = values.slice(0, -run).filter((v) => v !== 0);
+      if (before.length < 2) continue;
+      const low = Math.min(...values.slice(-run));
+      const usual = median(before);
+      // A round line strictly below the lowest month: $866 is "above $850".
+      const line = Math.floor((low - 1) / 5000) * 5000;
+      if (low < 10000 || low < usual * 1.05 || line <= usual) continue;
+      const step = low - usual;
+      if (!best || step > best.step || (step === best.step && run > best.months)) {
+        best = { id, months: run, line, before: usual, step };
+      }
     }
-    if (run >= 3 && (!best || run > best.months)) best = { id, months: run, line: usual };
   }
   if (best) {
-    const line = Math.floor(best.line / 5000) * 5000;
-    const count =
-      ["", "", "two", "three", "four", "five", "six"][best.months] ?? String(best.months);
+    const name = names(best.id);
+    const count = COUNT_LOWER[best.months] ?? String(best.months);
+    const before = Math.round(best.before / 1000) * 1000;
     notes.push({
-      text: `${names(best.id)} ${has(names(best.id))} been above ${formatMoney(line)} ${count} months running.`,
+      text: `${name} ${has(name)} been above ${formatMoney(best.line)} ${count} months running. They used to be about ${formatMoney(before)}.`,
       categoryId: best.id,
     });
   }
 
-  // Subscriptions compared with six months ago.
+  // Subscriptions now, against a year ago (or the earliest month we have, at least five back).
   const subsNow = latest.byCategory.get("subscriptions") ?? 0;
-  const past = sorted.find((h) => h.month === addMonths(latest.month, -5)) ?? sorted[0]!;
-  const subsThen = past.byCategory.get("subscriptions") ?? 0;
-  if (subsThen > 0 && subsNow - subsThen >= 1000) {
+  const past =
+    sorted.find((h) => h.month === addMonths(latest.month, -12)) ??
+    sorted.find((h) => h.month === addMonths(latest.month, -11)) ??
+    sorted.find((h) => h.month <= addMonths(latest.month, -5));
+  const subsThen = past?.byCategory.get("subscriptions") ?? 0;
+  if (past && subsThen > 0 && subsNow - subsThen >= 1000) {
+    const when =
+      addMonths(past.month, 11) <= latest.month ? "a year ago" : `in ${monthName(past.month)}`;
     notes.push({
-      text: `Subscriptions are ${formatMoney(subsNow)} a month now, up from ${formatMoney(subsThen)} in ${monthName(past.month)}.`,
+      text: `Subscriptions are ${formatMoney(subsNow)} a month now, up from ${formatMoney(subsThen)} ${when}.`,
       categoryId: "subscriptions",
     });
   }
 
-  // Something coming down steadily.
+  // Lighter three months in a row: "Dining out keeps getting lighter: $486 in August,
+  // the least since March." The biggest drop wins.
+  let lighter: { id: string; amount: Cents; drop: Cents } | null = null;
   for (const id of latest.byCategory.keys()) {
     const recent = sorted.slice(-4).map((h) => h.byCategory.get(id) ?? 0);
-    if (
-      recent.length === 4 &&
-      recent.every((v, i) => i === 0 || v < recent[i - 1]!) &&
-      recent[0]! >= 10000
-    ) {
-      notes.push({
-        text: `${names(id)} ${has(names(id))} come down three months in a row, to ${formatMoney(recent[3]!)}.`,
-        categoryId: id,
-      });
-      break;
-    }
+    if (recent.length < 4 || recent[0]! < 10000 || recent[3]! <= 0) continue;
+    if (!recent.every((v, i) => i === 0 || v < recent[i - 1]!)) continue;
+    const drop = recent[0]! - recent[3]!;
+    if (!lighter || drop > lighter.drop) lighter = { id, amount: recent[3]!, drop };
+  }
+  if (lighter) {
+    const { id, amount } = lighter;
+    const earlier = sorted.slice(0, -1).reverse();
+    const since = earlier.find((h) => {
+      const value = h.byCategory.get(id) ?? 0;
+      return value !== 0 && value <= amount;
+    });
+    const tail = since
+      ? `the least since ${monthName(since.month)}`
+      : `the least in ${COUNT_LOWER[sorted.length] ?? sorted.length} months`;
+    notes.push({
+      text: `${names(id)} keeps getting lighter: ${formatMoney(amount)} in ${monthName(latest.month)}, ${tail}.`,
+      categoryId: id,
+    });
   }
   return notes.slice(0, 3);
 }

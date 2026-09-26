@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C · Soft &amp; friendly · Quick add</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBF6EF;-webkit-font-smoothing:antialiased}
+a{color:#B4461A}a:hover{color:#8A3412}
+button{font:inherit;color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; position: relative; background: #FBF6EF; color: #2B2536; font-family: 'Nunito', system-ui, sans-serif; overflow: hidden">
+
+<div aria-hidden="true" style="position: absolute; inset: 0; box-sizing: border-box; padding: 20px 32px 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="height: 44px; display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; align-items: center; gap: 10px"><svg width="34" height="24" viewBox="0 0 34 24"><circle cx="12" cy="12" r="11" fill="#2F6FB0"></circle><circle cx="22" cy="12" r="11" fill="#F5C451" style="mix-blend-mode: multiply"></circle></svg><span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px">duet</span></span>
+<span style="width: 420px; height: 44px; border-radius: 999px; background: #FFFFFF"></span>
+<span style="width: 200px; height: 40px; border-radius: 999px; background: #F07A4A"></span>
+</div>
+<div style="display: flex; gap: 18px; height: 356px">
+<div style="width: 700px; border-radius: 26px; background: #FFFFFF; padding: 26px 28px; box-sizing: border-box"><div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 68px; margin-top: 40px">$4,106</div></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 18px"><div style="height: 186px; border-radius: 26px; background: #FFFFFF"></div><div style="flex-grow: 1; border-radius: 26px; background: #FFFFFF"></div></div>
+</div>
+<div style="display: flex; gap: 18px; flex-grow: 1"><div style="width: 700px; border-radius: 26px; background: #FFFFFF"></div><div style="flex-grow: 1; border-radius: 26px; background: #FFFFFF"></div></div>
+</div>
+<div style="position: absolute; inset: 0; background: rgba(43, 37, 54, 0.34)"></div>
+
+<div role="dialog" aria-modal="true" aria-label="Quick add" style="position: absolute; left: 300px; top: 92px; width: 680px; box-sizing: border-box; background: #FFFFFF; border-radius: 30px; padding: 26px 28px 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 30px 80px -30px rgba(43, 37, 54, 0.55)">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 21px">Add something</h1>
+<span style="font-size: 12.5px; font-weight: 700; color: #6B6478">esc to close</span>
+</div>
+<label style="display: block">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Describe an expense</span>
+<input type="text" value="42.18 trader joes groceries yesterday" style="width: 100%; box-sizing: border-box; border: 2px solid #F07A4A; outline: none; background: #FBF6EF; border-radius: 18px; padding: 16px 20px; font-family: 'Fredoka', sans-serif; font-size: 23px; color: #2B2536">
+</label>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 13px; font-weight: 800; color: #6B6478">Here's what I got</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; background: #D9F4E6; color: #1E5B3C; border-radius: 999px; padding: 4px 11px; font-size: 12.5px; font-weight: 800"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E5B3C" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>All six filled in</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 10px">
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">Amount</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px solid #FFE3D3; background: #FFE3D3; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 16px">$42.18</span></div>
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">Merchant</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px solid #FFF0C2; background: #FFF0C2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h16l-1.6 9H5.6z M8 10l3-5 M16 10l-3-5"></path></svg>Trader Joe's</span></div>
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">Category</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px solid #FFF0C2; background: #FFF0C2">Food › Groceries</span></div>
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">When</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px solid #DCEEFF; background: #DCEEFF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2B2536" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg>Tue, Sep 22</span></div>
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">For</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px dashed #B9AFC8; background: #FFFFFF; color: #4E475C"><span style="display: flex"><span style="width: 14px; height: 14px; border-radius: 50%; background: #2F6FB0"></span><span style="width: 14px; height: 14px; border-radius: 50%; background: #F5C451; margin-left: -5px"></span></span>{{t.ours}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 11.5px; font-weight: 800; color: #6B6478; letter-spacing: 0.05em; text-transform: uppercase">Paid with</span><span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 800; border: 1.5px dashed #B9AFC8; background: #FFFFFF; color: #4E475C">Cash · Jack</span></div>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; font-size: 12.5px; font-weight: 700; color: #6B6478">
+<span style="display: inline-flex; align-items: center; gap: 7px"><span style="width: 14px; height: 14px; border-radius: 50%; background: #FFF0C2"></span>From your words</span>
+<span style="display: inline-flex; align-items: center; gap: 7px"><span style="width: 14px; height: 14px; box-sizing: border-box; border-radius: 50%; border: 1.5px dashed #B9AFC8"></span>Filled in for you · tap any to change</span>
+</div>
+<p style="margin: 0; font-size: 13.5px; font-weight: 600; color: #6B6478; line-height: 1.5">Try “<span style="color: #2B2536; font-weight: 800">{{t.hint1}}</span>” or “<span style="color: #2B2536; font-weight: 800">{{t.hint2}}</span>”.</p>
+<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px">
+<a href="C-QuickAdd.dc.html" style="font-size: 14px; font-weight: 800">More details</a>
+<a href="C-Month.dc.html" style="display: flex; align-items: center; gap: 10px; background: #2B2536; color: #FFFFFF; text-decoration: none; border-radius: 999px; padding: 12px 22px; font-size: 15px; font-weight: 800">{{t.addToSep}}<span style="font-family: 'Fredoka', sans-serif; font-weight: 500; opacity: 0.8">↵</span></a>
+</div>
+</div>
+
+<div style="position: absolute; left: 300px; top: 584px; width: 680px; box-sizing: border-box; background: #FFFFFF; border-radius: 26px; padding: 18px 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 20px 50px -30px rgba(43, 37, 54, 0.45)">
+<div style="font-size: 13px; font-weight: 800; color: #6B6478">Added by hand lately</div>
+<div style="display: flex; align-items: center; gap: 12px; height: 34px; font-size: 14px; font-weight: 700"><span style="width: 28px; height: 28px; border-radius: 50%; background: #FFF0C2"></span><span style="flex-grow: 1">Farmers market <span style="color: #6B6478; font-weight: 600">· Sep 20</span></span><span style="background: #FFE6DA; color: #7A2E0C; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 800">{{t.ours}}</span><span style="width: 70px; text-align: right; font-family: 'Fredoka', sans-serif; font-weight: 500">$36.00</span></div>
+<div style="display: flex; align-items: center; gap: 12px; height: 34px; font-size: 14px; font-weight: 700"><span style="width: 28px; height: 28px; border-radius: 50%; background: #F5EBDD"></span><span style="flex-grow: 1">Haircut <span style="color: #6B6478; font-weight: 600">· Sep 18</span></span><span style="background: #DCE9F7; color: #1F4F82; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 800">{{t.mine}}</span><span style="width: 70px; text-align: right; font-family: 'Fredoka', sans-serif; font-weight: 500">$45.00</span></div>
+<div style="display: flex; align-items: center; gap: 12px; height: 34px; font-size: 14px; font-weight: 700"><span style="width: 28px; height: 28px; border-radius: 50%; background: #D9F4E6"></span><span style="flex-grow: 1">Parking downtown <span style="color: #6B6478; font-weight: 600">· Sep 14</span></span><span style="background: #FFE6DA; color: #7A2E0C; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 800">{{t.ours}}</span><span style="width: 70px; text-align: right; font-family: 'Fredoka', sans-serif; font-weight: 500">$12.00</span></div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { ours: "Ours", mine: "Mine", addToSep: "Add to September", hint1: "mine 18 sweetgreen lunch", hint2: "ours 64 dinner friday" };
+    return { t: T };
+  }
+}
+</script>
+</body>
+</html>

@@ -257,6 +257,39 @@ function dateSpan(rows: ParsedRow[]): { firstDate: string | null; lastDate: stri
   return { firstDate: first, lastDate: last };
 }
 
+/**
+ * For a layout we don't know yet: how many rows sit under the header, and the dates they
+ * span, from whichever column reads best as dates. Lets Uploads place the file in a month
+ * before its one-time setup.
+ */
+function looseSpan(
+  grid: Grid,
+  from: number,
+): { dataRows: number; firstDate: string | null; lastDate: string | null } {
+  const rows = grid.slice(from).filter((r) => !isBlankRow(r));
+  const width = Math.max(0, ...rows.map((r) => r.length));
+  let best: string[] = [];
+  for (let col = 0; col < width; col++) {
+    const dates: string[] = [];
+    for (const row of rows) {
+      const cell = row[col];
+      let date: string | null = null;
+      if (cell instanceof Date) date = parseDate(cell);
+      else if (typeof cell === "number") {
+        date = Number.isInteger(cell) && cell > 30000 && cell < 70000 ? parseDate(cell) : null;
+      } else if (typeof cell === "string" && /[/\-.]|[A-Za-z]{3}/.test(cell))
+        date = parseDate(cell);
+      if (date) dates.push(date);
+    }
+    if (dates.length > best.length) best = dates;
+  }
+  if (rows.length === 0 || best.length < rows.length * 0.6) {
+    return { dataRows: rows.length, firstDate: null, lastDate: null };
+  }
+  best.sort();
+  return { dataRows: rows.length, firstDate: best[0]!, lastDate: best[best.length - 1]! };
+}
+
 function sampleOf(grid: Grid, from: number): string[][] {
   return grid
     .slice(from, from + SAMPLE_ROWS + 1)
@@ -318,9 +351,9 @@ export function readGrid(
       rows: [],
       skipped: 0,
       headers: headerRow >= 0 ? (grid[headerRow] ?? []).map(cellText) : [],
+      headerRow: Math.max(0, headerRow),
       sample: sampleOf(grid, headerRow + 1),
-      firstDate: null,
-      lastDate: null,
+      ...looseSpan(grid, headerRow + 1),
     };
   }
 
