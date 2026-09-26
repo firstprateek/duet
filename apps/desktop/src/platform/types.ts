@@ -27,6 +27,7 @@ export interface Platform {
     delete(key: string): Promise<void>;
   };
   appVersion(): Promise<string>;
-  /** Looks for a newer Duet on the Mac mini at this address (the relay's). */
-  checkForUpdate(from: string): Promise<UpdateInfo | null>;
+  checkForUpdate(): Promise<UpdateInfo | null>;
+  /** Calls back with the join code in a duet://join link that opened Duet. Returns an unsubscribe function. */
+  onJoinCode(handler: (code: string) => void): () => void;
 }

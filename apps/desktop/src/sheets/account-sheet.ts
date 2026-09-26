@@ -65,7 +65,7 @@ export class AccountSheet extends Screen {
         <div class="group">
           <span class="group-label">Whose is it?</span>
           <div class="choices">
-            ${b.members.map((m) => html`<button type="button" class="choice person" aria-pressed=${this.owner === m.id ? "true" : "false"} @click=${() => (this.owner = m.id)}><du-avatar .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name}</button>`)}
+            ${b.members.map((m) => html`<button type="button" class="choice person" aria-pressed=${this.owner === m.id ? "true" : "false"} @click=${() => (this.owner = m.id)}><du-avatar .pair=${this.app.pair} .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name}</button>`)}
           </div>
         </div>
         <div class="group">

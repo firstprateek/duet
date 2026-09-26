@@ -296,7 +296,7 @@ export async function startHousehold(
   return { phrase, credentials };
 }
 
-/** A join code for the other one of us: works once, for ten minutes. */
+/** A join code for the other one of us: works once, for a day. */
 export async function makeJoinCode(
   store: Store,
   secrets: Secrets,

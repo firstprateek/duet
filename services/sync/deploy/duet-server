@@ -3,10 +3,9 @@
 #
 #   duet-server install [path/to/duet-sync]   put the relay in place, start it under launchd,
 #                                             and publish it on the tailnet with tailscale serve
-#   duet-server update                        the latest release from our private repository
-#                                             (needs gh, signed in once): the relay, checked
-#                                             against its SHA-256, and the app, which our Macs
-#                                             then install and update from here, at /app
+#   duet-server update                        the relay from the latest GitHub release, checked
+#                                             against its SHA-256, if it's newer, then a restart
+#   duet-server auto-update                   run update every night at 04:30
 #   duet-server status                        is it running, and what does it answer
 #   duet-server backup                        a backup right now (one also runs every night)
 #   duet-server logs                          follow the relay's log
@@ -14,8 +13,8 @@
 #   duet-server install-sorter                the sorting service (needs uv and Ollama), published
 #                                             on the tailnet under /sort
 #
-# install, install-sorter, update and keep-awake change the system, so they ask for your
-# password (sudo).
+# install, install-sorter, update, auto-update and keep-awake change the system, so they ask
+# for your password (sudo).
 set -eu
 
 REPO="${DUET_REPO:-firstprateek/duet}"
@@ -23,7 +22,6 @@ BIN=/usr/local/bin/duet-sync
 DATA=/usr/local/var/duet
 LOGS=/usr/local/var/log
 DAEMONS=/Library/LaunchDaemons
-APP="$DATA/app"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 say() { printf '%s\n' "$*"; }
@@ -49,41 +47,6 @@ healthy() {
 # tailscale serve works without sudo once we're its operator (tailscale up --operator=$USER).
 serve() {
   tailscale serve --bg "$@" >/dev/null 2>&1 || sudo tailscale serve --bg "$@" >/dev/null
-}
-
-# This Mac mini's address on the tailnet, like https://mac-mini.tail1234.ts.net.
-tailnet_url() {
-  if [ -n "${DUET_URL:-}" ]; then
-    echo "${DUET_URL%/}"
-    return
-  fi
-  name="$(tailscale status --json --peers=false 2>/dev/null \
-    | grep -o '"DNSName": *"[^"]*"' | head -n 1 | sed 's/.*"\([^"]*\)"$/\1/')"
-  [ -n "$name" ] || return 1
-  echo "https://${name%.}"
-}
-
-# Hands a release's app to our Macs: the relay serves $APP at /app. That's the bundle the
-# updater installs, a checksum, install.sh, and the update manifest, which has to point here
-# because our Macs can't download from a private repository. The manifest goes last, so it
-# never names a half-copied bundle.
-publish_app() {
-  from="$1"
-  bundle="$(find "$from" -maxdepth 1 -name '*.app.tar.gz' | head -n 1)"
-  if [ -z "$bundle" ] || [ ! -f "$from/latest.json" ]; then
-    say "This release has no app in it, so the Mac mini keeps handing out the one it has."
-    return 0
-  fi
-  base="$(tailnet_url)/app" || fail "couldn't find this Mac mini's tailnet address (set DUET_URL)"
-  mkdir -p "$APP"
-  cp "$bundle" "$APP/Duet.app.tar.gz.new"
-  mv "$APP/Duet.app.tar.gz.new" "$APP/Duet.app.tar.gz"
-  (cd "$APP" && shasum -a 256 Duet.app.tar.gz > Duet.app.tar.gz.sha256)
-  sed "s#__DUET_FROM__#$base#" "$HERE/../../../install.sh" > "$APP/install.sh"
-  sed -E "s#\"url\": *\"[^\"]*\"#\"url\": \"$base/Duet.app.tar.gz\"#g" "$from/latest.json" > "$APP/latest.json.new"
-  mv "$APP/latest.json.new" "$APP/latest.json"
-  say "Our Macs can install Duet $(grep -o '"version": *"[^"]*"' "$APP/latest.json" | head -n 1 | sed 's/.*"\([^"]*\)"$/\1/') with:"
-  say "  curl -fsSL $base/install.sh | sh"
 }
 
 install_plists() {
@@ -120,16 +83,19 @@ case "${1:-help}" in
     say "Use that https address in Duet: Settings, Sync & security."
     ;;
   update)
-    command -v gh >/dev/null \
-      || fail "releases come from our private repository: brew install gh, then gh auth login"
     asset="duet-sync-$(arch_name)"
+    base="https://github.com/$REPO/releases/latest/download"
+    latest="$(curl -fsSI "https://github.com/$REPO/releases/latest" | tr -d '\r' \
+      | sed -n 's#^[Ll]ocation: .*/tag/v\{0,1\}##p')"
+    current="$("$BIN" version 2>/dev/null || true)"
+    if [ -n "$latest" ] && [ "$latest" = "$current" ]; then
+      say "The relay is up to date ($current)."
+      exit 0
+    fi
     tmp="$(mktemp -d)"
     trap 'rm -rf "$tmp"' EXIT
-    tag="$(gh release view --repo "$REPO" --json tagName --jq .tagName)" \
-      || fail "couldn't find the latest release (is gh signed in? gh auth status)"
-    gh release download "$tag" --repo "$REPO" --dir "$tmp" \
-      --pattern "$asset" --pattern "$asset.sha256" --pattern latest.json --pattern '*.app.tar.gz' \
-      || fail "couldn't download $tag"
+    curl -fsSL "$base/$asset" -o "$tmp/$asset" || fail "couldn't download the latest relay"
+    curl -fsSL "$base/$asset.sha256" -o "$tmp/$asset.sha256" || fail "couldn't download its checksum"
     expected="$(cut -d' ' -f1 < "$tmp/$asset.sha256")"
     actual="$(shasum -a 256 "$tmp/$asset" | cut -d' ' -f1)"
     [ "$expected" = "$actual" ] || fail "the download doesn't match its checksum; nothing was changed"
@@ -138,7 +104,11 @@ case "${1:-help}" in
     sudo install -m 755 "$tmp/$asset" "$BIN"
     sudo launchctl kickstart -k system/app.duet.sync
     say "The relay is now $new_version."
-    publish_app "$tmp"
+    ;;
+  auto-update)
+    sudo install -m 755 "$0" /usr/local/bin/duet-server
+    install_plists app.duet.update
+    say "Every night at 04:30 the Mac mini takes a newer relay from GitHub, if there is one."
     ;;
   status)
     if sudo launchctl print system/app.duet.sync >/dev/null 2>&1; then say "launchd: running"; else say "launchd: not loaded"; fi
@@ -175,6 +145,6 @@ case "${1:-help}" in
     say "The Mac mini won't sleep, and starts again after a power cut."
     ;;
   *)
-    sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
     ;;
 esac

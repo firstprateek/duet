@@ -5,17 +5,17 @@
 //!   (`db_open`, `db_all`, `db_run`, `db_batch`).
 //! - Reading a statement file again later, by its path (`read_statement_file`).
 //! - The macOS keychain for secrets (`secret_get`, `secret_set`, `secret_delete`).
-//! - Updates from our Mac mini (`update_check`), whose address the app only learns at runtime.
+//!
+//! Join links (`duet://join#DUET1-…`) arrive through the deep-link plugin.
 
 use std::path::Path;
 use std::sync::Mutex;
 
 use rusqlite::types::{Value, ValueRef};
 use rusqlite::{params_from_iter, Connection};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serde_json::{Map, Value as Json};
 use tauri::{Manager, State};
-use tauri_plugin_updater::UpdaterExt;
 
 /// The database connection, opened by `db_open` once the app knows where its data lives.
 pub struct Db(Mutex<Option<Connection>>);
@@ -212,48 +212,10 @@ async fn secret_delete(key: String) -> Result<(), String> {
     }
 }
 
-/// What the updater plugin's own `check` returns, so the app can hand it to the plugin's
-/// `Update` class and install it the usual way.
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-struct UpdateMetadata {
-    rid: tauri::ResourceId,
-    current_version: String,
-    version: String,
-    body: Option<String>,
-    raw_json: Json,
-}
-
-/// Looks for a newer Duet where our Mac mini hands it out: the relay's address plus
-/// `/app/latest.json`. The repository is private, so updates can't come from GitHub, and
-/// whatever the Mac mini offers still has to be signed with Duet's release key to install.
-#[tauri::command]
-async fn update_check(
-    webview: tauri::Webview,
-    endpoint: String,
-) -> Result<Option<UpdateMetadata>, String> {
-    let url = tauri::Url::parse(&endpoint).map_err(err)?;
-    let updater = webview
-        .updater_builder()
-        .endpoints(vec![url])
-        .map_err(err)?
-        .build()
-        .map_err(err)?;
-    let Some(update) = updater.check().await.map_err(err)? else {
-        return Ok(None);
-    };
-    Ok(Some(UpdateMetadata {
-        current_version: update.current_version.clone(),
-        version: update.version.clone(),
-        body: update.body.clone(),
-        raw_json: update.raw_json.clone(),
-        rid: webview.resources_table().add(update),
-    }))
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
@@ -266,8 +228,7 @@ pub fn run() {
             read_statement_file,
             secret_get,
             secret_set,
-            secret_delete,
-            update_check
+            secret_delete
         ])
         .run(tauri::generate_context!())
         .expect("Duet couldn't start");

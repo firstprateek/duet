@@ -198,8 +198,8 @@ export class DuetApp extends Screen {
             <du-icon name="sliders" size="18"></du-icon>
           </a>
           <span class="pair">
-            ${basics.first ? html`<du-avatar ring .name=${basics.first.name} .color=${basics.first.color}></du-avatar>` : nothing}
-            ${basics.second ? html`<du-avatar ring .name=${basics.second.name} .color=${basics.second.color}></du-avatar>` : nothing}
+            ${basics.first ? html`<du-avatar .pair=${this.app.pair} ring .name=${basics.first.name} .color=${basics.first.color}></du-avatar>` : nothing}
+            ${basics.second ? html`<du-avatar .pair=${this.app.pair} ring .name=${basics.second.name} .color=${basics.second.color}></du-avatar>` : nothing}
           </span>
         </div>
       </header>

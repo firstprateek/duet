@@ -17,8 +17,8 @@ export const KEY_PROOF_HEADER = "Duet-Key-Proof";
 /** The household log. A personal stream (a later version) would sit beside it. */
 export const HOUSEHOLD_STREAM = "household";
 
-/** An invite (join code) works once, for ten minutes. */
-export const INVITE_MINUTES = 10;
+/** An invite (a join code or link) works once, for a day. */
+export const INVITE_MINUTES = 24 * 60;
 
 /** Most envelopes in one push, and the largest one. */
 export const MAX_PUSH = 500;

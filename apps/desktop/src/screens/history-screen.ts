@@ -291,7 +291,7 @@ export class HistoryScreen extends Screen {
           <div class="figure">
             ${
               whoMember
-                ? html`<du-avatar .name=${whoMember.name} .color=${whoMember.color} size="36"></du-avatar>
+                ? html`<du-avatar .pair=${this.app.pair} .name=${whoMember.name} .color=${whoMember.color} size="36"></du-avatar>
                   <span class="big">+${formatMoney(Math.abs(v.flow.overall))}</span>`
                 : html`<du-yinyang size="36" .first=${first.color} .second=${second.color}></du-yinyang>
                   <span class="big">${words.inStep}</span>`

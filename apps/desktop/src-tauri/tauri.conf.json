@@ -44,8 +44,12 @@
     }
   },
   "plugins": {
+    "deep-link": {
+      "desktop": { "schemes": ["duet"] }
+    },
     "updater": {
-      "pubkey": "REPLACE_WITH_THE_PUBLIC_KEY_FROM_scripts/release-keys.sh"
+      "pubkey": "REPLACE_WITH_THE_PUBLIC_KEY_FROM_scripts/release-keys.sh",
+      "endpoints": ["https://github.com/firstprateek/duet/releases/latest/download/latest.json"]
     }
   }
 }

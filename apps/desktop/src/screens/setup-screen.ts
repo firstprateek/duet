@@ -177,6 +177,16 @@ export class SetupScreen extends Screen {
     this.error = null;
   }
 
+  override willUpdate(): void {
+    const fromLink = this.app?.joinCode.get();
+    if (fromLink) {
+      this.app.joinCode.set(null);
+      this.mode = "join";
+      this.code = fromLink;
+      this.error = null;
+    }
+  }
+
   override render() {
     if (this.mode === "join") return this.renderJoin();
     if (this.mode === "restore") return this.renderRestore();
@@ -193,13 +203,13 @@ export class SetupScreen extends Screen {
       <div class="names">
         <label class="field">Your name
           <span class="name-field">
-            <du-avatar .name=${this.me || "?"} .color=${myColor} size="36"></du-avatar>
+            <du-avatar .pair=${[this.me, this.partner]} .name=${this.me || "?"} .color=${myColor} size="36"></du-avatar>
             <input class="input" .value=${this.me} @input=${(e: Event) => (this.me = (e.target as HTMLInputElement).value)} autofocus />
           </span>
         </label>
         <label class="field">Your partner's name
           <span class="name-field">
-            <du-avatar .name=${this.partner || "?"} .color=${theirColor} size="36"></du-avatar>
+            <du-avatar .pair=${[this.me, this.partner]} .name=${this.partner || "?"} .color=${theirColor} size="36"></du-avatar>
             <input class="input" .value=${this.partner} @input=${(e: Event) => (this.partner = (e.target as HTMLInputElement).value)} />
           </span>
         </label>
@@ -250,8 +260,8 @@ export class SetupScreen extends Screen {
     return html`<form class="card" @submit=${this.join}>
       <du-logo></du-logo>
       <h1>Join with a code</h1>
-      <p class="lede">On the other Mac, open Settings, then Sync &amp; security, and make a join code. Paste it here.</p>
-      <label class="field">Join code
+      <p class="lede">On the other Mac, open Settings, then Sync &amp; security, and make a join link. Open it on this Mac, or paste it here.</p>
+      <label class="field">Join link or code
         <textarea class="input code" rows="4" spellcheck="false" .value=${this.code} @input=${(
           e: Event,
         ) => {

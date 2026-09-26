@@ -262,7 +262,7 @@ export class NewAccountSheetElement extends Screen {
             (
               m,
             ) => html`<button type="button" class="choice person" aria-pressed=${this.owner === m.id ? "true" : "false"} @click=${() => (this.owner = m.id)}>
-              <du-avatar .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name}
+              <du-avatar .pair=${this.app.pair} .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name}
             </button>`,
           )}
         </div>

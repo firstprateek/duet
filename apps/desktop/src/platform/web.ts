@@ -108,5 +108,8 @@ export async function createWebPlatform(): Promise<Platform> {
     async checkForUpdate() {
       return null;
     },
+    onJoinCode() {
+      return () => {};
+    },
   };
 }

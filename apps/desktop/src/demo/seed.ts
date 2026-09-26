@@ -191,7 +191,8 @@ function monthParts(index: number): Part[] {
   ) as [Cents, Cents, Cents, Cents, Cents, Cents, Cents, Cents, Cents];
   const r = Math.round;
   const parts: Part[] = [];
-  const add = (sub: string, ours: Cents, jack = 0, jill = 0) => parts.push({ sub, ours, jack, jill });
+  const add = (sub: string, ours: Cents, jack = 0, jill = 0) =>
+    parts.push({ sub, ours, jack, jill });
 
   const utilities = cents(UTILITIES[index]!);
   const insurance = INSURANCE[0]! + INSURANCE[1]!;
@@ -992,7 +993,15 @@ export async function seedSampleHousehold(store: Store): Promise<void> {
   await store.write([
     define("amex", jack, "American Express", "Amex Gold", "1008", "credit", "amex-csv"),
     define("chase", jack, "Chase", "Chase Sapphire", "4417", "credit", "chase-card-csv"),
-    define("wf", jack, "Wells Fargo", "Wells Fargo Checking", "2290", "checking", "wells-fargo-csv"),
+    define(
+      "wf",
+      jack,
+      "Wells Fargo",
+      "Wells Fargo Checking",
+      "2290",
+      "checking",
+      "wells-fargo-csv",
+    ),
     define("dcu", jack, "DCU", "DCU Checking", "0871", "checking", null),
     define("citi", jack, "Citi", "Citi Double Cash", "5532", "credit", "citi-csv"),
     define("apple", jill, "Apple Card", "Apple Card", null, "credit", "apple-card-csv"),

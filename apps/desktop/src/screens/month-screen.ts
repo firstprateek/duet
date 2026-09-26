@@ -557,7 +557,7 @@ export class MonthScreen extends Screen {
         </div>
         ${[first, second].map(
           (m) => html`<div class="who-row">
-            <span class="people"><du-avatar .name=${m.name} .color=${m.color} size="20"></du-avatar></span>
+            <span class="people"><du-avatar .pair=${this.app.pair} .name=${m.name} .color=${m.color} size="20"></du-avatar></span>
             <span class="square" style="background:${m.color}"></span>
             <span class="label">${m.name}</span>
             <span class="amount">${formatMoney(v.mineByMember[m.id] ?? 0)}</span>
@@ -585,7 +585,7 @@ export class MonthScreen extends Screen {
     const sentence = this.scope === "month" ? v.ebb.monthSentence : v.ebb.overallSentence;
     const avatar = (id: string) => {
       const m = b.members.find((x) => x.id === id)!;
-      return html`<du-avatar .name=${m.name} .color=${m.color} size="28"></du-avatar>`;
+      return html`<du-avatar .pair=${this.app.pair} .name=${m.name} .color=${m.color} size="28"></du-avatar>`;
     };
     return html`<div class="ebb-open">
       <div class="ebb-head">

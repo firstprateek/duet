@@ -60,7 +60,7 @@ export class CleanSlateSheetElement extends Screen {
             ${[a, c].map((m) => {
               const other = m.id === a.id ? c : a;
               return html`<button type="button" class="choice person" aria-pressed=${this.from === m.id ? "true" : "false"} @click=${() => (this.from = m.id)}>
-                <du-avatar .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name} gave ${other.name}
+                <du-avatar .pair=${this.app.pair} .name=${m.name} .color=${m.color} size="26"></du-avatar>${m.name} gave ${other.name}
               </button>`;
             })}
           </div>

@@ -2,9 +2,10 @@ import type { SqlDriver, SqlValue, Statement } from "@duet/core";
 import { getVersion } from "@tauri-apps/api/app";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { Update } from "@tauri-apps/plugin-updater";
+import { check } from "@tauri-apps/plugin-updater";
 import type { PickedFile, Platform } from "./types.ts";
 
 /**
@@ -89,16 +90,10 @@ export async function createTauriPlatform(): Promise<Platform> {
       },
     },
     appVersion: () => getVersion(),
-    async checkForUpdate(from) {
-      // The Mac mini hands out each release next to the relay (duet-server update puts it
-      // there), since the repository is private. Rust checks the signature before installing.
-      const endpoint = `${from.replace(/\/+$/, "")}/app/latest.json`;
-      const metadata = await invoke<ConstructorParameters<typeof Update>[0] | null>(
-        "update_check",
-        { endpoint },
-      );
-      if (!metadata) return null;
-      const update = new Update(metadata);
+    async checkForUpdate() {
+      // The latest GitHub release; the updater checks its signature before installing.
+      const update = await check();
+      if (!update) return null;
       return {
         version: update.version,
         notes: update.body ?? null,
@@ -106,6 +101,26 @@ export async function createTauriPlatform(): Promise<Platform> {
           await update.downloadAndInstall();
           await relaunch();
         },
+      };
+    },
+    onJoinCode(handler) {
+      const take = (urls: string[] | null) => {
+        for (const url of urls ?? []) {
+          const code = url.match(/DUET1-[A-Za-z0-9_-]+/)?.[0];
+          if (url.startsWith("duet://join") && code) handler(code);
+        }
+      };
+      let unlisten: (() => void) | null = null;
+      let stopped = false;
+      // A link can open Duet, or arrive while it's already open.
+      void getCurrent().then(take, () => {});
+      void onOpenUrl(take).then((fn) => {
+        if (stopped) fn();
+        else unlisten = fn;
+      });
+      return () => {
+        stopped = true;
+        unlisten?.();
       };
     },
   };

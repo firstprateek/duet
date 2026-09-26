@@ -84,6 +84,8 @@ export class App extends EventTarget {
   readonly basics = signal<Basics | null>(null);
   readonly version = signal(0);
   readonly toasts = signal<Toast[]>([]);
+  /** A join code from a duet://join link, waiting for the setup screen. */
+  readonly joinCode = signal<string | null>(null);
   readonly queue: PickedFile[] = [];
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
   private worker: Worker | null = null;
@@ -211,6 +213,22 @@ export class App extends EventTarget {
       this.parses.set(id, { resolve, reject });
       this.worker!.postMessage({ id, bytes: file.bytes, name: file.name, options });
     });
+  }
+
+  /** A join link opened Duet. Only a Mac that isn't set up yet can use it. */
+  receiveJoinCode(code: string): void {
+    if (this.basics.get()?.setUp) {
+      this.toast(
+        "This Mac already has our household. Join links are for a Mac that's new to Duet.",
+      );
+      return;
+    }
+    this.joinCode.set(code);
+  }
+
+  /** Both of our names, for avatars that must tell us apart. */
+  get pair(): string[] {
+    return this.basics.get()?.members.map((m) => m.name) ?? [];
   }
 
   nameOf(memberId: string | null | undefined): string {

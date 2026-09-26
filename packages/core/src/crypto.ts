@@ -156,7 +156,9 @@ export function openRecord(envelope: Envelope, householdKey: Uint8Array): Change
 
 /**
  * The join code Jack's Mac shows for Jill's: the relay address, a one-time invite, and the
- * household key. It works once, for ten minutes, and should only travel between our own devices.
+ * household key. It works once, for a day, and should only travel between the two of us: as
+ * text, or inside a link (https://…/join/#DUET1-… or duet://join#DUET1-…), after the #, so no
+ * server ever sees it.
  */
 export interface JoinCode {
   relayUrl: string;
@@ -180,9 +182,11 @@ export function encodeJoinCode(code: JoinCode): string {
   return JOIN_PREFIX + toBase64Url(encoder.encode(body));
 }
 
+/** Decodes a join code, or the code inside a join link. */
 export function decodeJoinCode(text: string): JoinCode {
-  const trimmed = text.trim().replace(/\s+/g, "");
-  if (!trimmed.startsWith(JOIN_PREFIX)) throw new Error("That isn't a Duet join code.");
+  const found = text.replace(/\s+/g, "").match(/DUET1-[A-Za-z0-9_-]+/);
+  if (!found) throw new Error("That isn't a Duet join code.");
+  const trimmed = found[0];
   try {
     const body = JSON.parse(decoder.decode(fromBase64Url(trimmed.slice(JOIN_PREFIX.length)))) as {
       u: string;

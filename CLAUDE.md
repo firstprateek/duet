@@ -1,9 +1,9 @@
 # Duet — notes for agents
 
-A local-first money app for two people (Jack and Jill in the mocks). The v1 spec is a Claude Doc:
-https://claude.ai/code/artifact/073b8ed5-cfd8-4987-83e3-78ed159a7dba. Final screens (direction C,
-"Soft & friendly") are on the design canvas: https://claude.ai/artifact/UnZ2oXSq1s6K4jHUdHq4da.
-Read the spec before changing behavior; it is the source of truth for words, math and privacy.
+A local-first money app for two people (Jack and Jill in the mocks). The v1 spec is
+[docs/spec.md](docs/spec.md), and the final screens (direction C, "Soft & friendly") are in
+[docs/design](docs/design). Read the spec before changing behavior; it is the source of truth for
+words, math and privacy.
 
 ## Layout
 
@@ -16,6 +16,8 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 | `services/sync` | Bun relay (stores ciphertext only) |
 | `services/sorter` | Python sorting service (Ollama, Laya) |
 | `tools/cli` | `duet export` and key tools |
+| `site` | The website on GitHub Pages: download page, join page, and the demo (the web build) |
+| `docs` | The spec, the designs, and setting up the Mac mini |
 
 ## Commands
 
@@ -25,6 +27,7 @@ Read the spec before changing behavior; it is the source of truth for words, mat
 - `pnpm dev:web` — the app in a browser with sample data (sql.js), no Tauri needed
 - `pnpm dev` — the real desktop app (needs Rust). Debug builds use `duet-dev.db` and the keychain
   service `app.duet.desktop.dev`, so they never touch the household we use
+- `pnpm site` — builds the website into `_site/` (the demo is the web build with `--mode demo`)
 
 ## Conventions that matter
 
@@ -50,18 +53,15 @@ Read the spec before changing behavior; it is the source of truth for words, mat
   unknown layout, and Uploads guesses their account from the file name (display only; the setup
   still asks, and can add the file to an account we already have).
 
-- **Tauri plugins**: dialog, updater and process only. The spec lists sql and fs too; SQLite
+- **Tauri plugins**: deep-link, dialog, updater and process only. The spec lists sql and fs too; SQLite
   goes through our Rust command instead (see above), and statement files are read by path
   through `read_statement_file`, which only opens statement extensions under 50 MB.
 - **Relay updates** (`duet-server update`) check the release's SHA-256; the spec also asks for a
   signature, which needs the release key set up first (a later step).
-- **Installs and updates come from the Mac mini, not GitHub.** The repository stays private, so
-  `duet-server update` (signed in with `gh`) copies each release to `/usr/local/var/duet/app`,
-  with `latest.json` rewritten to point at the Mac mini, and the relay serves those four files
-  at `/app` (the Tailscale app can't serve folders on macOS; only the open-source daemon can).
-  The app asks the relay's address plus `/app/latest.json` through the `update_check` Rust
-  command, since the updater's endpoint is only known at runtime; the release key's signature
-  is still checked before anything installs.
+- **Join codes work for a day, not ten minutes, and travel as links**
+  (`https://firstprateek.github.io/duet/join/#DUET1-…`). The code sits after the `#`, so no
+  server sees it; the join page installs Duet and opens `duet://join#…`, which fills in the
+  Join screen (it never joins by itself). A code alone only works from inside our tailnet.
 - **The personal vault** (Mine details backed up under the owner's own key) is still an open
   question in the spec, so it isn't built; the envelope's `stream` field leaves room for it.
 

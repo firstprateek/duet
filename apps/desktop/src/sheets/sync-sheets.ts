@@ -7,6 +7,7 @@ import {
   startHousehold,
 } from "@duet/core";
 import { css, html, nothing } from "lit";
+import { joinLink } from "../app/links.ts";
 import { Screen } from "../app/screen.ts";
 import { timeAgo } from "../app/sync.ts";
 import { sheetStyles } from "./new-account-sheet.ts";
@@ -133,7 +134,7 @@ export class SyncSetupSheet extends Screen {
   };
 }
 
-/** A join code for the other one of us: works once, for ten minutes. */
+/** A join link for the other one of us: works once, for a day. */
 export class JoinCodeSheet extends Screen {
   static override properties = {
     ...Screen.properties,
@@ -194,30 +195,31 @@ export class JoinCodeSheet extends Screen {
 
   override render() {
     const partner = this.basics.partner?.name ?? "your partner";
-    return html`<du-sheet label="Join code" @close=${() => this.app.closeSheet()}>
+    const link = this.code ? joinLink(this.code) : null;
+    return html`<du-sheet label="Join link" @close=${() => this.app.closeSheet()}>
       <div class="body">
         <div class="head">
           <span class="badge" style="background:var(--du-mine-bg)"><du-icon name="link" size="22"></du-icon></span>
           <div>
-            <h1>A join code for ${partner}</h1>
-            <div class="meta">Works once, for the next 10 minutes</div>
+            <h1>A join link for ${partner}</h1>
+            <div class="meta">Works once, within the next 24 hours</div>
           </div>
         </div>
         ${
           this.error
             ? html`<div class="error">${this.error}</div>`
-            : this.code
-              ? html`<div class="code" aria-label="Join code">${this.code}</div>`
-              : html`<p class="lede">Making a code…</p>`
+            : link
+              ? html`<div class="code" aria-label="Join link">${link}</div>`
+              : html`<p class="lede">Making a link…</p>`
         }
         <ol>
-          <li>On ${partner}'s Mac, open Duet and choose <b>Join with a code</b>.</li>
-          <li>Paste this code there. It opens our data, so keep it between our own devices.</li>
+          <li>Send it to ${partner}. AirDrop or Messages are good; it opens our data, so keep it between the two of us.</li>
+          <li>On ${partner}'s Mac, the link installs Duet and opens it, ready to join.</li>
         </ol>
         <div class="foot">
-          <button class="linkish" @click=${() => void this.make()}>Make a new code</button>
+          <button class="linkish" @click=${() => void this.make()}>Make a new link</button>
           <span style="display:flex;gap:10px">
-            <button class="btn soft" ?disabled=${!this.code} @click=${this.copy}>Copy</button>
+            <button class="btn soft" ?disabled=${!link} @click=${this.copy}>Copy link</button>
             <button class="btn" @click=${() => this.app.closeSheet()}>Done</button>
           </span>
         </div>
@@ -228,10 +230,10 @@ export class JoinCodeSheet extends Screen {
   private copy = async () => {
     if (!this.code) return;
     try {
-      await navigator.clipboard.writeText(this.code);
-      this.app.toast("Copied. Paste it on the other Mac.");
+      await navigator.clipboard.writeText(joinLink(this.code));
+      this.app.toast(`Copied. Send it to ${this.basics.partner?.name ?? "your partner"}.`);
     } catch {
-      this.app.toast("Couldn't copy. Select the code and copy it by hand.");
+      this.app.toast("Couldn't copy. Select the link and copy it by hand.");
     }
   };
 }
@@ -311,7 +313,7 @@ export class DevicesSheet extends Screen {
             ? html`<div>
                 ${this.devices.map(
                   (d) => html`<div class="device">
-                    <du-avatar .name=${this.app.nameOf(d.memberId) || "?"} .color=${this.app.colorOf(d.memberId)} size="32"></du-avatar>
+                    <du-avatar .pair=${this.app.pair} .name=${this.app.nameOf(d.memberId) || "?"} .color=${this.app.colorOf(d.memberId)} size="32"></du-avatar>
                     <div class="grow">
                       <div class="name">${d.name}${d.current ? html` <span class="pill good" style="margin-left:6px">This Mac</span>` : nothing}</div>
                       <div class="meta">${this.app.nameOf(d.memberId)}${d.lastSeenAt ? ` · last synced ${timeAgo(d.lastSeenAt)}` : ""}</div>

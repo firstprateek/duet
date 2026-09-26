@@ -1,5 +1,6 @@
 import { css, html, LitElement, svg } from "lit";
 import { iconPath } from "./icons.ts";
+import { avatarLetters } from "./letters.ts";
 import { tint } from "./styles.ts";
 
 /** Picks readable text (white or ink) for a colored circle. */
@@ -103,6 +104,7 @@ export class DuAvatar extends LitElement {
     name: { type: String },
     color: { type: String },
     size: { type: Number },
+    pair: { attribute: false },
   };
   static override styles = css`
     :host {
@@ -124,21 +126,25 @@ export class DuAvatar extends LitElement {
   declare name: string;
   declare color: string;
   declare size: number;
+  /** Both of our names, so two people who share an initial still look different. */
+  declare pair: readonly string[];
 
   constructor() {
     super();
     this.name = "";
     this.color = "#2F6FB0";
     this.size = 32;
+    this.pair = [];
   }
 
   override render() {
-    const initial = this.name.trim().charAt(0).toUpperCase() || "?";
+    const letters = avatarLetters(this.name, this.pair);
+    const scale = letters.length > 1 ? 0.38 : 0.44;
     return html`<span
       role="img"
       aria-label=${this.name}
-      style="width:${this.size}px;height:${this.size}px;background:${this.color};color:${textOn(this.color)};font-size:${Math.round(this.size * 0.44)}px"
-      >${initial}</span
+      style="width:${this.size}px;height:${this.size}px;background:${this.color};color:${textOn(this.color)};font-size:${Math.round(this.size * scale)}px"
+      >${letters}</span
     >`;
   }
 }

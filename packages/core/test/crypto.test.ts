@@ -114,6 +114,19 @@ describe("join codes", () => {
     expect(decodeJoinCode(`  ${text}\n`)).toEqual(code);
   });
 
+  it("can be read out of a join link", () => {
+    const code = {
+      relayUrl: "https://mac-mini.tail1234.ts.net",
+      invite: "invite-token",
+      householdKey: newHouseholdKey(),
+      householdId: "household-1",
+      memberId: "jill",
+    };
+    const text = encodeJoinCode(code);
+    expect(decodeJoinCode(`https://example.github.io/duet/join/#${text}`)).toEqual(code);
+    expect(decodeJoinCode(`duet://join#${text}`)).toEqual(code);
+  });
+
   it("say so when they're cut short or aren't ours", () => {
     const text = encodeJoinCode({
       relayUrl: "https://mini.ts.net",

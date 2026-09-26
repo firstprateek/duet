@@ -9,10 +9,10 @@ a recovery phrase can open the data, and nobody else can, including the Mac mini
 | Tailscale | The open-source `tailscaled` daemon, so it runs with nobody logged in | — |
 | Duet relay | `duet-sync`, one binary, a LaunchDaemon that restarts it if it stops | 127.0.0.1:8787, published over HTTPS by `tailscale serve` |
 | Nightly backup | `duet-sync backup`, a LaunchDaemon at 03:15 | `/usr/local/var/duet/backups` |
-| The app | A copy of the latest release, made by `duet-server update` and served by the relay | `/app` on the same address, for our Macs to install and update from |
+| Nightly update | `duet-server update`, a LaunchDaemon at 04:30 (optional) | — |
 
-The repository is private, so our Macs never download anything from GitHub: the Mac mini copies
-each release and hands it to them over Tailscale.
+Duet itself comes from [GitHub releases](https://github.com/firstprateek/duet/releases), and each
+Mac updates itself from there.
 
 ## 1. Tailscale
 
@@ -45,21 +45,16 @@ the Mac mini tagged `tag:duet`, the policy's rule looks like this (use our real 
 
 Device tokens are a second lock: a Mac that isn't paired can't read or write anything.
 
-## 2. GitHub
+## 2. A copy of Duet
 
-The Mac mini signs in to GitHub once, to copy each release from our private repository. A token
-that can only read this one repository is enough: on GitHub, **Settings → Developer settings →
-Fine-grained tokens**, with access to `firstprateek/duet` only and **Contents: Read-only**. Then:
+The commands below run from a copy of this repository:
 
 ```bash
-brew install gh
-gh auth login --with-token     # paste the token
-gh auth setup-git              # so git can use it too
-gh repo clone firstprateek/duet ~/duet
+git clone https://github.com/firstprateek/duet.git ~/duet
 cd ~/duet
 ```
 
-The commands below run from that copy. `git pull` brings it up to date.
+`git pull` brings it up to date.
 
 ## 3. Keep it awake
 
@@ -75,8 +70,9 @@ Take it from the latest release, or build it on one of our Macs (it needs [Bun](
 and copy it over:
 
 ```bash
-gh release download --repo firstprateek/duet --pattern duet-sync-darwin-arm64 --dir /tmp
-services/sync/deploy/duet-server install /tmp/duet-sync-darwin-arm64
+curl -fsSLo /tmp/duet-sync https://github.com/firstprateek/duet/releases/latest/download/duet-sync-darwin-arm64
+chmod +x /tmp/duet-sync
+services/sync/deploy/duet-server install /tmp/duet-sync
 
 # or, on a Mac with the repository and Bun:
 pnpm --filter @duet/sync build
@@ -91,29 +87,26 @@ under launchd, and publishes it on the tailnet. It prints the address to use, so
 
 ## 5. Duet on our Macs
 
-Once there's a release, copy it to the Mac mini:
+On each Mac, open the [download page](https://firstprateek.github.io/duet/), or run:
 
 ```bash
-services/sync/deploy/duet-server update
+curl -fsSL https://firstprateek.github.io/duet/install.sh | sh
 ```
 
-It prints the line that installs Duet on each Mac, something like:
-
-```bash
-curl -fsSL https://mac-mini.tail1234.ts.net/app/install.sh | sh
-```
-
-From then on, **Settings → Updates** looks for new versions on the Mac mini. Each one is signed
-with our release key (`scripts/release-keys.sh`), and Duet checks that before installing.
+**Settings → Updates** finds new versions on GitHub. Each one is signed with our release key
+(`scripts/release-keys.sh`), and Duet checks that before installing.
 
 ## 6. The two Macs
 
 1. On the first Mac: **Settings → Sync & security → Set up sync**, and enter the Mac mini's
    address. Duet shows a 24-word recovery phrase once. Write it on paper; Duet checks three of
    the words.
-2. Still on the first Mac, make a **join code**. It works once, for ten minutes.
-3. On the second Mac, open Duet for the first time and choose **Join with a code from the other
-   Mac**. It gets its own recovery phrase, and everything we've added comes down.
+2. Still on the first Mac, make a **join link** and send it to the other Mac (AirDrop or Messages).
+   It works once, within a day. The code in it sits after the `#`, so it never reaches a server.
+3. On the second Mac, open the link. Its page installs Duet, then **Open in Duet** goes straight
+   to joining. (Or open Duet, choose **Join with a code from the other Mac** and paste the link.)
+   The second Mac gets its own recovery phrase, and everything we've added comes down. It has
+   to be on the tailnet to reach the Mac mini.
 
 Either phrase alone opens all household data, so either of us can always look at it.
 
@@ -155,11 +148,12 @@ go anywhere: Time Machine, or restic to a USB drive and a cloud bucket. Run one 
 ## Updating
 
 ```bash
-services/sync/deploy/duet-server update
+services/sync/deploy/duet-server update        # now
+services/sync/deploy/duet-server auto-update   # or every night at 04:30
 ```
 
-It downloads the latest release with `gh`, checks the relay against its SHA-256, swaps the binary
-and restarts it, then hands the new app to our Macs at `/app`. The relay accepts the app's current
+`update` looks at the latest GitHub release. If its relay is newer, it downloads it, checks it
+against its SHA-256, swaps the binary and restarts it. The relay accepts the app's current
 protocol and the one before it, so the Macs and the Mac mini don't have to update at the same
 moment. To update the sorting service too, `git pull` and run `duet-server install-sorter` again.
 

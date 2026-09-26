@@ -33,6 +33,7 @@ async function start() {
   const el = document.querySelector("duet-app") as DuetApp;
   el.app = app;
   el.hidden = false;
+  platform.onJoinCode((code) => app.receiveJoinCode(code));
   void app.sync.start().then(() => app.sorting.check());
   (window as unknown as { duet: App }).duet = app;
 }

@@ -183,7 +183,7 @@ describe("relay", () => {
     ]);
   });
 
-  it("lets an invite expire after ten minutes", async () => {
+  it("lets an invite expire after a day", async () => {
     let now = Date.parse("2026-09-23T18:00:00Z");
     const h = await household({ now: () => new Date(now) });
     const invite = await h.call<{ invite: string }>(
@@ -192,7 +192,7 @@ describe("relay", () => {
       { memberId: "jill" },
       h.auth(h.jack.deviceToken),
     );
-    now += 11 * 60_000;
+    now += 24 * 60 * 60_000 + 60_000;
     const late = await h.call<{ error: string }>("POST", "/v1/devices", {
       invite: invite.body.invite,
       deviceName: "Jill's MacBook Pro",
@@ -337,28 +337,5 @@ describe("backups", () => {
     expect(kept).not.toContain("relay-2025-09-01.db");
     expect(removed.has("notes.txt")).toBe(false);
     expect(kept.length).toBe(30 + 11);
-  });
-});
-
-describe("the app at /app", () => {
-  it("hands out only the app's own files", async () => {
-    const files: Record<string, string> = {
-      "latest.json": '{"version":"0.2.0"}',
-      "Duet.app.tar.gz": "bundle",
-    };
-    const relay = new Relay({
-      db: nodeRelayDb(),
-      appFile: async (name) => (name in files ? new Blob([files[name]!]) : null),
-    });
-    const get = (path: string) => relay.handle(new Request(BASE + path));
-    const manifest = await get("/app/latest.json");
-    expect(manifest.status).toBe(200);
-    expect(manifest.headers.get("content-type")).toContain("application/json");
-    expect(await manifest.json()).toEqual({ version: "0.2.0" });
-    expect(await (await get("/app/Duet.app.tar.gz")).text()).toBe("bundle");
-    // Not there yet, not the app's, or reaching for something else.
-    for (const path of ["/app/install.sh", "/app/relay.db", "/app/..%2Frelay.db", "/app/"]) {
-      expect((await get(path)).status).toBe(404);
-    }
   });
 });
