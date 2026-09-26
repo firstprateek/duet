@@ -57,6 +57,16 @@
           }
         }
       }
+    },
+    {
+      "includes": [
+        "**/package.json",
+        "apps/desktop/src-tauri/tauri.conf.json",
+        ".release-please-manifest.json"
+      ],
+      "formatter": {
+        "enabled": false
+      }
     }
   ]
 }
