@@ -103,6 +103,8 @@ Needs Node 22.13+ and pnpm; the desktop app also needs Rust.
 ```bash
 pnpm install
 pnpm test
+pnpm lint      # Biome: lint and formatting checks
+pnpm typecheck # tsc in every package that has a typecheck script
 pnpm dev:web   # the app in a browser; open http://localhost:5174/?sample for sample data
 pnpm dev       # the desktop app, with its own database and keychain items
 pnpm site      # the website and the demo, into _site/
