@@ -110,6 +110,18 @@ pnpm dev       # the desktop app, with its own database and keychain items
 pnpm site      # the website and the demo, into _site/
 ```
 
+The sorting service and the Rust shell have their own checks. The Rust build embeds the built web
+app, so build it first:
+
+```bash
+(cd services/sorter && uv run pytest -q)
+
+pnpm --filter @duet/desktop build
+cd apps/desktop/src-tauri
+cargo clippy --all-targets -- -D warnings
+cargo test
+```
+
 The browser preview keeps everything in memory, so a reload starts over. To try sync there, run
 `pnpm relay:dev` and use `http://127.0.0.1:8787` as the Mac mini's address. CI runs lint, types
 and tests on every push; merging Release Please's pull request builds a signed release, and the
