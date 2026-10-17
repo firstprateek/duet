@@ -98,7 +98,8 @@ flowchart LR
 
 ## Development
 
-Needs Node 22.13+ and pnpm; the desktop app also needs Rust.
+Needs Node 22.13+ and pnpm; the desktop app also needs Rust, and the sorting service's tests need
+[uv](https://docs.astral.sh/uv/) (it fetches Python 3.11+ if you don't have it).
 
 ```bash
 pnpm install
