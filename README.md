@@ -125,8 +125,9 @@ cargo test
 
 The browser preview keeps everything in memory, so a reload starts over. To try sync there, run
 `pnpm relay:dev` and use `http://127.0.0.1:8787` as the Mac mini's address. CI runs lint, types
-and tests on every push; merging Release Please's pull request builds a signed release, and the
-website redeploys from `main`.
+and tests on every push, along with the sorting service's tests and, on macOS, the Rust shell's
+clippy and tests; merging Release Please's pull request builds a signed release, and the website
+redeploys from `main`.
 
 ## Built with Claude Code
 
