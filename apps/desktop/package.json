@@ -32,6 +32,6 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.5",
     "@types/sql.js": "^1.4.11",
-    "vite": "^8.3.1"
+    "vite": "^8.3.8"
   }
 }
